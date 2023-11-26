@@ -4,7 +4,7 @@ import ThemeToggle from './theme-toggle';
 
 const Header: React.FC = () => {
   return (
-    <div className="mx-auto flex max-w-7xl items-center justify-between bg-background p-4">
+    <div className="mx-auto flex w-full max-w-7xl items-center justify-between bg-background p-4">
       <p className="text-2xl">SQWADZ</p>
       <div className="flex gap-4">
         <ThemeToggle />
