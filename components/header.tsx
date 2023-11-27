@@ -6,7 +6,7 @@ import SignIn from './sign-in';
 const Header: React.FC = () => {
   return (
     <div className="mx-auto flex w-full max-w-7xl items-center justify-between bg-background p-4">
-      <p className="text-2xl">SQWADZ</p>
+      <p className="text-2xl logo">SQWADZ</p>
       <div className="flex gap-4">
         <ThemeToggle />
         <SignIn/>
