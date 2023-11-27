@@ -1,12 +1,10 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import TwitchProvider from 'next-auth/providers/twitch';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/prisma';
 
-const discordAuthScopes = ['identify', 'email'];
-
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
@@ -18,6 +16,8 @@ const handler = NextAuth({
       clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
     }),
   ],
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
