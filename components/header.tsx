@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import ThemeToggle from './theme-toggle';
+import SignIn from './sign-in';
 
 const Header: React.FC = () => {
   return (
@@ -8,6 +9,7 @@ const Header: React.FC = () => {
       <p className="text-2xl">SQWADZ</p>
       <div className="flex gap-4">
         <ThemeToggle />
+        <SignIn/>
         <Avatar>
           <AvatarFallback>FL</AvatarFallback>
         </Avatar>
