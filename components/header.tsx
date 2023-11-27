@@ -2,7 +2,7 @@ import React from 'react';
 import ThemeToggle from './theme-toggle';
 import SignIn from './sign-in';
 import { getServerSession, Session } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/utils/authOptions';
 
 const Header: React.FC = async () => {
   const session = await getServerSession(authOptions);
