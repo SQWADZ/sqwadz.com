@@ -6,6 +6,9 @@ import TwitchProvider from 'next-auth/providers/twitch';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  pages: {
+    signIn: '/sign-in',
+  },
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID as string,

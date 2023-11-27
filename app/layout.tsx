@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 import React from 'react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,13 +17,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background`}>
+      <body className={cn(inter.className, `bg-background`)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <Header />
-          <div className="flex min-h-screen flex-col">
-            <main className="flex-1">{children}</main>
-            <Footer />
+          <div className="flex h-full flex-1 flex-col">
+            <Header />
+            {children}
           </div>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

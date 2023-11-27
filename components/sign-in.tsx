@@ -5,11 +5,17 @@ import { Button } from './ui/button';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Session } from 'next-auth';
+import Link from 'next/link';
 
 const SignIn: React.FC<{ session: Session | null }> = ({ session }) => {
   console.log(session);
 
-  if (!session) return <Button onClick={() => signIn('discord')}>Sign in</Button>;
+  if (!session)
+    return (
+      <Link href="/sign-in">
+        <Button>Sign in</Button>
+      </Link>
+    );
 
   return (
     <div className="flex gap-4">
