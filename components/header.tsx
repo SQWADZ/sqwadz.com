@@ -13,7 +13,7 @@ const Header: React.FC = async () => {
       <Link href="/">
         <p className="logo text-2xl">SQWADZ</p>
       </Link>
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <ThemeToggle />
         <SignIn session={session} />
       </div>

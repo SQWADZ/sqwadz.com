@@ -6,6 +6,9 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Session } from 'next-auth';
 import Link from 'next/link';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRightFromBracket, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const SignIn: React.FC<{ session: Session | null }> = ({ session }) => {
   console.log(session);
@@ -19,11 +22,31 @@ const SignIn: React.FC<{ session: Session | null }> = ({ session }) => {
 
   return (
     <div className="flex gap-4">
-      <Button onClick={() => signOut()}>Sign out</Button>
-      <Avatar>
-        <AvatarImage src={session.user?.image || undefined} />
-        <AvatarFallback>FL</AvatarFallback>
-      </Avatar>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Avatar>
+            <AvatarImage src={session.user?.image || undefined} />
+            <AvatarFallback>FL</AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem className="flex items-center gap-2">
+            <FontAwesomeIcon icon={faUser} fixedWidth />
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-2">
+            <FontAwesomeIcon icon={faGear} fixedWidth />
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="bg-text-destructive flex items-center gap-2"
+            onClick={() => signOut({ callbackUrl: '/' })}
+          >
+            <FontAwesomeIcon icon={faArrowRightFromBracket} fixedWidth />
+            Sign out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
