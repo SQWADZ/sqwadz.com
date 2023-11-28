@@ -19,11 +19,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={cn(inter.className, `bg-background`)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <div className="flex h-full flex-1 flex-col">
+          <div className="flex h-screen flex-col">
             <Header />
             {children}
+            <Footer />
           </div>
-          <Footer />
         </ThemeProvider>
       </body>
     </html>

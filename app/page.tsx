@@ -3,7 +3,7 @@ import games from '@/data/games.json';
 
 export default function Home() {
   return (
-    <main className="mx-auto flex max-w-7xl flex-col gap-8 p-4">
+    <div className="mx-auto flex max-w-7xl flex-1 flex-col gap-8 p-4">
       <div className="flex flex-col gap-0">
         <p className="text-xl">Games</p>
         <p className="sm text-muted-foreground">Select a game to find a group in</p>
@@ -14,6 +14,6 @@ export default function Home() {
           <GameCard key={game.name} name={game.name} image={game.image} />
         ))}
       </div>
-    </main>
+    </div>
   );
 }

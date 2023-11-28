@@ -8,7 +8,7 @@ import { faDiscord, faTwitch } from '@fortawesome/free-brands-svg-icons';
 
 const SignInPage: React.FC = () => {
   return (
-    <div className="flex flex-1 items-center justify-center">
+    <div className="flex w-full flex-1 items-center justify-center">
       <div className="flex w-full max-w-sm flex-1 flex-col gap-4 rounded-lg border-[1px] border-border p-4 shadow md:max-w-md">
         <div>
           <p className="text-xl">Sign in</p>
