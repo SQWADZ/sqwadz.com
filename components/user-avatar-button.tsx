@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from './ui/button';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Session } from 'next-auth';
 import Link from 'next/link';
@@ -10,9 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 
-const SignIn: React.FC<{ session: Session | null }> = ({ session }) => {
-  console.log(session);
-
+const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) => {
   if (!session)
     return (
       <Link href="/sign-in">
@@ -51,4 +49,4 @@ const SignIn: React.FC<{ session: Session | null }> = ({ session }) => {
   );
 };
 
-export default SignIn;
+export default UserAvatarButton;

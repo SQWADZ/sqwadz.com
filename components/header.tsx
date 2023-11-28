@@ -1,6 +1,6 @@
 import React from 'react';
 import ThemeToggle from './theme-toggle';
-import SignIn from './sign-in';
+import UserAvatarButton from './user-avatar-button';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/authOptions';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ const Header: React.FC = async () => {
       </Link>
       <div className="flex gap-2">
         <ThemeToggle />
-        <SignIn session={session} />
+        <UserAvatarButton session={session} />
       </div>
     </div>
   );
