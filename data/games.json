@@ -1,26 +1,32 @@
 [
     {
         "name": "Diablo IV",
+        "path": "d4",
         "image": "https://i.imgur.com/0Ax3Er8.png"
     },
     {
         "name": "Path of Exile 2",
+        "path": "poe2",
         "image": "https://i.imgur.com/OkoQEc6.png"
     },
     {
         "name": "Rust",
+        "path": "rust",
         "image": "https://i.imgur.com/Js1Nf2L.png"
     },
     {
         "name": "Ashes of Creation",
+        "path": "aoc",
         "image": "https://i.imgur.com/w25MoPM.png"
     },
     {
         "name": "Pax Dei",
+        "path": "pax-dei",
         "image": "https://i.imgur.com/lfwEvwL.png"
     },
     {
         "name": "GTA6",
+        "path": "gta6",
         "image": "https://i.imgur.com/UdJpzaz.png"
     }
 ]

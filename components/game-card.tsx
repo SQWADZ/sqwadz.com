@@ -5,10 +5,11 @@ import Link from 'next/link';
 interface Props {
   name: string;
   image: string;
+  path: string;
 }
 
-const GameCard: React.FC<Props> = ({ name, image }) => {
-  const gamePageUrl = `/games/${encodeURIComponent(name)}`;
+const GameCard: React.FC<Props> = ({ name, image, path }) => {
+  const gamePageUrl = `/games/${encodeURIComponent(path)}`;
 
   return (
     <Link href={gamePageUrl}>
