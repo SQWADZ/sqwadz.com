@@ -7,6 +7,7 @@ import { faArrowRight, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Input } from '@/components/ui/input';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/authOptions';
+import CreateRoom from './_components/create-room';
 
 const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
   const game = games.find((jsonGame) => jsonGame.path === params.game)!;
@@ -16,10 +17,7 @@ const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
     <Container className="flex flex-col gap-10">
       <div className="flex items-center justify-between">
         <p className="text-xl">Rooms</p>
-        <Button variant="secondary" className="flex items-center gap-2" disabled={!session?.user}>
-          <FontAwesomeIcon icon={faPlus} fixedWidth />
-          Create a room
-        </Button>
+        <CreateRoom session={session} />
       </div>
       <Input placeholder="Search..." />
       {/* Placeholder table */}
