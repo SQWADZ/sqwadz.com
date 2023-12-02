@@ -3,16 +3,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLock, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faLock, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'next-auth';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -28,6 +21,7 @@ const formSchema = z.object({
 });
 
 const CreateRoom: React.FC<{ session: Session | null }> = ({ session }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,8 +32,22 @@ const CreateRoom: React.FC<{ session: Session | null }> = ({ session }) => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // TODO: POST to API to create db entry
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    const resp = await fetch('/api/rooms/create-room', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+    const data = await resp.json();
+    setIsLoading(false);
+    if (data !== 200) {
+      //   Maybe set some "Something went wrong" error?
+    }
+
+    // TODO: redirect and close dialog (controlled)
   };
 
   return (
@@ -109,7 +117,13 @@ const CreateRoom: React.FC<{ session: Session | null }> = ({ session }) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Create</Button>
+            <Button type="submit" disabled={isLoading}>
+              {!isLoading ? (
+                'Create'
+              ) : (
+                <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
+              )}
+            </Button>
           </form>
         </Form>
       </DialogContent>
