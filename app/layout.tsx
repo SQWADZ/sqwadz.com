@@ -6,6 +6,8 @@ import React from 'react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { cn } from '@/lib/utils';
+import ModalsProvider from '@/components/modals-provider';
+import { Provider } from 'jotai';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,13 +20,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={cn(inter.className, `bg-background`)}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <div className="flex h-screen flex-col">
-            <Header />
-            {children}
-            <Footer />
-          </div>
-        </ThemeProvider>
+        <Provider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <ModalsProvider>
+              <div className="flex h-screen flex-col">
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </ModalsProvider>
+          </ThemeProvider>
+        </Provider>
       </body>
     </html>
   );

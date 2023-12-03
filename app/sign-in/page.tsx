@@ -16,13 +16,21 @@ const SignInPage: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Button className="flex items-center justify-start gap-2" onClick={() => signIn('discord')} variant="outline">
+          <Button
+            className="flex items-center justify-start gap-2"
+            onClick={() => signIn('discord', { callbackUrl: '/' })}
+            variant="outline"
+          >
             <div className="w-[20px]">
               <FontAwesomeIcon icon={faDiscord} size="lg" fixedWidth />
             </div>
             Discord
           </Button>
-          <Button className="flex items-center justify-start gap-2" onClick={() => signIn('twitch')} variant="outline">
+          <Button
+            className="flex items-center justify-start gap-2"
+            onClick={() => signIn('twitch', { callbackUrl: '/' })}
+            variant="outline"
+          >
             <div className="w-[20px]">
               <FontAwesomeIcon icon={faTwitch} size="lg" fixedWidth />
             </div>
