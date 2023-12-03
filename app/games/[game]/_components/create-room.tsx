@@ -13,6 +13,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
+import { useModal } from '@/components/modals-provider';
+import CreateRoomModal from '@/app/games/[game]/_components/create-room-modal';
 
 const formSchema = z.object({
   activity: z.string().max(50),
@@ -23,6 +25,7 @@ const formSchema = z.object({
 const CreateRoom: React.FC<{ session: Session | null }> = ({ session }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
+  const modal = useModal();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,102 +35,21 @@ const CreateRoom: React.FC<{ session: Session | null }> = ({ session }) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    const resp = await fetch('/api/rooms/create-room', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    });
-    const data = await resp.json();
-    setIsLoading(false);
-    if (data !== 200) {
-      //   Maybe set some "Something went wrong" error?
-    }
-
-    // TODO: redirect and close dialog (controlled)
-  };
-
   return (
-    <Dialog modal>
-      <DialogTrigger asChild>
-        <Button variant="secondary" className="flex items-center gap-2" disabled={!session?.user}>
-          <FontAwesomeIcon icon={faPlus} fixedWidth />
-          Create a room
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create a room</DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="activity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel aria-required>Activity</FormLabel>
-                  <FormDescription>Main activity of the room</FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="slots"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel aria-required>Slots</FormLabel>
-                  <FormDescription>Number of slots available slots in the room</FormDescription>
-                  <FormControl>
-                    <Input {...field} onChange={(event) => field.onChange(+event.target.value)} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <label htmlFor="private-room" className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <FontAwesomeIcon icon={faLock} fixedWidth />
-                  <label htmlFor="private-room" className="text-base">
-                    Private room
-                  </label>
-                </div>
-                <p className="text-sm text-muted-foreground">Allow only users with the password to join</p>
-              </div>
-              <Switch id="private-room" checked={isPrivate} onCheckedChange={() => setIsPrivate(!isPrivate)} />
-            </label>
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(!isPrivate && 'text-muted-foreground')}>Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" disabled={!isPrivate} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={isLoading}>
-              {!isLoading ? (
-                'Create'
-              ) : (
-                <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
-              )}
-            </Button>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+    <Button
+      variant="secondary"
+      className="flex items-center gap-2"
+      disabled={!session?.user}
+      onClick={() =>
+        modal.open({
+          title: 'Create a room',
+          children: <CreateRoomModal />,
+        })
+      }
+    >
+      <FontAwesomeIcon icon={faPlus} fixedWidth />
+      Create a room
+    </Button>
   );
 };
 
