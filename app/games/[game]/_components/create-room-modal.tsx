@@ -35,6 +35,7 @@ const CreateRoomModal: React.FC = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    values.password = !isPrivate ? '' : values.password;
     const resp = await fetch('/api/rooms/create-room', {
       method: 'POST',
       headers: {
@@ -49,7 +50,7 @@ const CreateRoomModal: React.FC = () => {
     }
 
     modal.close();
-    // TODO: redirect and close dialog (controlled)
+    // TODO: redirect
   };
 
   return (
@@ -83,31 +84,33 @@ const CreateRoomModal: React.FC = () => {
             </FormItem>
           )}
         />
-        <label htmlFor="private-room" className="flex flex-row items-center justify-between rounded-lg border p-4">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faLock} fixedWidth />
-              <label htmlFor="private-room" className="text-base">
-                Private room
-              </label>
+        <div className="flex flex-col gap-4 rounded-lg border p-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faLock} fixedWidth />
+                <label htmlFor="private-room" className="text-base">
+                  Private room
+                </label>
+              </div>
+              <p className="text-sm text-muted-foreground">Allow only users with the password to join</p>
             </div>
-            <p className="text-sm text-muted-foreground">Allow only users with the password to join</p>
+            <Switch id="private-room" checked={isPrivate} onCheckedChange={() => setIsPrivate(!isPrivate)} />
           </div>
-          <Switch id="private-room" checked={isPrivate} onCheckedChange={() => setIsPrivate(!isPrivate)} />
-        </label>
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className={cn(!isPrivate && 'text-muted-foreground')}>Password</FormLabel>
-              <FormControl>
-                <Input {...field} type="password" disabled={!isPrivate} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={cn(!isPrivate && 'text-muted-foreground')}>Password</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" disabled={!isPrivate} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button type="submit" disabled={isLoading}>
           {!isLoading ? (
             'Create'
