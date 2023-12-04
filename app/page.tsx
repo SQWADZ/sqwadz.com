@@ -11,7 +11,7 @@ export default function Home() {
 
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">
         {games.map((game) => (
-          <GameCard key={game.name} name={game.name} image={game.image} path={game.path} />
+          <GameCard key={game.name} name={game.name} image={game.image} path={game.path} color={game.color} />
         ))}
       </div>
     </div>
