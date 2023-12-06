@@ -6,7 +6,7 @@ export async function POST(request: Request) {
 
   if (!session?.user) return Response.json({ status: 401 });
 
-  const data: { activity: string; password?: string; slots: number } = await request.json();
+  const data: { activity: string; password?: string; slots: number; game: string } = await request.json();
 
   await prisma.room.create({
     data: {
@@ -14,6 +14,7 @@ export async function POST(request: Request) {
       password: data.password === '' ? undefined : data.password,
       slots: data.slots,
       creatorId: session.user.id,
+      game: data.game,
     },
   });
 

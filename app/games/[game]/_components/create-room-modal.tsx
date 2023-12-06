@@ -19,7 +19,7 @@ const formSchema = z.object({
   password: z.string().optional(),
 });
 
-const CreateRoomModal: React.FC = () => {
+const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
   const modal = useModal();
@@ -35,15 +35,19 @@ const CreateRoomModal: React.FC = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+
     values.password = !isPrivate ? '' : values.password;
+
+    const formData: z.infer<typeof formSchema> & { game: string } = { ...values, game };
     const resp = await fetch('/api/rooms/create-room', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(formData),
     });
     const data = await resp.json();
+
     setIsLoading(false);
     if (data !== 200) {
       //   Maybe set some "Something went wrong" error?

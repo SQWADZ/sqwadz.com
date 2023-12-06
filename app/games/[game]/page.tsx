@@ -13,13 +13,23 @@ const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
   const game = games.find((jsonGame) => jsonGame.path === params.game)!;
   const session = await getServerAuthSession();
 
-  const rooms = await prisma.room.findMany();
+  const rooms = await prisma.room.findMany({
+    where: {
+      game: params.game,
+    },
+    select: {
+      id: true,
+      activity: true,
+      slots: true,
+      createdAt: true,
+    },
+  });
 
   return (
     <Container className="flex flex-col gap-10">
       <div className="flex items-center justify-between">
         <p className="text-xl">Rooms</p>
-        <CreateRoom session={session} />
+        <CreateRoom session={session} game={params.game} />
       </div>
       <Input placeholder="Search..." />
       {rooms.length > 0 ? (

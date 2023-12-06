@@ -14,8 +14,6 @@ interface Props {
 const GameCard: React.FC<Props> = ({ name, image, path, color }) => {
   const gamePageUrl = `/games/${encodeURIComponent(path)}`;
 
-  console.log(color);
-
   return (
     <Link href={gamePageUrl}>
       <div className="group flex cursor-pointer items-center justify-start gap-8">
