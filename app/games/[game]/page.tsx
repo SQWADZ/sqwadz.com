@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
 import prisma from '@/lib/prisma';
+import Link from 'next/link';
 
 const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
   const game = games.find((jsonGame) => jsonGame.path === params.game)!;
@@ -48,10 +49,12 @@ const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
                 <td>2 minutes ago</td>
                 <td>0/{room.slots}</td>
                 <td className="flex items-center justify-center p-2">
-                  <Button className="flex items-center gap-2" disabled={!session?.user}>
-                    Join room
-                    <FontAwesomeIcon icon={faArrowRight} fixedWidth />
-                  </Button>
+                  <Link href={`/games/${params.game}/${room.id.toString()}`}>
+                    <Button className="flex items-center gap-2" disabled={!session?.user}>
+                      Join room
+                      <FontAwesomeIcon icon={faArrowRight} fixedWidth />
+                    </Button>
+                  </Link>
                 </td>
               </tr>
             ))}

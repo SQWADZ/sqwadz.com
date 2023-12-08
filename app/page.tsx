@@ -1,7 +1,5 @@
 import React from 'react';
 import Container from '@/components/container';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faS } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getServerAuthSession } from '@/server/auth';
