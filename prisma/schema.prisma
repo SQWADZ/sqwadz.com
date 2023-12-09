@@ -64,6 +64,7 @@ model Room {
   activity  String
   slots     Int
   password  String?
+  game      String
   createdAt DateTime @default(now())
 
   roomMembers RoomMember[]
@@ -71,6 +72,7 @@ model Room {
   creator User @relation(fields: [creatorId], references: [id])
 
   @@index([creatorId])
+  @@index([game])
 }
 
 model RoomMember {
