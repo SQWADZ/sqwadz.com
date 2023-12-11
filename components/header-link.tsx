@@ -11,7 +11,7 @@ const HeaderLink: React.FC<{ path: string; label: string }> = ({ path, label }) 
   return (
     <div
       className={cn(
-        'flex gap-2 text-muted-foreground hover:text-secondary-foreground',
+        'hidden gap-2 text-muted-foreground hover:text-secondary-foreground sm:flex',
         pathname === path && 'text-secondary-foreground'
       )}
     >

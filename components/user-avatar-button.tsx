@@ -24,7 +24,7 @@ const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) =>
         <DropdownMenuTrigger>
           <Avatar>
             <AvatarImage src={session.user?.image || undefined} />
-            <AvatarFallback>FL</AvatarFallback>
+            <AvatarFallback>{session.user.name?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -36,10 +36,7 @@ const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) =>
             <FontAwesomeIcon icon={faGear} fixedWidth />
             Settings
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="bg-text-destructive flex items-center gap-2"
-            onClick={() => signOut({ callbackUrl: '/' })}
-          >
+          <DropdownMenuItem className="flex items-center gap-2" onClick={() => signOut({ callbackUrl: '/' })}>
             <FontAwesomeIcon icon={faArrowRightFromBracket} fixedWidth />
             Sign out
           </DropdownMenuItem>
