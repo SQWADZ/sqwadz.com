@@ -12,7 +12,7 @@ const HeaderLink: React.FC<{ path: string; label: string }> = ({ path, label }) 
     <div
       className={cn(
         'hidden gap-2 text-muted-foreground hover:text-secondary-foreground sm:flex',
-        pathname === path && 'text-secondary-foreground'
+        pathname === path && 'text-primary'
       )}
     >
       <Link href={path}>{label}</Link>
