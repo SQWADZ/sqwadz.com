@@ -1,35 +1,16 @@
 import React from 'react';
 import Container from '@/components/container';
-import games from '@/data/games.json';
 import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
-import prisma from '@/lib/prisma';
-import RoomsTable from '@/app/games/[game]/_components/rooms-table';
 import RoomSearch from '@/app/games/[game]/_components/room-search';
+import Rooms from '@/app/games/[game]/_components/rooms';
+import TableLoadingSkeleton from '@/app/games/[game]/_components/table-loading-skeleton';
 
 const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: string } }> = async ({
   params,
   searchParams,
 }) => {
-  const game = games.find((jsonGame) => jsonGame.path === params.game)!;
   const session = await getServerAuthSession();
-
-  console.log(searchParams);
-
-  const rooms = await prisma.room.findMany({
-    where: {
-      game: params.game,
-      activity: {
-        contains: searchParams.query,
-      },
-    },
-    select: {
-      id: true,
-      activity: true,
-      slots: true,
-      createdAt: true,
-    },
-  });
 
   return (
     <Container className="flex flex-col gap-10">
@@ -38,7 +19,9 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
         <CreateRoom session={session} game={params.game} />
       </div>
       <RoomSearch />
-      {rooms.length > 0 ? <RoomsTable rooms={rooms} game={params.game} session={session} /> : <p>No rooms found</p>}
+      <React.Suspense key={`${searchParams.query}0`} fallback={<TableLoadingSkeleton />}>
+        <Rooms game={params.game} session={session} query={searchParams.query} />
+      </React.Suspense>
     </Container>
   );
 };

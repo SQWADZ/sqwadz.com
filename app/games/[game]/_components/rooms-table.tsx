@@ -36,7 +36,7 @@ const RoomsTable: React.FC<Props> = (props) => {
         header: 'Activity',
       }),
       columnHelper.accessor('createdAt', {
-        header: 'Created at',
+        header: 'Created',
         cell: (info) => dayjs(info.getValue() as Date).fromNow(),
       }),
       columnHelper.accessor('slots', {
