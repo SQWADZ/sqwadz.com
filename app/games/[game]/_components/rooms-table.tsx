@@ -75,7 +75,7 @@ const RoomsTable: React.FC<Props> = (props) => {
     <table className="w-full table-fixed border-separate border-spacing-0 rounded-lg border">
       <thead className="border-separate border-b border-border">
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className="">
+          <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <th key={header.id} className="border-b border-border p-2">
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
