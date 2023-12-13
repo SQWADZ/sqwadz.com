@@ -9,6 +9,7 @@ import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import RoomsTable from '@/app/games/[game]/_components/rooms-table';
 
 const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
   const game = games.find((jsonGame) => jsonGame.path === params.game)!;
@@ -33,36 +34,7 @@ const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
         <CreateRoom session={session} game={params.game} />
       </div>
       <Input placeholder="Search..." />
-      {rooms.length > 0 ? (
-        <table className="border">
-          <thead className="border-b">
-            <tr>
-              <th>Activity</th>
-              <th>Created at</th>
-              <th>Group size</th>
-            </tr>
-          </thead>
-          <tbody className="text-center">
-            {rooms.map((room) => (
-              <tr key={room.id}>
-                <td>{room.activity}</td>
-                <td>2 minutes ago</td>
-                <td>0/{room.slots}</td>
-                <td className="flex items-center justify-center p-2">
-                  <Link href={`/games/${params.game}/${room.id.toString()}`}>
-                    <Button className="flex items-center gap-2" disabled={!session?.user}>
-                      Join room
-                      <FontAwesomeIcon icon={faArrowRight} fixedWidth />
-                    </Button>
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No rooms found</p>
-      )}
+      {rooms.length > 0 ? <RoomsTable rooms={rooms} game={params.game} session={session} /> : <p>No rooms found</p>}
     </Container>
   );
 };

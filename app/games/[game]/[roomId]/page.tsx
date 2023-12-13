@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faGear, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Input } from '@/components/ui/input';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import UserItem from '@/app/games/[game]/[roomId]/_components/user-item';
 
 const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) => {
   const session = await getServerAuthSession();
@@ -54,10 +55,30 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
               </div>
             </div>
           </div>
-          <div className="flex flex-1 flex-col rounded-lg border p-4">
+          <div className="flex flex-1 flex-col gap-4 rounded-lg border p-4">
             <div className="flex items-center justify-between">
               <p className="text-xl">People</p>
               <FontAwesomeIcon icon={faUsers} fixedWidth size="lg" />
+            </div>
+            <div>
+              <Input placeholder="Search..." />
+            </div>
+            <div className="flex flex-col gap-4 overflow-y-auto">
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
+              <UserItem session={session} />
             </div>
           </div>
         </div>

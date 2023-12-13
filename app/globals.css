@@ -56,6 +56,18 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  ::-webkit-scrollbar {
+    @apply w-[2px]
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary rounded-lg overflow-hidden
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary-foreground rounded-lg
+  }
 }
 
 html,
