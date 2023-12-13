@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={cn(inter.className, `bg-background`)}>
         <Provider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            <TooltipProvider disableHoverableContent delayDuration={0}>
+            <TooltipProvider disableHoverableContent delayDuration={0} >
               <ModalsProvider>
                 <div className="flex h-screen flex-col">
                   <Header />
