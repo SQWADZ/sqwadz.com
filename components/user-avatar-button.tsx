@@ -27,7 +27,7 @@ const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) =>
             <AvatarFallback>{session.user.name?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <DropdownMenuItem className="flex items-center gap-2">
             <FontAwesomeIcon icon={faUser} fixedWidth />
             Profile

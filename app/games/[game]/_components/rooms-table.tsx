@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'next-auth';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
 
 dayjs.extend(relativeTime);
 
@@ -46,14 +47,7 @@ const RoomsTable: React.FC<Props> = (props) => {
       columnHelper.display({
         id: 'join-room',
         cell: (tableProps) => (
-          <div className="flex items-center justify-center">
-            <Link href={`/games/${props.game}/${tableProps.row.getValue('id')}`}>
-              <Button className="flex items-center gap-2" disabled={!props.session?.user}>
-                <p className="hidden md:block">Join room</p>
-                <FontAwesomeIcon icon={faArrowRight} fixedWidth />
-              </Button>
-            </Link>
-          </div>
+          <JoinRoomButton roomId={tableProps.row.getValue('id')} game={props.game} session={props.session} />
         ),
       }),
     ],
