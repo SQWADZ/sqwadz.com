@@ -23,8 +23,9 @@ const JoinRoomButton: React.FC<Props> = ({ game, roomId, session }) => {
   return (
     <div className="flex items-center justify-center">
       <Button
-        className="flex items-center gap-2"
-        disabled={!session?.user || isLoading}
+        disabled={!session?.user}
+        loading={isLoading}
+        rightIcon={faArrowRight}
         onClick={async () => {
           setIsLoading(true);
           const resp = await fetch('/api/rooms/check-for-password', {
@@ -50,14 +51,9 @@ const JoinRoomButton: React.FC<Props> = ({ game, roomId, session }) => {
           });
         }}
       >
-        {isLoading ? (
-          <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
-        ) : (
-          <>
-            <p className="hidden md:block">Join room</p>
-            <FontAwesomeIcon icon={faArrowRight} fixedWidth />
-          </>
-        )}
+        <>
+          <p className="hidden md:block">Join room</p>
+        </>
       </Button>
     </div>
   );

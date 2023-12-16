@@ -3,6 +3,9 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -34,12 +37,35 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
+  leftIcon?: IconDefinition;
+  rightIcon?: IconDefinition;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }), props.loading && 'relative')}
+        ref={ref}
+        {...props}
+        disabled={props.loading || props.disabled}
+      >
+        <>
+          <div className={cn('flex items-center gap-2', props.loading && 'opacity-0')}>
+            {props.leftIcon && <FontAwesomeIcon icon={props.leftIcon} fixedWidth />}
+            {props.children}
+            {props.rightIcon && <FontAwesomeIcon icon={props.rightIcon} fixedWidth />}
+          </div>
+          {props.loading && (
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
+            </div>
+          )}
+        </>
+      </Comp>
+    );
   }
 );
 Button.displayName = 'Button';

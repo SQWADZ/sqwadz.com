@@ -70,12 +70,8 @@ const RoomPasswordModal: React.FC<{ roomId: number }> = ({ roomId }) => {
             </FormItem>
           )}
         />
-        <Button className="self-end" type="submit" disabled={isLoading}>
-          {isLoading ? (
-            <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
-          ) : (
-            <>Join room</>
-          )}
+        <Button className="self-end" type="submit" loading={isLoading}>
+          Join room
         </Button>
       </form>
     </Form>

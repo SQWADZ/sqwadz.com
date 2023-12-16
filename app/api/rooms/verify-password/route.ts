@@ -17,8 +17,6 @@ async function handler(request: Request) {
     },
   });
 
-  console.log(data.roomId, data.password, room);
-
   if (!room) return Response.json({ isCorrect: false });
 
   return Response.json({ isCorrect: true });
