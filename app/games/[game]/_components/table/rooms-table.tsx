@@ -15,11 +15,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'next-auth';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
+import JoinRoomButton from '@/app/games/[game]/_components/table/join-room-button';
+import TablePagination from '@/app/games/[game]/_components/table/table-pagination';
+import { useSearchParams } from 'next/navigation';
 
 dayjs.extend(relativeTime);
 
-type Room = {
+export type Room = {
   id: number;
   activity: string;
   slots: number;
@@ -30,6 +32,7 @@ interface Props {
   rooms: Room[];
   game: string;
   session: Session | null;
+  roomsCount: number;
 }
 
 const PAGE_SIZE = 8;
@@ -62,13 +65,16 @@ const RoomsTable: React.FC<Props> = (props) => {
     [props]
   );
 
-  const [page, setPage] = React.useState(0);
+  const searchParams = useSearchParams();
+  const _page = searchParams.get('page');
+
+  const [page, setPage] = React.useState<number>(_page ? +_page : 0);
 
   const table = useReactTable<Room>({
     data: props.rooms,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
     state: {
       pagination: {
         pageSize: PAGE_SIZE,
@@ -108,33 +114,12 @@ const RoomsTable: React.FC<Props> = (props) => {
           ))}
         </tbody>
       </table>
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          Showing {page * PAGE_SIZE + 1}-{props.rooms.slice(0, page * PAGE_SIZE + PAGE_SIZE).length}/
-          {props.rooms.length} results.
-        </p>
-        <div className="flex items-center gap-2">
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={() => table.getCanPreviousPage() && setPage((prev) => --prev)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} fixedWidth />
-          </Button>
-          <p>
-            Page {page + 1} of {table.getPageCount()}
-          </p>
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={() => table.getCanNextPage() && setPage((prev) => ++prev)}
-            disabled={!table.getCanNextPage()}
-          >
-            <FontAwesomeIcon icon={faChevronRight} fixedWidth />
-          </Button>
-        </div>
-      </div>
+      <TablePagination
+        page={page}
+        setPage={setPage}
+        rooms={props.rooms}
+        totalPages={Math.ceil(props.roomsCount / PAGE_SIZE)}
+      />
     </div>
   );
 };

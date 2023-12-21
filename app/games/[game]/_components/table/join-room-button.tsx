@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';

@@ -14,6 +14,7 @@ const RoomSearch: React.FC = () => {
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
     term ? params.set('query', term) : params.delete('query');
+    params.delete('page');
 
     router.replace(`${pathname}?${params.toString()}`);
   }, 300);

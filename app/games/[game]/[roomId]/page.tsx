@@ -14,6 +14,8 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
 
   if (!session) return <Container>401 - Unauthorized</Container>;
 
+  // TODO: some kind of check to see if user has previously entered the password
+
   const room = await prisma.room.findFirst({
     where: {
       id: +params.roomId,

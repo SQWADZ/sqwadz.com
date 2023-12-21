@@ -3,14 +3,15 @@ import Container from '@/components/container';
 import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
 import RoomSearch from '@/app/games/[game]/_components/room-search';
-import Rooms from '@/app/games/[game]/_components/rooms';
-import TableLoadingSkeleton from '@/app/games/[game]/_components/table-loading-skeleton';
+import Rooms from '@/app/games/[game]/_components/table/rooms';
+import TableLoadingSkeleton from '@/app/games/[game]/_components/table/table-loading-skeleton';
 
-const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: string } }> = async ({
+const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: string; page?: string } }> = async ({
   params,
   searchParams,
 }) => {
   const session = await getServerAuthSession();
+  const _page = searchParams.page ? +searchParams.page : undefined;
 
   return (
     <Container className="flex flex-col gap-10">
@@ -20,7 +21,7 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
       </div>
       <RoomSearch />
       <React.Suspense key={`${searchParams.query}0`} fallback={<TableLoadingSkeleton />}>
-        <Rooms game={params.game} session={session} query={searchParams.query} />
+        <Rooms game={params.game} session={session} query={searchParams.query} page={_page} />
       </React.Suspense>
     </Container>
   );
