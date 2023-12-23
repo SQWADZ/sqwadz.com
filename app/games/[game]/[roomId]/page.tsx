@@ -26,7 +26,7 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
 
   return (
     <Container className="flex-1">
-      <div className="flex flex-col gap-8">
+      <div className="flex h-full flex-col gap-8">
         <div className="flex flex-col gap-0">
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold">{room.activity}</p>
@@ -41,42 +41,29 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
           </div>
           <p className="text-sm text-destructive">Room closing in: 59m 59s</p>
         </div>
-        <div className="flex h-[650px] flex-col justify-between gap-4 md:flex-row">
-          <div className="flex flex-1 flex-col rounded-lg border p-4 ">
-            <div className="flex items-center justify-between">
+        <div className="flex flex-1 rounded-lg border border-border">
+          <div className="flex flex-[0.7] flex-col justify-between border-r border-border p-4">
+            <div className="flex items-center justify-between text-muted-foreground">
               <p className="text-xl">Chat</p>
-              <FontAwesomeIcon icon={faComment} fixedWidth size="lg" />
-            </div>
-            <div className="flex flex-1 flex-col justify-between">
-              <div className="flex-1"></div>
-              <div className="flex items-center gap-2">
-                <Input placeholder="Message..." />
-                <Button size="icon">
-                  <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
-                </Button>
+              <div>
+                <FontAwesomeIcon icon={faComment} fixedWidth size="lg" />
               </div>
             </div>
+            <div className="flex items-center gap-2">
+              <Input placeholder="Message..." />
+              <Button size="icon">
+                <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-1 flex-col gap-4 rounded-lg border p-4">
-            <div className="flex items-center justify-between">
-              <p className="text-xl">People</p>
-              <FontAwesomeIcon icon={faUsers} fixedWidth size="lg" />
+          <div className="flex flex-[0.3] flex-col gap-4 overflow-y-auto p-4">
+            <div className="flex items-center justify-between text-muted-foreground">
+              <p className="text-xl">Members</p>
+              <div>
+                <FontAwesomeIcon icon={faUsers} fixedWidth size="lg" />
+              </div>
             </div>
-            <div>
-              <Input placeholder="Search..." />
-            </div>
-            <div className="flex flex-col gap-4 overflow-y-auto">
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
-              <UserItem session={session} />
+            <div className="flex h-full flex-col gap-4 overflow-y-auto">
               <UserItem session={session} />
               <UserItem session={session} />
               <UserItem session={session} />
