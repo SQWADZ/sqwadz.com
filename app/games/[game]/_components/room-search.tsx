@@ -12,7 +12,7 @@ const RoomSearch: React.FC = () => {
   const router = useRouter();
 
   const handleSearch = useDebouncedCallback((term: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams || undefined);
     term ? params.set('query', term) : params.delete('query');
     params.delete('page');
 
@@ -23,7 +23,7 @@ const RoomSearch: React.FC = () => {
     <Input
       placeholder="Search..."
       onChange={(e) => handleSearch(e.target.value)}
-      defaultValue={searchParams.get('query')?.toString()}
+      defaultValue={searchParams?.get('query')?.toString()}
     />
   );
 };

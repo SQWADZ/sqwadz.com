@@ -66,7 +66,7 @@ const RoomsTable: React.FC<Props> = (props) => {
   );
 
   const searchParams = useSearchParams();
-  const _page = searchParams.get('page');
+  const _page = searchParams?.get('page') || 0;
 
   const [page, setPage] = React.useState<number>(_page ? +_page : 0);
 

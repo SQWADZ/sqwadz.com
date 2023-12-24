@@ -23,7 +23,7 @@ const TablePagination: React.FC<Props> = ({ page, setPage, rooms, totalPages }) 
   const router = useRouter();
 
   const handleChangePage = (page: number) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams || undefined);
     params.set('page', page.toString());
 
     router.replace(`${pathname}?${params.toString()}`);
