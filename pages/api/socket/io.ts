@@ -22,12 +22,10 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     const path = '/api/socket/io';
     const httpServer: NetServer = res.socket.server as any;
     const io = new ServerIO(httpServer, {
-      path: path,
-      // @ts-ignore
+      path,
       addTrailingSlash: false,
     });
     res.socket.server.io = io;
-
     io.on('connection', (socket) => {
       socket.on('join_room', (roomId) => {
         socket.join(roomId);

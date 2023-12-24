@@ -25,13 +25,13 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     socket.connect();
     socket.emit('join_room', roomId);
 
-    socket.on('receive_message', (message: string) => {
-      console.log('receive');
-      handleAddMessage(message);
-    });
+    const receiveMessage = (message: string) => handleAddMessage(message);
+
+    socket.on('receive_message', receiveMessage);
 
     return () => {
       socket.emit('leave_room', roomId);
+      socket.off('receive_message', receiveMessage);
       socket.disconnect();
     };
   }, [roomId, handleAddMessage]);
