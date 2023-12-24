@@ -2,6 +2,7 @@ import { Server as NetServer } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Server as ServerIO } from 'socket.io';
 import { Socket } from 'net';
+import { Message } from '@/types';
 
 export type NextApiResponseServerIo = NextApiResponse & {
   socket: Socket & {
@@ -37,7 +38,9 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
         console.log(`user with id-${socket.id} left the room - ${roomId}`);
       });
 
-      socket.on('send_message', (roomId: string, message: string) => {
+      socket.on('send_message', (roomId: string, message: Message) => {
+        if (message.contents === '') return;
+
         io.to(roomId).emit('receive_message', message);
       });
     });

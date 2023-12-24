@@ -9,13 +9,23 @@ import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import UserItem from '@/app/games/[game]/[roomId]/_components/user-item';
 import { Session } from 'next-auth';
 import { socket } from '@/client/socket';
+import { Message } from '@/types';
+import UserAvatar from '@/components/user-avatar';
 
 const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roomId }) => {
-  const [messages, setMessages] = React.useState<string[]>(['hello', 'pog']);
+  const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
+  const user = React.useMemo(
+    () => ({
+      id: session.user.id,
+      image: session.user.image,
+      name: session.user.name,
+    }),
+    [session]
+  );
 
   const handleAddMessage = React.useCallback(
-    (message: string) => {
+    (message: Message) => {
       setMessages((prev) => [...prev, message]);
     },
     [setMessages]
@@ -25,7 +35,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     socket.connect();
     socket.emit('join_room', roomId);
 
-    const receiveMessage = (message: string) => handleAddMessage(message);
+    const receiveMessage = (message: Message) => handleAddMessage(message);
 
     socket.on('receive_message', receiveMessage);
 
@@ -37,9 +47,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
   }, [roomId, handleAddMessage]);
 
   const handleSendMessage = React.useCallback(
-    (message: string) => {
+    (message: Message) => {
       setInput('');
-      console.log('send', roomId, message);
       socket.emit('send_message', roomId, message);
     },
     [setInput, roomId]
@@ -54,10 +63,17 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
             <FontAwesomeIcon icon={faComment} fixedWidth size="lg" />
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex flex-1 flex-col gap-2 overflow-hidden">
           {messages.map((message, index) => (
-            <div key={`${message}-${index}`} className="w-fit rounded-lg border border-border p-2">
-              {message}
+            <div
+              key={`${message.contents}-${message.name}`}
+              className="flex w-fit gap-2 rounded-lg border border-border p-2"
+            >
+              <UserAvatar name={user.name} image={user.image} />
+              <div className=" flex flex-col">
+                <p>{message.name}</p>
+                <p className="text-sm text-muted-foreground">{message.contents}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -66,12 +82,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
             className="flex-1"
             onSubmit={(e) => {
               e.preventDefault();
-              handleSendMessage(input);
+              handleSendMessage({ ...user, contents: input });
             }}
           >
             <Input placeholder="Message..." value={input} onChange={({ target }) => setInput(target.value)} />
           </form>
-          <Button size="icon" onClick={() => handleSendMessage(input)}>
+          <Button size="icon" onClick={() => handleSendMessage({ ...user, contents: input })}>
             <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
           </Button>
         </div>
