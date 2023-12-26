@@ -7,6 +7,7 @@ import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/modals-provider';
 import RoomPasswordModal from '@/app/games/[game]/_components/room-password-modal';
+import { socket } from '@/client/socket';
 
 interface Props {
   game: string;

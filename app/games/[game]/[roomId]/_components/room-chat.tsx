@@ -24,15 +24,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     [session]
   );
 
-  const handleAddMessage = React.useCallback(
-    (message: Message) => {
-      setMessages((prev) => [...prev, message]);
-    },
-    [setMessages]
-  );
+  const handleAddMessage = (message: Message) => {
+    setMessages((prev) => [...prev, message]);
+  };
 
   React.useEffect(() => {
-    socket.connect();
+    console.log('CONNECT', roomId);
     socket.emit('join_room', roomId);
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
@@ -40,19 +37,17 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     socket.on('receive_message', receiveMessage);
 
     return () => {
+      console.log('cleanup');
       socket.emit('leave_room', roomId);
       socket.off('receive_message', receiveMessage);
-      socket.disconnect();
     };
-  }, [roomId, handleAddMessage]);
+  }, [roomId]);
 
-  const handleSendMessage = React.useCallback(
-    (message: Message) => {
-      setInput('');
-      socket.emit('send_message', roomId, message);
-    },
-    [setInput, roomId]
-  );
+  const handleSendMessage = (message: Message) => {
+    setInput('');
+    console.log(`send message - ${message.contents} - ${roomId}`);
+    socket.emit('send_message', roomId, message);
+  };
 
   return (
     <div className="flex flex-1 rounded-lg border border-border">
@@ -65,14 +60,11 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
         </div>
         <div className="flex flex-1 flex-col gap-2 overflow-hidden">
           {messages.map((message, index) => (
-            <div
-              key={`${message.contents}-${message.name}`}
-              className="flex w-fit gap-2 rounded-lg border border-border p-2"
-            >
+            <div key={`${message.contents}-${message.name}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
               <UserAvatar name={user.name} image={user.image} />
-              <div className=" flex flex-col">
-                <p>{message.name}</p>
-                <p className="text-sm text-muted-foreground">{message.contents}</p>
+              <div className="flex flex-col">
+                <p className="text-muted-foreground">{message.name}</p>
+                <p className="text-sm text-secondary-foreground">{message.contents}</p>
               </div>
             </div>
           ))}

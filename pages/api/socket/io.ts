@@ -1,13 +1,13 @@
 import { Server as NetServer } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Server as ServerIO } from 'socket.io';
+import { Server } from 'socket.io';
 import { Socket } from 'net';
 import { Message } from '@/types';
 
 export type NextApiResponseServerIo = NextApiResponse & {
   socket: Socket & {
     server: NetServer & {
-      io: ServerIO;
+      io: Server;
     };
   };
 };
@@ -19,15 +19,16 @@ export const config = {
 };
 
 const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
+  console.log(res.socket.server.io);
   if (!res.socket.server.io) {
     const path = '/api/socket/io';
-    const httpServer: NetServer = res.socket.server as any;
-    const io = new ServerIO(httpServer, {
+    const io = new Server(res.socket.server, {
       path,
       addTrailingSlash: false,
     });
     res.socket.server.io = io;
     io.on('connection', (socket) => {
+      console.log(`connected - ${socket.id}`);
       socket.on('join_room', (roomId) => {
         socket.join(roomId);
         console.log(`user with id-${socket.id} joined room - ${roomId}`);
@@ -39,6 +40,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       });
 
       socket.on('send_message', (roomId: string, message: Message) => {
+        console.log(`Message ${message.contents} sent in ${roomId}`);
         if (message.contents === '') return;
 
         io.to(roomId).emit('receive_message', message);
