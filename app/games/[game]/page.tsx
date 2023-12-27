@@ -1,31 +1,17 @@
 import React from 'react';
 import Container from '@/components/container';
-import games from '@/data/games.json';
-import { Button } from '@/components/ui/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { Input } from '@/components/ui/input';
 import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
-import prisma from '@/lib/prisma';
-import Link from 'next/link';
-import RoomsTable from '@/app/games/[game]/_components/rooms-table';
+import RoomSearch from '@/app/games/[game]/_components/room-search';
+import Rooms from '@/app/games/[game]/_components/table/rooms';
+import TableLoadingSkeleton from '@/app/games/[game]/_components/table/table-loading-skeleton';
 
-const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
-  const game = games.find((jsonGame) => jsonGame.path === params.game)!;
+const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: string; page?: string } }> = async ({
+  params,
+  searchParams,
+}) => {
   const session = await getServerAuthSession();
-
-  const rooms = await prisma.room.findMany({
-    where: {
-      game: params.game,
-    },
-    select: {
-      id: true,
-      activity: true,
-      slots: true,
-      createdAt: true,
-    },
-  });
+  const _page = searchParams.page ? +searchParams.page : undefined;
 
   return (
     <Container className="flex flex-col gap-10">
@@ -33,8 +19,10 @@ const GamePage: React.FC<{ params: { game: string } }> = async ({ params }) => {
         <p className="text-xl">Rooms</p>
         <CreateRoom session={session} game={params.game} />
       </div>
-      <Input placeholder="Search..." />
-      {rooms.length > 0 ? <RoomsTable rooms={rooms} game={params.game} session={session} /> : <p>No rooms found</p>}
+      <RoomSearch />
+      <React.Suspense key={`${searchParams.query}0`} fallback={<TableLoadingSkeleton />}>
+        <Rooms game={params.game} session={session} query={searchParams.query} page={_page} />
+      </React.Suspense>
     </Container>
   );
 };

@@ -21,8 +21,8 @@ const CreateRoom: React.FC<{ session: Session | null; game: string }> = ({ sessi
   return (
     <Button
       variant="secondary"
-      className="flex items-center gap-2"
       disabled={!session?.user}
+      leftIcon={faPlus}
       onClick={() =>
         modal.open({
           title: 'Create a room',
@@ -30,7 +30,6 @@ const CreateRoom: React.FC<{ session: Session | null; game: string }> = ({ sessi
         })
       }
     >
-      <FontAwesomeIcon icon={faPlus} fixedWidth />
       Create a room
     </Button>
   );

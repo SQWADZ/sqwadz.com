@@ -17,7 +17,7 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <Button asChild size="icon" variant="ghost" onClick={() => setOpen(true)}>
+      <Button size="icon" variant="ghost" onClick={() => setOpen(true)}>
         <FontAwesomeIcon icon={faBars} fixedWidth size="xl" />
       </Button>
       <SheetContent>

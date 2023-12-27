@@ -13,7 +13,7 @@ const UserItem: React.FC<{ session: Session }> = ({ session }) => {
 
   return (
     <div
-      className="flex items-center justify-between gap-2 rounded-lg p-4 hover:bg-muted"
+      className="flex items-center justify-between gap-2 rounded-lg py-2"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
@@ -28,7 +28,7 @@ const UserItem: React.FC<{ session: Session }> = ({ session }) => {
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="secondary" className="text-destructive">
+              <Button size="icon" variant="destructive">
                 <FontAwesomeIcon icon={faUserMinus} fixedWidth size="lg" />
               </Button>
             </TooltipTrigger>
@@ -38,7 +38,7 @@ const UserItem: React.FC<{ session: Session }> = ({ session }) => {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="secondary" className="text-destructive">
+              <Button size="icon" variant="destructive">
                 <FontAwesomeIcon icon={faGavel} fixedWidth size="lg" />
               </Button>
             </TooltipTrigger>

@@ -8,6 +8,8 @@ export async function POST(request: Request) {
 
   const data: { activity: string; password?: string; slots: number; game: string } = await request.json();
 
+  if (data.activity.length > 50) return Response.json({ status: 401 });
+
   await prisma.room.create({
     data: {
       activity: data.activity,

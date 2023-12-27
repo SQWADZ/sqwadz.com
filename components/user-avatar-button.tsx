@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
+import UserAvatar from '@/components/user-avatar';
 
 const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) => {
   if (!session)
@@ -22,12 +23,9 @@ const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) =>
     <div className="flex gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage src={session.user?.image || undefined} />
-            <AvatarFallback>{session.user.name?.charAt(0).toUpperCase()}</AvatarFallback>
-          </Avatar>
+          <UserAvatar image={session.user.image} name={session.user.name} />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <DropdownMenuItem className="flex items-center gap-2">
             <FontAwesomeIcon icon={faUser} fixedWidth />
             Profile
