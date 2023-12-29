@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  app:
+  app-prod:
     container_name: sqwadz-prod
     build:
       context: .
