@@ -34,5 +34,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
+        file: ./dev.Dockerfile
         push: true
         tags: ipajudd/sqwadz:latest
+      
