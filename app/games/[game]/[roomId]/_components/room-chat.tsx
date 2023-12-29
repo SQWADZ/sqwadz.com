@@ -62,7 +62,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
         <div className="flex flex-1 flex-col gap-2 overflow-hidden">
           {messages.map((message, index) => (
             <div key={`${message.contents}-${message.name}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
-              <UserAvatar name={user.name} image={user.image} />
+              <UserAvatar name={message.name} image={message.image} />
               <div className="flex flex-col">
                 <p className="text-muted-foreground">{message.name}</p>
                 <p className="text-sm text-secondary-foreground">{message.contents}</p>
