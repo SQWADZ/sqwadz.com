@@ -15,14 +15,11 @@ services:
       - TWITCH_CLIENT_SECRET=${TWITCH_CLIENT_SECRET}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
-    volumes:
-      - .:/app
     ports:
       - 3000:3000
     networks:
       - SQWADZ-NET
     restart: unless-stopped
-    pull_policy: build
     domainname: beta.sqwadz.com
 
 networks:
