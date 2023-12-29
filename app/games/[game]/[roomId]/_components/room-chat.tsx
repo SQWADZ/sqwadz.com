@@ -9,13 +9,13 @@ import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import UserItem from '@/app/games/[game]/[roomId]/_components/user-item';
 import { Session } from 'next-auth';
 import { socket } from '@/client/socket';
-import { Message } from '@/types';
+import { Message, User } from '@/types';
 import UserAvatar from '@/components/user-avatar';
 
 const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roomId }) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
-  const user = React.useMemo(
+  const user: User = React.useMemo(
     () => ({
       id: session.user.id,
       image: session.user.image,
@@ -23,6 +23,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     }),
     [session]
   );
+  const [roomMembers, setRoomMembers] = React.useState<User[]>([user]);
 
   const handleAddMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
@@ -92,10 +93,9 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
           </div>
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
-          <UserItem session={session} />
-          <UserItem session={session} />
-          <UserItem session={session} />
-          <UserItem session={session} />
+          {roomMembers.map((member) => (
+            <UserItem user={member} key={member.id} />
+          ))}
         </div>
       </div>
     </div>
