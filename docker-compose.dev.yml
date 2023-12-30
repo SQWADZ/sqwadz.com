@@ -3,10 +3,7 @@ version: '3'
 services:
   app-dev:
     container_name: sqwadz-dev
-    image: sqwadz-dev-image:latest
-    build:
-      context: .
-      dockerfile: dev.Dockerfile
+    image: ipajudd/sqwadz:latest
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
@@ -25,4 +22,3 @@ services:
 networks:
   SQWADZ-NET:
     external: true
-
