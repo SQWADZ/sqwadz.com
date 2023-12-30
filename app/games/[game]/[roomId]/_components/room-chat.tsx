@@ -23,7 +23,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     }),
     [session]
   );
-  const [roomMembers, setRoomMembers] = React.useState<User[]>([user]);
+  const [roomMembers, setRoomMembers] = React.useState<User[]>([]);
 
   const handleAddMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
@@ -31,15 +31,18 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
 
   React.useEffect(() => {
     console.log('CONNECT', roomId);
-    socket.emit('join_room', roomId);
+    socket.emit('join_room', roomId, user);
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
+    const updateRoomMembers = (members: User[]) => setRoomMembers(members);
 
     socket.on('receive_message', receiveMessage);
+    socket.on('user_joined', updateRoomMembers);
 
     return () => {
       console.log('cleanup');
       socket.emit('leave_room', roomId);
+      socket.off('user_join', updateRoomMembers);
       socket.off('receive_message', receiveMessage);
     };
   }, [roomId]);
