@@ -9,13 +9,13 @@ import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import UserItem from '@/app/games/[game]/[roomId]/_components/user-item';
 import { Session } from 'next-auth';
 import { socket } from '@/client/socket';
-import { Message, User } from '@/types';
+import { Message, RoomMember } from '@/types';
 import UserAvatar from '@/components/user-avatar';
 
 const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roomId }) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
-  const user: User = React.useMemo(
+  const user: RoomMember = React.useMemo(
     () => ({
       id: session.user.id,
       image: session.user.image,
@@ -23,7 +23,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     }),
     [session]
   );
-  const [roomMembers, setRoomMembers] = React.useState<User[]>([]);
+  const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
 
   const handleAddMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
@@ -34,15 +34,15 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     socket.emit('join_room', roomId, user);
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
-    const updateRoomMembers = (members: User[]) => setRoomMembers(members);
+    const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
 
     socket.on('receive_message', receiveMessage);
-    socket.on('user_joined', updateRoomMembers);
+    socket.on('members_changed', updateRoomMembers);
 
     return () => {
       console.log('cleanup');
       socket.emit('leave_room', roomId);
-      socket.off('user_join', updateRoomMembers);
+      socket.off('members_changed', updateRoomMembers);
       socket.off('receive_message', receiveMessage);
     };
   }, [roomId]);

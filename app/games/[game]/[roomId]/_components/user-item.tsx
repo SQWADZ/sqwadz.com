@@ -5,11 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons';
-import { Session } from 'next-auth';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { User } from '@/types';
+import { RoomMember } from '@/types';
 
-const UserItem: React.FC<{ user: User }> = ({ user }) => {
+const UserItem: React.FC<{ user: RoomMember }> = ({ user }) => {
   const [showControls, setShowControls] = React.useState(false);
 
   return (
