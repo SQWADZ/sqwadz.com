@@ -65,6 +65,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       socket.on('send_message', (roomId: string, message: Message) => {
         console.log(`Message ${message.contents} sent in ${roomId}`);
         if (message.contents === '') return;
+        message.createdAt = Date.now();
 
         io.to(roomId).emit('receive_message', message);
       });

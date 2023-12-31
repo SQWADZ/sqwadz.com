@@ -11,6 +11,10 @@ import { Session } from 'next-auth';
 import { socket } from '@/client/socket';
 import { Message, RoomMember } from '@/types';
 import UserAvatar from '@/components/user-avatar';
+import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
+
+dayjs.extend(calendar);
 
 const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roomId }) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
@@ -47,7 +51,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     };
   }, [roomId]);
 
-  const handleSendMessage = (message: Message) => {
+  const handleSendMessage = (message: Omit<Message, 'createdAt'>) => {
     setInput('');
     console.log(`send message - ${message.contents} - ${roomId}`);
     socket.emit('send_message', roomId, message);
@@ -67,7 +71,10 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
             <div key={`${message.contents}-${message.name}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
               <UserAvatar name={message.name} image={message.image} />
               <div className="flex flex-col">
-                <p className="text-muted-foreground">{message.name}</p>
+                <div className="flex items-center gap-2">
+                  <p className="">{message.name}</p>
+                  <p className="text-xs text-muted-foreground">{dayjs().calendar(message.createdAt)}</p>
+                </div>
                 <p className="text-sm text-secondary-foreground">{message.contents}</p>
               </div>
             </div>
