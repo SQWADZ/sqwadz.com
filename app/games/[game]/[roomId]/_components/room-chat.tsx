@@ -54,7 +54,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
   };
 
   return (
-    <div className="flex flex-1 rounded-lg border border-border">
+    <div className="flex flex-[1_1_0] overflow-hidden rounded-lg border border-border">
       <div className="flex flex-[0.7] flex-col justify-between gap-2 border-r border-border p-4">
         <div className="flex items-center justify-between text-muted-foreground">
           <p className="text-xl">Chat</p>
@@ -62,7 +62,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
             <FontAwesomeIcon icon={faComment} fixedWidth size="lg" />
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2 overflow-hidden">
+        <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
           {messages.map((message, index) => (
             <div key={`${message.contents}-${message.name}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
               <UserAvatar name={message.name} image={message.image} />
