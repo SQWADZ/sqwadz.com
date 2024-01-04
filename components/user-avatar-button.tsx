@@ -30,9 +30,11 @@ const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) =>
             <FontAwesomeIcon icon={faUser} fixedWidth />
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faGear} fixedWidth />
-            Settings
+          <DropdownMenuItem className="flex items-center gap-2" asChild>
+            <Link href="/settings">
+              <FontAwesomeIcon icon={faGear} fixedWidth />
+              Settings
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2" onClick={() => signOut({ callbackUrl: '/' })}>
             <FontAwesomeIcon icon={faArrowRightFromBracket} fixedWidth />

@@ -1,4 +1,4 @@
 import { Session } from 'next-auth';
 
-export type User = Omit<Session['user'], 'email'>;
-export type Message = User & { contents: string };
+export type RoomMember = Omit<Session['user'], 'email'>;
+export type Message = RoomMember & { contents: string; createdAt: number };

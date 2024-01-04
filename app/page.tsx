@@ -21,7 +21,7 @@ const HeroPage: React.FC = async () => {
             <Button variant="secondary">Browse games</Button>
           </Link>
           <Link href={session?.user ? '/games' : '/sign-in'}>
-            <Button>Sign in</Button>
+            {session?.user ? null : <Button>Sign in</Button>}
           </Link>
         </div>
       </div>

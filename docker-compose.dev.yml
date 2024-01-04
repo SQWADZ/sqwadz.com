@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  app-dev:
+    container_name: sqwadz-dev
+    image: ipajudd/sqwadz:latest
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID}
+      - TWITCH_CLIENT_SECRET=${TWITCH_CLIENT_SECRET}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+    ports:
+      - 3000:3000
+    networks:
+      - SQWADZ-NET
+    restart: unless-stopped
+    domainname: beta.sqwadz.com
+
+networks:
+  SQWADZ-NET:
+    external: true
