@@ -17,4 +17,4 @@ COPY . .
 RUN npx prisma generate
 
 # Define the command to run the app
-CMD ["pnpm", "dev"]
+CMD ["pnpm", "start"]

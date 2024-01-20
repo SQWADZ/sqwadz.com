@@ -3,11 +3,18 @@ import React from 'react';
 
 const SupportUsPage: React.FC = () => {
   return (
-    <Container>
-      <div className="flex flex-col items-center justify-center h-full">
-        <a href="https://www.buymeacoffee.com/sqwadz">
-          <img src="https://img.buymeacoffee.com/button-api/?text=Buy us a coffee&emoji=&slug=sqwadz&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" />
-        </a>
+    <Container className="flex flex-col gap-8">
+      <div className="flex flex-col gap-0">
+        <p className="text-xl">Support us</p>
+        <p className="sm text-muted-foreground">Enjoy what we made? Consider supporting us!</p>
+      </div>
+      <div className="flex h-full flex-col items-center justify-center">
+        <iframe 
+          id='kofiframe' 
+          src='https://ko-fi.com/sqwadz/?hidefeed=true&widget=true&embed=true&preview=true'
+          style={{ width: '21vw', height: '66vh', backgroundColor: 'transparent' }}
+          title='sqwadz'
+        />
       </div>
     </Container>
   );

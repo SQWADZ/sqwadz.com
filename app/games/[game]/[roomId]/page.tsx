@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faGear, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
 import RoomChat from './_components/room-chat';
+import EditButton from './_components/edit-button';
 
 const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) => {
   const session = await getServerAuthSession();
@@ -29,9 +30,12 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold">{room.activity}</p>
             <div className="flex items-center gap-2">
-              <Button size="icon" variant="secondary">
-                <FontAwesomeIcon icon={faGear} fixedWidth size="lg" />
-              </Button>
+              <EditButton
+                disabled={room.creatorId !== session.user.id}
+                roomId={params.roomId}
+                activity={room.activity}
+                slots={room.slots}
+              />
               <Button size="icon" variant="destructive">
                 <FontAwesomeIcon icon={faTrash} fixedWidth size="lg" />
               </Button>

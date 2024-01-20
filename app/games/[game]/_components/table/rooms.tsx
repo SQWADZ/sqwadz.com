@@ -11,7 +11,7 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
   query,
   page,
 }) => {
-  const rooms = await prisma.room.findMany({
+  const _rooms = await prisma.room.findMany({
     where: {
       game,
       activity: {
@@ -23,10 +23,13 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
       activity: true,
       slots: true,
       createdAt: true,
+      password: true,
     },
     take: 8,
     skip: (page ? (page >= 0 ? page : 0) : 0) * 8,
   });
+
+  const rooms = _rooms.map((room) => ({ ...room, password: !!room.password }));
 
   const roomsCount = await prisma.room.count({
     where: {

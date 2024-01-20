@@ -35,10 +35,6 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
           {session?.user ? (
             <div className="flex flex-col gap-2">
               <Button variant="secondary" className="flex items-center justify-start gap-2">
-                <FontAwesomeIcon icon={faUser} fixedWidth />
-                <p>Profile</p>
-              </Button>
-              <Button variant="secondary" className="flex items-center justify-start gap-2">
                 <FontAwesomeIcon icon={faGear} fixedWidth />
                 <p>Settings</p>
               </Button>

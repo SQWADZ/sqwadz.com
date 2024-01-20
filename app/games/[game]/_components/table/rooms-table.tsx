@@ -1,23 +1,15 @@
 'use client';
 
 import React from 'react';
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'next-auth';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import JoinRoomButton from '@/app/games/[game]/_components/table/join-room-button';
 import TablePagination from '@/app/games/[game]/_components/table/table-pagination';
 import { useSearchParams } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 dayjs.extend(relativeTime);
 
@@ -26,6 +18,7 @@ export type Room = {
   activity: string;
   slots: number;
   createdAt: Date;
+  password?: boolean;
 };
 
 interface Props {
@@ -54,6 +47,10 @@ const RoomsTable: React.FC<Props> = (props) => {
       columnHelper.accessor('slots', {
         cell: (info) => `0/${info.getValue()}`,
         header: 'Slots',
+      }),
+      columnHelper.accessor('password', {
+        header: '',
+        cell: (info) => <>{info.getValue() && <FontAwesomeIcon icon={faLock} fixedWidth />}</>,
       }),
       columnHelper.display({
         id: 'join-room',
