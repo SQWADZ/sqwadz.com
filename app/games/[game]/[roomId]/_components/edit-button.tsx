@@ -11,15 +11,17 @@ interface Props {
   activity: string;
   slots: number;
   roomId: number;
+  disabled?: boolean;
 }
 
-const EditButton: React.FC<Props> = ({ activity, slots, roomId }) => {
+const EditButton: React.FC<Props> = ({ activity, slots, roomId, disabled }) => {
   const modal = useModal();
 
   return (
     <Button
       size="icon"
       variant="secondary"
+      disabled={disabled}
       onClick={() =>
         modal.open({
           title: 'Settings',

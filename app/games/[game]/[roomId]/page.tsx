@@ -30,7 +30,12 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold">{room.activity}</p>
             <div className="flex items-center gap-2">
-              <EditButton roomId={params.roomId} activity={room.activity} slots={room.slots} />
+              <EditButton
+                disabled={room.creatorId !== session.user.id}
+                roomId={params.roomId}
+                activity={room.activity}
+                slots={room.slots}
+              />
               <Button size="icon" variant="destructive">
                 <FontAwesomeIcon icon={faTrash} fixedWidth size="lg" />
               </Button>
