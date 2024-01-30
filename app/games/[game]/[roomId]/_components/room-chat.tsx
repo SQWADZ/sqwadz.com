@@ -34,11 +34,18 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
   };
 
   React.useEffect(() => {
-    console.log('CONNECT', roomId);
-    socket.emit('join_room', roomId, user);
+    fetch('/api/rooms/join-room', {
+      body: JSON.stringify({ roomId, user }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then();
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
+
+    socket.on(`${roomId}:join-room`, (members: RoomMember[]) => updateRoomMembers(members));
 
     socket.on('receive_message', receiveMessage);
     socket.on('members_changed', updateRoomMembers);
@@ -46,7 +53,17 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     return () => {
       console.log('cleanup');
       socket.emit('leave_room', roomId);
+
+      fetch('/api/rooms/leave-room', {
+        body: JSON.stringify({ roomId }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then();
+
       socket.off('members_changed', updateRoomMembers);
+      socket.off('join-room', updateRoomMembers);
       socket.off('receive_message', receiveMessage);
     };
   }, [roomId]);
