@@ -34,6 +34,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
   };
 
   React.useEffect(() => {
+    // todo, set members to returned value
     fetch('/api/rooms/join-room', {
       body: JSON.stringify({ roomId, user }),
       method: 'POST',
@@ -46,6 +47,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
 
     socket.on(`${roomId}:join-room`, (members: RoomMember[]) => updateRoomMembers(members));
+    socket.on(`${roomId}:leave-room`, (members) => updateRoomMembers(members));
 
     socket.on('receive_message', receiveMessage);
     socket.on('members_changed', updateRoomMembers);
@@ -63,7 +65,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
       }).then();
 
       socket.off('members_changed', updateRoomMembers);
-      socket.off('join-room', updateRoomMembers);
+      socket.off(`${roomId}:join-room`, updateRoomMembers);
+      socket.off(`${roomId}:leave-room`, updateRoomMembers);
       socket.off('receive_message', receiveMessage);
     };
   }, [roomId]);

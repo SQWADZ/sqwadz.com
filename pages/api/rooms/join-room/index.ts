@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         },
       });
     } catch (e) {
-      console.log(e);
+      console.log(`failed to insert room member ${user.id} into room ${roomId}`, e);
     }
   }
 
@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     image: member.user.image,
   }));
 
-  res?.socket?.server?.io.emit(`${roomId}:join-room`, roomMembers);
+  res.socket.server.io.emit(`${roomId}:join-room`, roomMembers);
 
   return res.status(200).json({ members: roomMembers });
 }
