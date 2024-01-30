@@ -33,24 +33,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!room) return res.status(400);
 
-  if (!room.roomMembers.find((member) => member.userId === user.id)) {
-    try {
-      await prisma.roomMember.create({
-        data: {
-          roomId,
-          userId: user.id,
-        },
-      });
-    } catch (e) {
-      console.log(`failed to insert room member ${user.id} into room ${roomId}`, e);
-    }
-  }
-
+  // TODO: fix user being inserted into the db twice (react strict mode - unique constraint?)
   const roomMembers: RoomMember[] = room.roomMembers.map((member) => ({
     id: member.user.id,
     name: member.user.name,
     image: member.user.image,
   }));
+
+  if (roomMembers.find((member) => member.id === user.id)) {
+    res.socket.server.io.emit(`${roomId}:join-room`, roomMembers);
+
+    return res.status(200).json({ members: roomMembers });
+  }
+
+  try {
+    await prisma.roomMember.create({
+      data: {
+        roomId,
+        userId: user.id,
+      },
+    });
+
+    roomMembers.push(user);
+  } catch (e) {
+    console.log(`failed to insert room member ${user.id} into room ${roomId}`, e);
+  }
 
   res.socket.server.io.emit(`${roomId}:join-room`, roomMembers);
 

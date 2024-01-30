@@ -76,7 +76,8 @@ model Room {
 }
 
 model RoomMember {
-  roomId Int    @id
+  id Int @id @default(autoincrement())
+  roomId Int
   userId String
 
   room Room @relation(fields: [roomId], references: [id])
