@@ -10,11 +10,12 @@ const TableLoadingSkeleton: React.FC = () => {
           <th className="border-b border-border p-2 text-sm text-muted-foreground">Created</th>
           <th className="border-b border-border p-2 text-sm text-muted-foreground">Slots</th>
           <th className="border-b border-border p-2 text-sm text-muted-foreground"></th>
+          <th className="border-b border-border p-2 text-sm text-muted-foreground"></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colSpan={4}>
+          <td colSpan={5}>
             <Skeleton className="h-[72px] w-full rounded-none" />
             <Skeleton className="h-[72px] w-full rounded-none" />
             <Skeleton className="h-[72px] w-full rounded-none" />
