@@ -4,10 +4,6 @@ import { RoomMember } from '@/types';
 import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 import prisma from '@/lib/prisma';
 
-type Member = RoomMember & { socketId: string };
-
-const roomMembers: Record<string, RoomMember[]> = {};
-
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
 
@@ -59,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     console.log(`failed to insert room member ${user.id} into room ${roomId}`, e);
   }
 
-  res.socket.server.io.emit(`${roomId}:join-room`, roomMembers);
+  res.socket.server.io.emit(`${roomId}:members-changed`, roomMembers);
 
   return res.status(200).json({ members: roomMembers });
 }

@@ -46,12 +46,6 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     io.on('connection', (socket) => {
       console.log(`connected - ${socket.id}`);
 
-      socket.on('leave_room', (roomId) => {
-        socket.leave(roomId);
-        filterRoomMembers(io, socket.id);
-        console.log(`user with id-${socket.id} left the room - ${roomId}`);
-      });
-
       socket.on('send_message', (roomId: string, message: Message) => {
         console.log(`Message ${message.contents} sent in ${roomId}`);
         if (message.contents === '') return;
