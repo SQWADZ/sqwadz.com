@@ -47,7 +47,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
 
     socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
 
-    socket.on('receive_message', receiveMessage);
+    socket.on(`${roomId}:receive-message`, receiveMessage);
 
     return () => {
       console.log('cleanup');
@@ -60,15 +60,20 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
         },
       }).then();
 
-      socket.off(`${roomId}:members_changed`, updateRoomMembers);
-      socket.off('receive_message', receiveMessage);
+      socket.off(`${roomId}:members-changed`, updateRoomMembers);
+      socket.off(`${roomId}:receive-message`, receiveMessage);
     };
   }, [roomId]);
 
-  const handleSendMessage = (message: Omit<Message, 'createdAt'>) => {
+  const handleSendMessage = async (message: Omit<Message, 'createdAt'>) => {
     setInput('');
-    console.log(`send message - ${message.contents} - ${roomId}`);
-    socket.emit('send_message', roomId, message);
+    fetch('/api/rooms/send-message', {
+      body: JSON.stringify({ roomId, message }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then();
   };
 
   return (
@@ -81,7 +86,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-          {messages.map((message, index) => (
+          {messages.map((message) => (
             <div key={`${message.name}-${message.createdAt}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
               <UserAvatar name={message.name} image={message.image} />
               <div className="flex flex-col">
