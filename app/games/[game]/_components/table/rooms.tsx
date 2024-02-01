@@ -5,14 +5,6 @@ import prisma from '@/lib/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
 
-interface Room {
-  id: string;
-  activity: string;
-  slots: number;
-  createdAt: Date;
-  password: boolean;
-}
-
 const Rooms: React.FC<{ game: string; session: Session | null; query?: string; page?: number }> = async ({
   game,
   session,
@@ -37,7 +29,7 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
     skip: (page ? (page >= 0 ? page : 0) : 0) * 8,
   });
 
-  const rooms = _rooms.map((room: Room) => ({ ...room, password: !!room.password }));
+  const rooms = _rooms.map((room) => ({ ...room, password: !!room.password }));
 
   const roomsCount = await prisma.room.count({
     where: {
