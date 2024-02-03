@@ -16,7 +16,11 @@ import calendar from 'dayjs/plugin/calendar';
 
 dayjs.extend(calendar);
 
-const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roomId }) => {
+const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: string }> = ({
+  session,
+  roomId,
+  roomCreatorId,
+}) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
   const user: RoomMember = React.useMemo(
@@ -123,7 +127,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
           {roomMembers.map((member) => (
-            <UserItem user={member} key={member.id} />
+            <UserItem user={member} key={member.id} roomCreatorId={roomCreatorId} />
           ))}
         </div>
       </div>
