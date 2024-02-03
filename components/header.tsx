@@ -4,12 +4,6 @@ import UserAvatarButton from './user-avatar-button';
 import Link from 'next/link';
 import { getServerAuthSession } from '@/server/auth';
 import HeaderLink from './header-link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket, faBars, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import MobileNavMenu from '@/components/mobile-nav-menu';
 
 const Header: React.FC = async () => {
