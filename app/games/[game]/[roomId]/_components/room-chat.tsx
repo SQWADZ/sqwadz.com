@@ -95,10 +95,10 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
               <UserAvatar name={message.name} image={message.image} />
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <p className="">{message.name}</p>
+                  <p>{message.name}</p>
                   <p className="text-xs text-muted-foreground">{dayjs().calendar(message.createdAt)}</p>
                 </div>
-                <p className="text-sm text-secondary-foreground">{message.contents}</p>
+                <p className="text-sm text-message">{message.contents}</p>
               </div>
             </div>
           ))}
