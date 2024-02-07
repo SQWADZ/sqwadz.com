@@ -42,7 +42,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
   React.useEffect(() => {
     fetch('/api/rooms/join-room', {
-      body: JSON.stringify({ roomId, user }),
+      body: JSON.stringify({ roomId }),
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

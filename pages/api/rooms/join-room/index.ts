@@ -9,10 +9,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!session) return res.status(401).json({ error: 'Unauthorized' });
 
-  const { user, roomId: id } = req.body as { user: RoomMember; roomId: number };
+  const { roomId: id } = req.body as { roomId: number };
   const roomId = +id;
 
-  if (session.user.id !== user.id || !roomId) return res.status(400);
+  if (!roomId) return res.status(400);
 
   const room = await prisma.room.findUnique({
     where: {
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     image: member.user.image,
   }));
 
-  if (roomMembers.find((member) => member.id === user.id)) {
+  if (roomMembers.find((member) => member.id === session.user.id)) {
     res.socket.server.io.emit(`${roomId}:join-room`, roomMembers);
 
     return res.status(200).json({ members: roomMembers });
@@ -55,13 +55,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     await prisma.roomMember.create({
       data: {
         roomId,
-        userId: user.id,
+        userId: session.user.id,
       },
     });
 
+    const user: RoomMember = {
+      id: session.user.id,
+      name: session.user.name,
+      image: session.user.image,
+    };
+
     roomMembers.push(user);
   } catch (e) {
-    console.log(`failed to insert room member ${user.id} into room ${roomId}`, e);
+    console.log(`failed to insert room member ${session.user.id} into room ${roomId}`, e);
   }
 
   res.socket.server.io.emit(`${roomId}:members-changed`, roomMembers);
