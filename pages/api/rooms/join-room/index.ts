@@ -19,6 +19,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
       id: roomId,
     },
     include: {
+      _count: {
+        select: {
+          roomMembers: true,
+        },
+      },
       roomMembers: {
         include: {
           user: true,
@@ -28,6 +33,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   });
 
   if (!room) return res.status(400);
+
+  if (room._count.roomMembers >= room.slots) {
+    return res.status(307).json({ error: 'room_full' });
+  }
 
   // TODO: fix user being inserted into the db twice (react strict mode - unique constraint?)
   const roomMembers: RoomMember[] = room.roomMembers.map((member) => ({

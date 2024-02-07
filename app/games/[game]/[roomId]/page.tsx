@@ -43,7 +43,7 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
           </div>
           <p className="text-sm text-destructive">Room closing in: 59m 59s</p>
         </div>
-        <RoomChat session={session} roomId={params.roomId} roomCreatorId={room.creatorId} />
+        <RoomChat session={session} roomId={params.roomId} roomCreatorId={room.creatorId} game={room.game} />
       </div>
     </Container>
   );

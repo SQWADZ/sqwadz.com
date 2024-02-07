@@ -13,14 +13,17 @@ import { Message, RoomMember } from '@/types';
 import UserAvatar from '@/components/user-avatar';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
+import { useRouter } from 'next/navigation';
 
 dayjs.extend(calendar);
 
-const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: string }> = ({
+const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: string; game: string }> = ({
   session,
   roomId,
   roomCreatorId,
+  game,
 }) => {
+  const router = useRouter();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
   const user: RoomMember = React.useMemo(
@@ -44,7 +47,14 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then();
+    }).then(async (resp) => {
+      const data = await resp.json();
+
+      if (data.error == 'room_full') {
+        // todo: notification why the user was redirected
+        router.push(`/games/${game}`);
+      }
+    });
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
