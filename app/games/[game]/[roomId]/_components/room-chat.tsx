@@ -13,10 +13,17 @@ import { Message, RoomMember } from '@/types';
 import UserAvatar from '@/components/user-avatar';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
+import { useRouter } from 'next/navigation';
 
 dayjs.extend(calendar);
 
-const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roomId }) => {
+const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: string; game: string }> = ({
+  session,
+  roomId,
+  roomCreatorId,
+  game,
+}) => {
+  const router = useRouter();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
   const user: RoomMember = React.useMemo(
@@ -34,27 +41,53 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
   };
 
   React.useEffect(() => {
-    console.log('CONNECT', roomId);
-    socket.emit('join_room', roomId, user);
+    fetch('/api/rooms/join-room', {
+      body: JSON.stringify({ roomId }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(async (resp) => {
+      const data = await resp.json();
+
+      if (data.error == 'room_full') {
+        // todo: notification why the user was redirected
+        router.push(`/games/${game}`);
+      }
+    });
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
 
-    socket.on('receive_message', receiveMessage);
-    socket.on('members_changed', updateRoomMembers);
+    socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
+
+    socket.on(`${roomId}:receive-message`, receiveMessage);
 
     return () => {
       console.log('cleanup');
-      socket.emit('leave_room', roomId);
-      socket.off('members_changed', updateRoomMembers);
-      socket.off('receive_message', receiveMessage);
+
+      fetch('/api/rooms/leave-room', {
+        body: JSON.stringify({ roomId }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then();
+
+      socket.off(`${roomId}:members-changed`, updateRoomMembers);
+      socket.off(`${roomId}:receive-message`, receiveMessage);
     };
   }, [roomId]);
 
-  const handleSendMessage = (message: Omit<Message, 'createdAt'>) => {
+  const handleSendMessage = async (message: Omit<Message, 'createdAt'>) => {
     setInput('');
-    console.log(`send message - ${message.contents} - ${roomId}`);
-    socket.emit('send_message', roomId, message);
+    fetch('/api/rooms/send-message', {
+      body: JSON.stringify({ roomId, message }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then();
   };
 
   return (
@@ -67,15 +100,15 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-          {messages.map((message, index) => (
+          {messages.map((message) => (
             <div key={`${message.name}-${message.createdAt}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
               <UserAvatar name={message.name} image={message.image} />
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <p className="">{message.name}</p>
+                  <p>{message.name}</p>
                   <p className="text-xs text-muted-foreground">{dayjs().calendar(message.createdAt)}</p>
                 </div>
-                <p className="text-sm text-secondary-foreground">{message.contents}</p>
+                <p className="text-sm text-message">{message.contents}</p>
               </div>
             </div>
           ))}
@@ -104,7 +137,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number }> = ({ session, roo
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
           {roomMembers.map((member) => (
-            <UserItem user={member} key={member.id} />
+            <UserItem user={member} key={member.id} roomCreatorId={roomCreatorId} />
           ))}
         </div>
       </div>

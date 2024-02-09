@@ -18,12 +18,12 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
         contains: query,
       },
     },
-    select: {
-      id: true,
-      activity: true,
-      slots: true,
-      createdAt: true,
-      password: true,
+    include: {
+      _count: {
+        select: {
+          roomMembers: true,
+        },
+      },
     },
     take: 8,
     skip: (page ? (page >= 0 ? page : 0) : 0) * 8,

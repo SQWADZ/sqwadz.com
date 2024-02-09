@@ -4,11 +4,11 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons';
+import { faCrown, faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
 
-const UserItem: React.FC<{ user: RoomMember }> = ({ user }) => {
+const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string }> = ({ user, roomCreatorId }) => {
   const [showControls, setShowControls] = React.useState(false);
 
   return (
@@ -23,6 +23,7 @@ const UserItem: React.FC<{ user: RoomMember }> = ({ user }) => {
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <p>{user.name}</p>
+        {user.id === roomCreatorId && <FontAwesomeIcon icon={faCrown} fixedWidth className="text-primary" />}
       </div>
       {showControls && (
         <div className="flex items-center gap-2">

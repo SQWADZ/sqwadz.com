@@ -19,6 +19,9 @@ export type Room = {
   slots: number;
   createdAt: Date;
   password?: boolean;
+  _count: {
+    roomMembers: number;
+  };
 };
 
 interface Props {
@@ -45,7 +48,7 @@ const RoomsTable: React.FC<Props> = (props) => {
         cell: (info) => dayjs(info.getValue() as Date).fromNow(),
       }),
       columnHelper.accessor('slots', {
-        cell: (info) => `0/${info.getValue()}`,
+        cell: (info) => `${info.row.original._count.roomMembers}/${info.getValue()}`,
         header: 'Slots',
       }),
       columnHelper.accessor('password', {
