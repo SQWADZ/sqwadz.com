@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Input } from '@/components/ui/input';
@@ -24,6 +24,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   game,
 }) => {
   const router = useRouter();
+  const lastMessageRef = useRef<null | HTMLDivElement>(null);
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
   const user: RoomMember = React.useMemo(
@@ -39,6 +40,10 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   const handleAddMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
   };
+
+  React.useEffect(() => {
+    lastMessageRef?.current?.scrollIntoView(false);
+  }, [messages]);
 
   React.useEffect(() => {
     fetch('/api/rooms/join-room', {
@@ -100,8 +105,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-          {messages.map((message) => (
-            <div key={`${message.name}-${message.createdAt}`} className="flex w-fit items-center gap-4 rounded-lg p-2">
+          {messages.map((message, index) => (
+            <div
+              ref={index === messages.length - 1 ? lastMessageRef : null}
+              key={`${message.name}-${message.createdAt}`}
+              className="flex w-fit items-center gap-4 rounded-lg p-2"
+            >
               <UserAvatar name={message.name} image={message.image} />
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
