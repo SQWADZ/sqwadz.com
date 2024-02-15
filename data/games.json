@@ -1,38 +1,44 @@
 [
-    {
-        "name": "Diablo IV",
-        "path": "d4",
-        "image": "https://i.imgur.com/0Ax3Er8.png",
-        "color": "#d63031"
-    },
-    {
-        "name": "Path of Exile 2",
-        "path": "poe2",
-        "image": "https://i.imgur.com/OkoQEc6.png",
-        "color": "#2ecc71"
-    },
-    {
-        "name": "Rust",
-        "path": "rust",
-        "image": "https://i.imgur.com/Js1Nf2L.png",
-        "color": "#e67e22"
-    },
-    {
-        "name": "Ashes of Creation",
-        "path": "aoc",
-        "image": "https://i.imgur.com/w25MoPM.png",
-        "color": "#f1c40f"
-    },
-    {
-        "name": "Pax Dei",
-        "path": "pax-dei",
-        "image": "https://i.imgur.com/lfwEvwL.png",
-        "color": "#dfe6e9"
-    },
-    {
-        "name": "GTA6",
-        "path": "gta6",
-        "image": "https://i.imgur.com/UdJpzaz.png",
-        "color": "#fd79a8"
-    }
+  {
+    "name": "Diablo IV",
+    "path": "d4",
+    "image": "https://i.imgur.com/0Ax3Er8.png",
+    "color": "#d63031"
+  },
+  {
+    "name": "Last Epoch",
+    "path": "le",
+    "image": "https://i.imgur.com/gNmCEwY.png",
+    "color": "#593FA3"
+  },
+  {
+    "name": "Path of Exile 2",
+    "path": "poe2",
+    "image": "https://i.imgur.com/OkoQEc6.png",
+    "color": "#2ecc71"
+  },
+  {
+    "name": "Rust",
+    "path": "rust",
+    "image": "https://i.imgur.com/Js1Nf2L.png",
+    "color": "#e67e22"
+  },
+  {
+    "name": "Ashes of Creation",
+    "path": "aoc",
+    "image": "https://i.imgur.com/w25MoPM.png",
+    "color": "#f1c40f"
+  },
+  {
+    "name": "Pax Dei",
+    "path": "pax-dei",
+    "image": "https://i.imgur.com/lfwEvwL.png",
+    "color": "#dfe6e9"
+  },
+  {
+    "name": "GTA6",
+    "path": "gta6",
+    "image": "https://i.imgur.com/UdJpzaz.png",
+    "color": "#fd79a8"
+  }
 ]
