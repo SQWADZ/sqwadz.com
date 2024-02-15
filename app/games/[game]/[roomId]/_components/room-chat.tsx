@@ -46,6 +46,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   }, [messages]);
 
   React.useEffect(() => {
+    const receiveMessage = (message: Message) => handleAddMessage(message);
+    const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
+
+    socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
+    socket.on(`${roomId}:receive-message`, receiveMessage);
+
     fetch('/api/rooms/join-room', {
       body: JSON.stringify({ roomId }),
       method: 'POST',
@@ -60,13 +66,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         router.push(`/games/${game}`);
       }
     });
-
-    const receiveMessage = (message: Message) => handleAddMessage(message);
-    const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
-
-    socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
-
-    socket.on(`${roomId}:receive-message`, receiveMessage);
 
     return () => {
       console.log('cleanup');
