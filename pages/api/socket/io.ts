@@ -19,7 +19,6 @@ export const config = {
 };
 
 const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
-  console.log(res.socket.server.io);
   if (!res.socket.server.io) {
     const path = '/api/socket/io';
     const io = new Server(res.socket.server, {

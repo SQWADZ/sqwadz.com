@@ -61,6 +61,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   members[user.id] = user;
 
+  console.log(`res.socket.server - ${res.socket.server}`);
+  console.log(`res.socket.server.io - ${res.socket.server.io}`);
   res.socket.server.io.emit(`${roomId}:members-changed`, Object.values(members));
 
   return res.status(200).json({ members: Object.values(members) });
