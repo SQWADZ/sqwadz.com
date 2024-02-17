@@ -49,7 +49,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
 
-    console.log(`socket.active - ${socket.active}`);
+    console.log(`connected - ${socket.connected}`);
     socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => {
       console.log(`${roomId}:members-changed`, JSON.stringify(members, null, 2));
       updateRoomMembers(members);
