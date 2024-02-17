@@ -53,7 +53,6 @@ const RoomSettingsModal: React.FC<Props> = ({ activity, slots, roomId }) => {
     }
 
     modal.close();
-    // TODO: emit socket event to update title
   };
 
   return (

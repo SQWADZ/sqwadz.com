@@ -12,6 +12,7 @@ import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useModal } from '@/components/modals-provider';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   activity: z.string().max(50),
@@ -22,6 +23,7 @@ const formSchema = z.object({
 const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
+  const router = useRouter();
   const modal = useModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,15 +48,15 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
       },
       body: JSON.stringify(formData),
     });
-    const data = await resp.json();
+    const data: { status: number; id?: number } = await resp.json();
 
     setIsLoading(false);
-    if (data !== 200) {
+    if (data.status !== 200) {
       //   Maybe set some "Something went wrong" error?
     }
 
     modal.close();
-    // TODO: redirect
+    router.push(`/games/${game}/${data.id}`);
   };
 
   return (

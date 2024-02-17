@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
   if (data.activity.length > 50) return Response.json({ status: 401 });
 
-  await prisma.room.create({
+  const { id } = await prisma.room.create({
     data: {
       activity: data.activity,
       password: data.password === '' ? undefined : data.password,
@@ -20,5 +20,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return Response.json({ status: 200 });
+  return Response.json({ status: 200, id });
 }

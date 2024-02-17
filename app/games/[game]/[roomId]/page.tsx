@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faGear, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
 import RoomChat from './_components/room-chat';
 import EditButton from './_components/edit-button';
+import RoomTitle from '@/app/games/[game]/[roomId]/_components/room-title';
 
 const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) => {
   const session = await getServerAuthSession();
@@ -26,23 +27,13 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
   return (
     <Container className="flex-1">
       <div className="flex h-full flex-col gap-8">
-        <div className="flex flex-col gap-0">
-          <div className="flex items-center justify-between">
-            <p className="text-2xl font-bold">{room.activity}</p>
-            <div className="flex items-center gap-2">
-              <EditButton
-                disabled={room.creatorId !== session.user.id}
-                roomId={params.roomId}
-                activity={room.activity}
-                slots={room.slots}
-              />
-              <Button size="icon" variant="destructive">
-                <FontAwesomeIcon icon={faTrash} fixedWidth size="lg" />
-              </Button>
-            </div>
-          </div>
-          <p className="text-sm text-destructive">Room closing in: 59m 59s</p>
-        </div>
+        <RoomTitle
+          activity={room.activity}
+          slots={room.slots}
+          roomId={room.id}
+          userId={session.user.id}
+          creatorId={room.creatorId}
+        />
         <RoomChat session={session} roomId={params.roomId} roomCreatorId={room.creatorId} game={room.game} />
       </div>
     </Container>

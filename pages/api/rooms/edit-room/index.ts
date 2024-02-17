@@ -1,0 +1,38 @@
+import { getPagesServerAuthSession, getServerAuthSession } from '@/server/auth';
+import prisma from '@/lib/prisma';
+import { NextApiRequest } from 'next';
+import { NextApiResponseServerIo } from '@/pages/api/socket/io';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
+  const session = await getPagesServerAuthSession(req, res);
+
+  if (!session) return Response.json({ status: 401 });
+
+  const data: { activity: string; slots: number; roomId: number } = req.body;
+
+  const room = await prisma.room.findFirst({
+    where: {
+      id: data.roomId,
+    },
+    select: {
+      creatorId: true,
+      id: true,
+    },
+  });
+
+  if (room?.creatorId !== session.user.id) return res.status(401).json({ error: 'Unauthorized' });
+
+  await prisma.room.update({
+    where: {
+      id: data.roomId,
+    },
+    data: {
+      activity: data.activity,
+      slots: data.slots,
+    },
+  });
+
+  res.socket.server.io.emit(`${room.id}:update_room`, data);
+
+  return res.status(200).json({ ok: true });
+}

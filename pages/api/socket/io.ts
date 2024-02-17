@@ -18,22 +18,6 @@ export const config = {
   },
 };
 
-type Member = RoomMember & { socketId: string };
-
-const roomMembers: Record<string, Member[]> = {};
-
-const filterRoomMembers = (io: Server, socketId: string) => {
-  Object.keys(roomMembers).forEach((roomId) => {
-    let length = roomMembers[roomId].length;
-    roomMembers[roomId] = roomMembers[roomId].filter((member) => member.socketId !== socketId);
-
-    if (roomMembers[roomId].length !== length) {
-      io.to(roomId).emit('members_changed', roomMembers[roomId]);
-      return;
-    }
-  });
-};
-
 const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
   console.log(res.socket.server.io);
   if (!res.socket.server.io) {
@@ -43,21 +27,6 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       addTrailingSlash: false,
     });
     res.socket.server.io = io;
-    io.on('connection', (socket) => {
-      console.log(`connected - ${socket.id}`);
-
-      socket.on('send_message', (roomId: string, message: Message) => {
-        console.log(`Message ${message.contents} sent in ${roomId}`);
-        if (message.contents === '') return;
-        message.createdAt = Date.now();
-
-        io.to(roomId).emit('receive_message', message);
-      });
-
-      socket.on('disconnect', () => {
-        filterRoomMembers(io, socket.id);
-      });
-    });
   }
 
   res.end();

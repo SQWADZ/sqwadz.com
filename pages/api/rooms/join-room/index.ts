@@ -38,18 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     return res.status(307).json({ error: 'room_full' });
   }
 
-  // TODO: fix user being inserted into the db twice (react strict mode - unique constraint?)
-  const roomMembers: RoomMember[] = room.roomMembers.map((member) => ({
-    id: member.user.id,
-    name: member.user.name,
-    image: member.user.image,
-  }));
+  const members: Record<RoomMember['id'], RoomMember> = {};
 
-  if (roomMembers.find((member) => member.id === session.user.id)) {
-    res.socket.server.io.emit(`${roomId}:join-room`, roomMembers);
-
-    return res.status(200).json({ members: roomMembers });
-  }
+  room.roomMembers.forEach((member) => (members[member.user.id] = member.user));
 
   try {
     await prisma.roomMember.create({
@@ -58,19 +49,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         userId: session.user.id,
       },
     });
-
-    const user: RoomMember = {
-      id: session.user.id,
-      name: session.user.name,
-      image: session.user.image,
-    };
-
-    roomMembers.push(user);
   } catch (e) {
-    console.log(`failed to insert room member ${session.user.id} into room ${roomId}`, e);
+    console.log(`failed to insert room member ${session.user.id} into room ${roomId}`);
   }
 
-  res.socket.server.io.emit(`${roomId}:members-changed`, roomMembers);
+  const user: RoomMember = {
+    id: session.user.id,
+    name: session.user.name,
+    image: session.user.image,
+  };
 
-  return res.status(200).json({ members: roomMembers });
+  members[user.id] = user;
+
+  res.socket.server.io.emit(`${roomId}:members-changed`, Object.values(members));
+
+  return res.status(200).json({ members: Object.values(members) });
 }
