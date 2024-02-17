@@ -8,12 +8,12 @@ import { Button } from '@/components/ui/button';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import UserItem from '@/app/games/[game]/[roomId]/_components/user-item';
 import { Session } from 'next-auth';
-import { socket } from '@/client/socket';
 import { Message, RoomMember } from '@/types';
 import UserAvatar from '@/components/user-avatar';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 import { useRouter } from 'next/navigation';
+import { useSocket } from '@/components/providers/socket-provider';
 
 dayjs.extend(calendar);
 
@@ -36,6 +36,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     [session]
   );
   const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
+  const { socket, isConnected } = useSocket();
 
   const handleAddMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
@@ -48,13 +49,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   React.useEffect(() => {
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
-
-    console.log(`connected - ${socket.connected}`);
-    socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => {
-      console.log(`${roomId}:members-changed`, JSON.stringify(members, null, 2));
-      updateRoomMembers(members);
-    });
-    socket.on(`${roomId}:receive-message`, receiveMessage);
 
     fetch('/api/rooms/join-room', {
       body: JSON.stringify({ roomId }),
@@ -71,8 +65,13 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       }
     });
 
+    socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
+    socket.on(`${roomId}:receive-message`, receiveMessage);
+
     return () => {
       console.log('cleanup');
+
+      socket.removeAllListeners();
 
       fetch('/api/rooms/leave-room', {
         body: JSON.stringify({ roomId }),
@@ -81,9 +80,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
           'Content-Type': 'application/json',
         },
       }).then();
-
-      socket.off(`${roomId}:members-changed`, updateRoomMembers);
-      socket.off(`${roomId}:receive-message`, receiveMessage);
     };
   }, [roomId]);
 

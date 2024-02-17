@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import ModalsProvider from '@/components/modals-provider';
 import { Provider } from 'jotai';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { SocketProvider } from '@/components/providers/socket-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,17 +23,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={cn(inter.className, `bg-background`)}>
         <Provider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            <TooltipProvider disableHoverableContent delayDuration={0}>
-              <ModalsProvider>
-                <div className="flex h-screen flex-col">
-                  <Header />
-                  {children}
-                  <Footer />
-                </div>
-              </ModalsProvider>
-            </TooltipProvider>
-          </ThemeProvider>
+          <SocketProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+              <TooltipProvider disableHoverableContent delayDuration={0}>
+                <ModalsProvider>
+                  <div className="flex h-screen flex-col">
+                    <Header />
+                    {children}
+                    <Footer />
+                  </div>
+                </ModalsProvider>
+              </TooltipProvider>
+            </ThemeProvider>
+          </SocketProvider>
         </Provider>
       </body>
     </html>
