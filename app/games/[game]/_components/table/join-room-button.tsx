@@ -7,7 +7,7 @@ import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/modals-provider';
 import RoomPasswordModal from '@/app/games/[game]/_components/room-password-modal';
-import { socket } from '@/client/socket';
+import { useSocket } from '@/components/providers/socket-provider';
 
 interface Props {
   game: string;
@@ -16,9 +16,10 @@ interface Props {
 }
 
 const JoinRoomButton: React.FC<Props> = ({ game, roomId, session }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const { socket } = useSocket();
   const router = useRouter();
   const modal = useModal();
-  const [isLoading, setIsLoading] = React.useState(false);
 
   return (
     <div className="flex items-center justify-center">

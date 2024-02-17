@@ -5,7 +5,7 @@ import EditButton from '@/app/games/[game]/[roomId]/_components/edit-button';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { socket } from '@/client/socket';
+import { useSocket } from '@/components/providers/socket-provider';
 
 interface Props {
   activity: string;
@@ -17,6 +17,7 @@ interface Props {
 
 const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId }) => {
   const [title, setTitle] = React.useState(activity);
+  const { socket } = useSocket();
 
   const handleUpdateRoom = React.useCallback(
     (data: { activity: string; slots: number }) => {
