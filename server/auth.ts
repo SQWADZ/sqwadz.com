@@ -54,6 +54,11 @@ export const authOptions: NextAuthOptions = {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
+  pages: {
+    signIn: '/sign-in',
+    error: '/sign-in',
+    newUser: '/',
+  },
 };
 
 /**

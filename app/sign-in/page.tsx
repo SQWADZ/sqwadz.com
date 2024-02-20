@@ -5,8 +5,11 @@ import React from 'react';
 import { signIn } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faTwitch } from '@fortawesome/free-brands-svg-icons';
+import { useParams, useSearchParams } from 'next/navigation';
 
 const SignInPage: React.FC = () => {
+  const params = useSearchParams();
+
   return (
     <div className="flex w-full flex-1 items-center justify-center">
       <div className="flex w-full max-w-sm flex-1 flex-col gap-4 rounded-lg border-[1px] border-border p-4 shadow md:max-w-md">
@@ -14,6 +17,12 @@ const SignInPage: React.FC = () => {
           <p className="text-xl">Sign in</p>
           <p className="text-sm text-muted-foreground">Create an account or use an existing one</p>
         </div>
+
+        {params?.get('error') && (
+          <div className="rounded-lg border border-destructive p-2">
+            <p className="text-destructive">An unknown error occured. Please try again.</p>
+          </div>
+        )}
 
         <div className="flex flex-col gap-2">
           <Button
