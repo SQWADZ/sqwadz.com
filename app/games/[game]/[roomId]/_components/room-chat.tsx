@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '@/components/providers/socket-provider';
+import { useChatScroll } from '@/client/hooks/useChatScroll';
 
 dayjs.extend(calendar);
 
@@ -24,7 +25,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   game,
 }) => {
   const router = useRouter();
-  const lastMessageRef = useRef<null | HTMLDivElement>(null);
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
   const user: RoomMember = React.useMemo(
@@ -36,15 +36,20 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     [session]
   );
   const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
-  const { socket, isConnected } = useSocket();
+  const { socket } = useSocket();
+  const chatRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef(null);
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    shouldLoadMore: false,
+    loadMore: () => {},
+    count: messages.length,
+  });
 
   const handleAddMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
   };
-
-  React.useEffect(() => {
-    lastMessageRef?.current?.scrollIntoView(false);
-  }, [messages]);
 
   React.useEffect(() => {
     const receiveMessage = (message: Message) => handleAddMessage(message);
@@ -103,23 +108,25 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
             <FontAwesomeIcon icon={faComment} fixedWidth size="lg" />
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-          {messages.map((message, index) => (
-            <div
-              ref={index === messages.length - 1 ? lastMessageRef : null}
-              key={`${message.name}-${message.createdAt}`}
-              className="flex w-fit items-center gap-4 rounded-lg p-2"
-            >
-              <UserAvatar name={message.name} image={message.image} />
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <p>{message.name}</p>
-                  <p className="text-xs text-muted-foreground">{dayjs().calendar(message.createdAt)}</p>
+        <div className="flex flex-1 flex-col gap-2 overflow-y-auto" ref={chatRef}>
+          <>
+            {messages.map((message, index) => (
+              <div
+                key={`${message.name}-${message.createdAt}`}
+                className="flex w-fit items-center gap-4 rounded-lg p-2"
+              >
+                <UserAvatar name={message.name} image={message.image} />
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <p>{message.name}</p>
+                    <p className="text-xs text-muted-foreground">{dayjs().calendar(message.createdAt)}</p>
+                  </div>
+                  <p className="text-sm text-message">{message.contents}</p>
                 </div>
-                <p className="text-sm text-message">{message.contents}</p>
               </div>
-            </div>
-          ))}
+            ))}
+            <div ref={bottomRef} />
+          </>
         </div>
         <div className="flex items-center gap-2">
           <form
