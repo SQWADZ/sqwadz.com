@@ -36,7 +36,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     [session]
   );
   const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
-  const { socket } = useSocket();
+  const { socket, isConnected } = useSocket();
   const chatRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef(null);
   useChatScroll({
@@ -52,6 +52,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   };
 
   React.useEffect(() => {
+    if (!socket || !isConnected) return;
+
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
 
@@ -86,7 +88,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         },
       }).then();
     };
-  }, [roomId]);
+  }, [roomId, socket, isConnected]);
 
   const handleSendMessage = async (message: Omit<Message, 'createdAt'>) => {
     setInput('');

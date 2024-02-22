@@ -28,12 +28,14 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
   );
 
   React.useEffect(() => {
+    if (!socket) return;
+
     socket.on(`${roomId}:update_room`, handleUpdateRoom);
 
     return () => {
       socket.off(`${roomId}:update_room`, handleUpdateRoom);
     };
-  }, []);
+  }, [socket]);
 
   return (
     <div className="flex flex-col gap-0">

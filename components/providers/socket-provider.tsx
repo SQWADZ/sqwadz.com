@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { io as ClientIO } from 'socket.io-client';
 
 type SocketContextType = {
-  socket: any | null;
+  socket: ReturnType<typeof ClientIO> | null;
   isConnected: boolean;
 };
 
@@ -27,6 +27,8 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       addTrailingSlash: false,
     });
 
+    setSocket(socketInstance);
+
     socketInstance.on('connect', () => {
       setIsConnected(true);
     });
@@ -34,8 +36,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     socketInstance.on('disconnect', () => {
       setIsConnected(false);
     });
-
-    setSocket(socketInstance);
 
     return () => {
       socketInstance.disconnect();
