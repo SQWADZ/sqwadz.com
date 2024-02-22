@@ -56,6 +56,10 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
     const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
+    const handleRoomDelete = () => {
+      router.push(`/games/${game}`);
+      //   todo: notification
+    };
 
     fetch('/api/rooms/join-room', {
       body: JSON.stringify({ roomId }),
@@ -74,6 +78,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
     socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
     socket.on(`${roomId}:receive-message`, receiveMessage);
+    socket.on(`${roomId}:room-delete`, handleRoomDelete);
 
     return () => {
       console.log('cleanup');

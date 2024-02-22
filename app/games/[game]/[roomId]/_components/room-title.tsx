@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSocket } from '@/components/providers/socket-provider';
+import { useModal } from '@/components/modals-provider';
+import DeleteRoomModal from '../_components/delete-room-modal';
 
 interface Props {
   activity: string;
@@ -18,6 +20,7 @@ interface Props {
 const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId }) => {
   const [title, setTitle] = React.useState(activity);
   const { socket } = useSocket();
+  const modal = useModal();
 
   const handleUpdateRoom = React.useCallback(
     (data: { activity: string; slots: number }) => {
@@ -43,7 +46,12 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
         <p className="text-2xl font-bold">{title}</p>
         <div className="flex items-center gap-2">
           <EditButton disabled={creatorId !== userId} roomId={roomId} activity={title} slots={slots} />
-          <Button size="icon" variant="destructive">
+          <Button
+            size="icon"
+            variant="destructive"
+            disabled={creatorId !== userId}
+            onClick={() => modal.open({ title: 'Delete room', children: <DeleteRoomModal roomId={roomId} /> })}
+          >
             <FontAwesomeIcon icon={faTrash} fixedWidth size="lg" />
           </Button>
         </div>
