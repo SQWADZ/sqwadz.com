@@ -40,7 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     image: member.user.image,
   }));
 
-  res.socket.server.io.emit(`${id}:members-changed`, roomMembers);
+  res.socket.server.io.emit(`${id}:members-changed`, {
+    members: roomMembers,
+    message: `${session.user.name} has left the room.`,
+  });
 
   return res.status(200).json({ members: roomMembers });
 }

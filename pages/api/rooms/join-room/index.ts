@@ -62,8 +62,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   members[user.id] = user;
 
-  console.log(`client count - ${res.socket.server.io.engine.clientsCount}`);
-  res.socket.server.io.emit(`${roomId}:members-changed`, Object.values(members));
+  res.socket.server.io.emit(`${roomId}:members-changed`, {
+    members: Object.values(members),
+    message: `${user.name} has joined the room.`,
+    isJoin: true,
+  });
 
-  return res.status(200).json({ members: Object.values(members) });
+  return res.status(200).json({ message: Object.values(members) });
 }

@@ -10,6 +10,7 @@ import ModalsProvider from '@/components/modals-provider';
 import { Provider } from 'jotai';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { SocketProvider } from '@/components/providers/socket-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </ThemeProvider>
           </SocketProvider>
         </Provider>
+        <Toaster />
       </body>
     </html>
   );

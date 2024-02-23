@@ -17,6 +17,7 @@ import { useSocket } from '@/components/providers/socket-provider';
 import { useChatScroll } from '@/client/hooks/useChatScroll';
 import { useModal } from '@/components/modals-provider';
 import ChatSettingsModal from '@/app/games/[game]/[roomId]/_components/chat-settings-modal';
+import { toast } from 'sonner';
 
 dayjs.extend(calendar);
 
@@ -58,10 +59,17 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     if (!socket || !isConnected) return;
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
-    const updateRoomMembers = (members: RoomMember[]) => setRoomMembers(members);
+    const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {
+      setRoomMembers(data.members);
+
+      if (localStorage.getItem('sqwadz.enable-notifications') !== 'true') return;
+      toast(`Member ${data.isJoin ? 'joined' : 'left'} the room`, { description: data.message });
+    };
+
     const handleRoomDelete = () => {
       router.push(`/games/${game}`);
-      //   todo: notification
+
+      toast('Room deleted', { description: 'The room you were in has been deleted' });
     };
 
     fetch('/api/rooms/join-room', {
@@ -74,12 +82,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       const data = await resp.json();
 
       if (data.error == 'room_full') {
-        // todo: notification why the user was redirected
         router.push(`/games/${game}`);
+        toast('Room full', { description: 'The room you are trying to join is currently full' });
       }
     });
 
-    socket.on(`${roomId}:members-changed`, (members: RoomMember[]) => updateRoomMembers(members));
+    socket.on(`${roomId}:members-changed`, updateRoomMembers);
     socket.on(`${roomId}:receive-message`, receiveMessage);
     socket.on(`${roomId}:room-delete`, handleRoomDelete);
 
