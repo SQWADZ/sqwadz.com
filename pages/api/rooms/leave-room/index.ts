@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     },
   });
 
-  if (!room) return res.status(400);
+  if (!room) return res.status(400).json('No room with such id found');
 
   const roomMembers: RoomMember[] = room.roomMembers.map((member) => ({
     id: member.user.id,
