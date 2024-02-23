@@ -34,6 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!room) return res.status(400);
 
+  // todo: check if room includes you to stop being kicked out on page refresh
   if (room._count.roomMembers >= room.slots) {
     return res.status(307).json({ error: 'room_full' });
   }

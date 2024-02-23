@@ -3,15 +3,7 @@ import { getServerAuthSession } from '@/server/auth';
 import { redirect } from 'next/navigation';
 import Container from '@/components/container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faCircleExclamation,
-  faLock,
-  faTriangleExclamation,
-  faVolumeHigh,
-} from '@fortawesome/free-solid-svg-icons';
-import { Switch } from '@/components/ui/switch';
-import SwitchBox from '@/components/SwitchBox';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/ui/button';
 
 const SettingsPage: React.FC = async () => {
@@ -26,18 +18,6 @@ const SettingsPage: React.FC = async () => {
           <p className="text-xl">Notifications</p>
           <p className="text-sm text-muted-foreground">Manage your notification settings</p>
         </div>
-        <SwitchBox
-          title="Enable notifications"
-          description="Send a notification when a user joins/leaves a room"
-          icon={faBell}
-          id="enable-notification"
-        />
-        <SwitchBox
-          title="Enable sound"
-          description="Play a sound when receiving a notification"
-          icon={faVolumeHigh}
-          id="enable-sound"
-        />
         <div className="flex flex-col">
           <p className="text-xl">Danger Zone</p>
           <p className="text-sm text-muted-foreground">Manage your account</p>

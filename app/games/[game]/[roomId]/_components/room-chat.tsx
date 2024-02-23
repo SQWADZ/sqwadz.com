@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faComment, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
@@ -15,6 +15,8 @@ import calendar from 'dayjs/plugin/calendar';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '@/components/providers/socket-provider';
 import { useChatScroll } from '@/client/hooks/useChatScroll';
+import { useModal } from '@/components/modals-provider';
+import ChatSettingsModal from '@/app/games/[game]/[roomId]/_components/chat-settings-modal';
 
 dayjs.extend(calendar);
 
@@ -27,6 +29,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   const router = useRouter();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState('');
+  const modal = useModal();
   const user: RoomMember = React.useMemo(
     () => ({
       id: session.user.id,
@@ -147,6 +150,13 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
           </form>
           <Button size="icon" onClick={() => handleSendMessage({ ...user, contents: input })}>
             <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
+          </Button>
+          <Button
+            size="icon"
+            variant="secondary"
+            onClick={() => modal.open({ title: 'Settings', children: <ChatSettingsModal />, size: 'lg' })}
+          >
+            <FontAwesomeIcon icon={faCog} fixedWidth />
           </Button>
         </div>
       </div>

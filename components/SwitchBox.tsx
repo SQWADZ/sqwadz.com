@@ -9,9 +9,11 @@ interface Props {
   description: string;
   icon: IconProp;
   id: string;
+  checked: boolean;
+  onCheckedChange?: (val: boolean) => void;
 }
 
-const SwitchBox: React.FC<Props> = ({ title, description, icon, id }) => {
+const SwitchBox: React.FC<Props> = ({ title, description, icon, id, checked, onCheckedChange }) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-4 rounded-lg border p-4">
@@ -25,7 +27,7 @@ const SwitchBox: React.FC<Props> = ({ title, description, icon, id }) => {
             </div>
             <p className="text-sm text-muted-foreground">{description}</p>
           </div>
-          <Switch id={id} checked />
+          <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
         </div>
       </div>
     </div>
