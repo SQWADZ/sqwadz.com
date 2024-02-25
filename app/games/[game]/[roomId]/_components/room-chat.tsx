@@ -62,8 +62,9 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {
       setRoomMembers(data.members);
 
-      if (localStorage.getItem('sqwadz.enable-notifications') !== 'true') return;
-      toast(`Member ${data.isJoin ? 'joined' : 'left'} the room`, { description: data.message });
+      if (!(localStorage.getItem('sqwadz.enable-notifications') === 'false')) {
+        toast(`Member ${data.isJoin ? 'joined' : 'left'} the room`, { description: data.message });
+      }
     };
 
     const handleRoomDelete = () => {

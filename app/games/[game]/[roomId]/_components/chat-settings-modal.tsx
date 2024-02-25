@@ -4,9 +4,9 @@ import { faBell, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 
 const ChatSettingsModal: React.FC = () => {
   const [enableNotification, setEnableNotification] = React.useState(
-    localStorage.getItem('sqwadz.enable-notifications') === 'true'
+    !(localStorage.getItem('sqwadz.enable-notifications') === 'false')
   );
-  const [enableSound, setEnableSound] = React.useState(localStorage.getItem('sqwadz.enable-sound') === 'true');
+  const [enableSound, setEnableSound] = React.useState(!(localStorage.getItem('sqwadz.enable-sound') === 'false'));
 
   return (
     <div className="flex flex-col gap-4">

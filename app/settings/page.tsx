@@ -15,10 +15,6 @@ const SettingsPage: React.FC = async () => {
     <Container>
       <div className="flex flex-col justify-between gap-4 rounded-lg">
         <div className="flex flex-col">
-          <p className="text-xl">Notifications</p>
-          <p className="text-sm text-muted-foreground">Manage your notification settings</p>
-        </div>
-        <div className="flex flex-col">
           <p className="text-xl">Danger Zone</p>
           <p className="text-sm text-muted-foreground">Manage your account</p>
         </div>
