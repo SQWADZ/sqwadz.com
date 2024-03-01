@@ -143,7 +143,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
                     <p>{message.name}</p>
-                    <p className="text-xs text-muted-foreground">{dayjs().calendar(message.createdAt)}</p>
+                    <p className="text-xs text-muted-foreground">{dayjs(message.createdAt).calendar()}</p>
                   </div>
                   <p className="text-sm text-message">{message.contents}</p>
                 </div>
