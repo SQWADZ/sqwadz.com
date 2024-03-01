@@ -3,6 +3,7 @@ import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 import { Message } from '@/types';
 import prisma from '@/lib/prisma';
 import { getPagesServerAuthSession } from '@/server/auth';
+import redis from '@/lib/redis';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const { message, roomId: id } = req.body as { message: Message; roomId: string };
@@ -17,6 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   if (session.user.id !== message.id) return res.status(401);
 
   message.createdAt = Date.now();
+
+  await redis.zadd(`roomId:${roomId}`, message.createdAt, JSON.stringify(message));
 
   const room = await prisma.room.findUnique({
     where: {

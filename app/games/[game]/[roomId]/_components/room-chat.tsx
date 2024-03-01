@@ -80,11 +80,16 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         'Content-Type': 'application/json',
       },
     }).then(async (resp) => {
-      const data = await resp.json();
+      const data: { error?: string; messages?: Message[] } = await resp.json();
 
       if (data.error == 'room_full') {
         router.push(`/games/${game}`);
         toast('Room full', { description: 'The room you are trying to join is currently full' });
+      }
+
+      if (data.messages) {
+        console.log(data.messages);
+        setMessages(data.messages);
       }
     });
 
