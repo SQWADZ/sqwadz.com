@@ -8,11 +8,12 @@ import { faComment, faGear, faTrash, faUsers } from '@fortawesome/free-solid-svg
 import RoomChat from './_components/room-chat';
 import EditButton from './_components/edit-button';
 import RoomTitle from '@/app/games/[game]/[roomId]/_components/room-title';
+import { redirect } from 'next/navigation';
 
-const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) => {
+const RoomPage: React.FC<{ params: { roomId: number; game: string } }> = async ({ params }) => {
   const session = await getServerAuthSession();
 
-  if (!session) return <Container>401 - Unauthorized</Container>;
+  if (!session) return redirect('/sign-in');
 
   // TODO: some kind of check to see if user has previously entered the password
 
@@ -22,7 +23,7 @@ const RoomPage: React.FC<{ params: { roomId: number } }> = async ({ params }) =>
     },
   })!;
 
-  if (!room) return null;
+  if (!room) return redirect(`/games/${params.game}`);
 
   return (
     <Container className="flex-1">
