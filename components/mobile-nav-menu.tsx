@@ -4,16 +4,19 @@ import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket, faBars, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faBars, faComment, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useModal } from '@/components/modals-provider';
+import FeedbackModal from '@/components/feedback-modal';
 
 const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
   const [open, setOpen] = React.useState(false);
+  const modal = useModal();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -37,6 +40,17 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
               <Button variant="secondary" className="flex items-center justify-start gap-2">
                 <FontAwesomeIcon icon={faGear} fixedWidth />
                 <p>Settings</p>
+              </Button>
+              <Button
+                variant="secondary"
+                className="flex items-center justify-start gap-2"
+                onClick={() => {
+                  setOpen(false);
+                  modal.open({ title: 'Give feedback', children: <FeedbackModal /> });
+                }}
+              >
+                <FontAwesomeIcon icon={faComment} fixedWidth />
+                <p>Give feedback</p>
               </Button>
               <Button
                 variant="secondary"
