@@ -29,7 +29,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
 
     worker.on('completed', (job) => {
       console.log(`completed - ${job.data.roomId}`);
-      res.socket.server.io.emit(`${job.data.roomId}:room-delete`);
+      io.emit(`${job.data.roomId}:room-delete`);
     });
   }
 
