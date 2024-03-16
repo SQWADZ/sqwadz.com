@@ -2,7 +2,7 @@ import { Server as NetServer } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Server } from 'socket.io';
 import { Socket } from 'net';
-import { Message, RoomMember } from '@/types';
+import { worker } from '@/lib/bullmq';
 
 export type NextApiResponseServerIo = NextApiResponse & {
   socket: Socket & {
@@ -26,6 +26,11 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       addTrailingSlash: false,
     });
     res.socket.server.io = io;
+
+    worker.on('completed', (job) => {
+      console.log(`completed - ${job.data.roomId}`);
+      res.socket.server.io.emit(`${job.data.roomId}:room-delete`);
+    });
   }
 
   res.end();
