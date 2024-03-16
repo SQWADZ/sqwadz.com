@@ -48,10 +48,10 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
       },
       body: JSON.stringify(formData),
     });
-    const data: { status: number; id?: number } = await resp.json();
+    const data: { id?: number } = await resp.json();
 
     setIsLoading(false);
-    if (data.status !== 200) {
+    if (resp.status !== 200) {
       //   Maybe set some "Something went wrong" error?
     }
 

@@ -4,11 +4,11 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   const session = await getServerAuthSession();
 
-  if (!session?.user) return Response.json({ status: 401 });
+  if (!session?.user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
   const data: { activity: string; password?: string; slots: number; game: string } = await request.json();
 
-  if (data.activity.length > 50) return Response.json({ status: 401 });
+  if (data.activity.length > 50) return Response.json({ error: 'Activity name too long' }, { status: 401 });
 
   const { id } = await prisma.room.create({
     data: {
@@ -20,5 +20,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return Response.json({ status: 200, id });
+  return Response.json({ id }, { status: 200 });
 }

@@ -15,7 +15,7 @@ type Embed = {
 export async function POST(request: Request) {
   const session = await getServerAuthSession();
 
-  if (!session?.user) return NextResponse.json({ status: 401 });
+  if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const data = (await request.json()) as GeneralFeedback | GameRequest | BugReport;
 
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
   switch (data.type) {
     case 'general':
     case 'bug-report':
-      if (!data.title) return NextResponse.json({ error: 'title_missing' });
-      if (!data.comment) return NextResponse.json({ error: 'comment_missing' });
+      if (!data.title) return NextResponse.json({ error: 'title_missing' }, { status: 400 });
+      if (!data.comment) return NextResponse.json({ error: 'comment_missing' }, { status: 400 });
 
       embed.fields = [
         {
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       ];
       break;
     case 'game-request':
-      if (!data.game) return NextResponse.json({ error: 'game_missing' });
+      if (!data.game) return NextResponse.json({ error: 'game_missing' }, { status: 400 });
 
       embed.fields = [
         {
@@ -75,5 +75,5 @@ export async function POST(request: Request) {
     console.log(e);
   }
 
-  return NextResponse.json({ status: 200 });
+  return NextResponse.json({ ok: true }, { status: 200 });
 }

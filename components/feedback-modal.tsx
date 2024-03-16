@@ -55,7 +55,6 @@ const FeedbackModal: React.FC = () => {
     setIsLoading(false);
 
     const data = (await resp.json()) as {
-      status?: number;
       error?: 'title_missing' | 'game_missing' | 'comment_missing';
     };
 
@@ -73,7 +72,7 @@ const FeedbackModal: React.FC = () => {
       }
     }
 
-    if (data.status === 200) {
+    if (resp.status === 200) {
       toast('Feedback successfully submitted.');
       modal.close();
     }

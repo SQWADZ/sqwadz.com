@@ -45,10 +45,8 @@ const RoomSettingsModal: React.FC<Props> = ({ activity, slots, roomId }) => {
       body: JSON.stringify({ ...values, roomId: +roomId }),
     });
 
-    const data = await resp.json();
-
     setIsLoading(false);
-    if (data !== 200) {
+    if (resp.status !== 200) {
       //   Maybe set some "Something went wrong" error?
     }
 

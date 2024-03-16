@@ -21,7 +21,7 @@ const DeleteRoomModal: React.FC<{ roomId: number }> = ({ roomId }) => {
 
     setIsLoading(false);
 
-    if (!resp) return;
+    if (resp.status !== 200) return;
 
     modal.close();
   }

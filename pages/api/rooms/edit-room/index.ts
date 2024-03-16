@@ -6,7 +6,7 @@ import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
 
-  if (!session) return Response.json({ status: 401 });
+  if (!session) return res.status(401).send({ error: 'Unauthorized' });
 
   const data: { activity: string; slots: number; roomId: number } = req.body;
 

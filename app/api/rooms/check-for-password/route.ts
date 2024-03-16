@@ -5,7 +5,7 @@ async function handler(request: Request) {
   const session = await getServerAuthSession();
 
   if (!session?.user) {
-    return Response.json({ status: 401 });
+    return Response.json({ error: 'Unauthorized' }, { status: 400 });
   }
 
   const roomId: number = await request.json();
@@ -20,10 +20,10 @@ async function handler(request: Request) {
   });
 
   if (!room || !room.password) {
-    return Response.json({ hasPassword: false });
+    return Response.json({ hasPassword: false }, { status: 200 });
   }
 
-  return Response.json({ hasPassword: true });
+  return Response.json({ hasPassword: true }, { status: 200 });
 }
 
 export { handler as POST, handler as GET };
