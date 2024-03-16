@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   const { roomId: id } = req.body as { roomId: number };
   const roomId = +id;
 
-  if (!roomId) return res.status(400);
+  if (!roomId) return res.status(400).json({ error: 'Unauthorized' });
 
   const room = await prisma.room.findUnique({
     where: {
