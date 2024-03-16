@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     },
   });
 
+  console.log(`Add job to queue: ${id}`);
   await roomRemovalQueue.add(id.toString(), { roomId: id }, { delay: 1 * 60 * 1000 });
 
   return res.status(200).json({ id });
