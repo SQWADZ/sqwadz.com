@@ -34,6 +34,7 @@ const RoomPage: React.FC<{ params: { roomId: number; game: string } }> = async (
           roomId={room.id}
           userId={session.user.id}
           creatorId={room.creatorId}
+          createdAt={room.createdAt}
         />
         <RoomChat session={session} roomId={params.roomId} roomCreatorId={room.creatorId} game={room.game} />
       </div>

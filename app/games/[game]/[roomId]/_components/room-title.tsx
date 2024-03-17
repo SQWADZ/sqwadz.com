@@ -8,6 +8,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSocket } from '@/components/providers/socket-provider';
 import { useModal } from '@/components/modals-provider';
 import DeleteRoomModal from '../_components/delete-room-modal';
+import dayjs from 'dayjs';
 
 interface Props {
   activity: string;
@@ -15,10 +16,16 @@ interface Props {
   roomId: number;
   userId: string;
   creatorId: string;
+  createdAt: Date;
 }
 
-const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId }) => {
+const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId, createdAt }) => {
   const [title, setTitle] = React.useState(activity);
+  const [time, setTime] = React.useState(() => {
+    const minutes = dayjs(+createdAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
+
+    return minutes <= 1 ? 'Pending deletion...' : `${minutes} minutes`;
+  });
   const { socket } = useSocket();
   const modal = useModal();
 
@@ -40,6 +47,17 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
     };
   }, [socket]);
 
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      const minutes = dayjs(+createdAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
+      const time = minutes <= 1 ? 'Pending deletion...' : `${minutes} minutes`;
+
+      setTime(time);
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [createdAt]);
+
   return (
     <div className="flex flex-col gap-0">
       <div className="flex items-center justify-between">
@@ -56,7 +74,7 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
           </Button>
         </div>
       </div>
-      <p className="text-sm text-destructive">Room closing in: 59m 59s</p>
+      <p className="text-sm text-destructive">Room closing in: {time}</p>
     </div>
   );
 };
