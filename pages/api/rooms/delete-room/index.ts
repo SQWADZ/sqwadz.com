@@ -2,6 +2,7 @@ import { NextApiRequest } from 'next';
 import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 import { getPagesServerAuthSession } from '@/server/auth';
 import prisma from '@/lib/prisma';
+import { roomRemovalQueue } from '@/lib/bullmq';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
@@ -32,6 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     console.log(e);
   }
 
+  await roomRemovalQueue.remove(roomId.toString());
   res.socket.server.io.emit(`${roomId}:room-delete`);
 
   return res.status(200).json({ ok: true });
