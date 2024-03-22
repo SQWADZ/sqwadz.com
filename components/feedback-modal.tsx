@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { useModal } from '@/components/modals-provider';
 import { toast } from 'sonner';
+import { notify } from '@/client/utils';
 
 const formSchema = z.object({
   type: z.string(),
@@ -73,7 +74,7 @@ const FeedbackModal: React.FC = () => {
     }
 
     if (resp.status === 200) {
-      toast('Feedback successfully submitted.');
+      notify({ message: 'Feedback successfully submitted.' });
       modal.close();
     }
 

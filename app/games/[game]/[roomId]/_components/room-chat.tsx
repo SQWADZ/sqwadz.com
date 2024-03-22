@@ -18,6 +18,7 @@ import { useChatScroll } from '@/client/hooks/useChatScroll';
 import { useModal } from '@/components/modals-provider';
 import ChatSettingsModal from '@/app/games/[game]/[roomId]/_components/chat-settings-modal';
 import { toast } from 'sonner';
+import { notify } from '@/client/utils';
 
 dayjs.extend(calendar);
 
@@ -63,14 +64,18 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       setRoomMembers(data.members);
 
       if (!(localStorage.getItem('sqwadz.enable-notifications') === 'false')) {
-        toast(`Member ${data.isJoin ? 'joined' : 'left'} the room`, { description: data.message });
+        notify({
+          message: `Member ${data.isJoin ? 'joined' : 'left'} the room`,
+          data: { description: data.message },
+          playSound: localStorage.getItem('sqwadz.enable-sound') === 'true',
+        }).then();
       }
     };
 
     const handleRoomDelete = () => {
       router.push(`/games/${game}`);
 
-      toast('Room deleted', { description: 'The room you were in has been deleted' });
+      notify({ message: 'Room deleted', data: { description: 'The room you were in has been deleted' } });
     };
 
     fetch('/api/rooms/join-room', {
@@ -84,7 +89,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
       if (data.error == 'room_full') {
         router.push(`/games/${game}`);
-        toast('Room full', { description: 'The room you are trying to join is currently full' });
+        notify({ message: 'Room full', data: { description: 'The room you are trying to join is currently full' } });
       }
 
       if (data.messages) {

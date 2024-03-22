@@ -17,7 +17,6 @@ interface Props {
 
 const JoinRoomButton: React.FC<Props> = ({ game, roomId, session }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { socket } = useSocket();
   const router = useRouter();
   const modal = useModal();
 
