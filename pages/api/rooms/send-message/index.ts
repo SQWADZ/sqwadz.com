@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   message.createdAt = Date.now();
 
-  await redis.zadd(`roomId:${roomId}`, message.createdAt, JSON.stringify(message));
+  await redis.zadd(`roomId:${roomId}:messages`, message.createdAt, JSON.stringify(message));
 
   const room = await prisma.room.findUnique({
     where: {

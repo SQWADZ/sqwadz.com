@@ -13,7 +13,7 @@ export const worker = new Worker(
     console.log(`job - ${job.data.roomId}`);
 
     try {
-      await redis.del(`roomId:${job.data.roomId}`);
+      await redis.del(`roomId:${job.data.roomId}:messages`);
 
       await prisma.room.delete({
         where: {

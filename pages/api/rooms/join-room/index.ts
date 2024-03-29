@@ -15,6 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!roomId) return res.status(400).json({ error: 'Unauthorized' });
 
+  const insertId = await redis.hset(
+    `roomId:${roomId}:members`,
+    `userId:${session.user.id}`,
+    JSON.stringify(session.user)
+  );
+
   const room = await prisma.room.findUnique({
     where: {
       id: roomId,
@@ -69,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     isJoin: true,
   });
 
-  const rawMessages = await redis.zrange(`roomId:${roomId}`, 0, 50);
+  const rawMessages = await redis.zrange(`roomId:${roomId}:messages`, 0, 50);
   const parsedMessages: Message[] = rawMessages.map((rawMessage) => JSON.parse(rawMessage));
 
   return res.status(200).json({ messages: parsedMessages });

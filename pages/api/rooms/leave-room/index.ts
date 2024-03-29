@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
 import { getPagesServerAuthSession } from '@/server/auth';
 import { RoomMember } from '@/types';
+import redis from '@/lib/redis';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
@@ -11,6 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   const { roomId: id } = req.body;
   const roomId = +id;
+
+  await redis.hdel(`roomId:${roomId}:members`, `userId:${session.user.id}`);
 
   await prisma.roomMember.deleteMany({
     where: {
