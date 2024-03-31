@@ -14,7 +14,11 @@ const formSchema = z.object({
   reason: z.string(),
 });
 
-const KickMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ targetId, roomId }) => {
+const BanKickMemberModal: React.FC<{ targetId: string; roomId: number; type: 'ban' | 'kick' }> = ({
+  targetId,
+  roomId,
+  type,
+}) => {
   const modal = useModal();
   const [isLoading, setIsLoading] = React.useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -27,7 +31,7 @@ const KickMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ targe
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const resp = await fetch('/api/rooms/kick-member', {
+    const resp = await fetch(`/api/rooms/${type === 'ban' ? 'ban-member' : 'kick-member'}`, {
       headers: {
         'Content-Type': 'Application/JSON',
       },
@@ -40,7 +44,10 @@ const KickMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ targe
     });
 
     if (resp.status !== 200) {
-      notify({ message: 'Unable to kick member', data: { description: 'Something went wrong.' } });
+      notify({
+        message: `Unable to ${type === 'ban' ? 'ban' : 'kick'} member`,
+        data: { description: 'Something went wrong.' },
+      });
     }
 
     setIsLoading(false);
@@ -69,7 +76,11 @@ const KickMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ targe
           </Button>
           <Button type="submit" disabled={isLoading} variant="destructive">
             {!isLoading ? (
-              'Kick'
+              type === 'kick' ? (
+                'Kick'
+              ) : (
+                'Ban'
+              )
             ) : (
               <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
             )}
@@ -80,4 +91,4 @@ const KickMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ targe
   );
 };
 
-export default KickMemberModal;
+export default BanKickMemberModal;

@@ -8,29 +8,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!session) return res.status(401).json('Unauthorized');
 
-  const data: { roomId: number; targetId: string; reason: string } = req.body;
+  const data: { targetId: string; reason: string; roomId: number } = req.body;
 
   const room = await prisma.room.findFirst({
     where: {
-      id: data.roomId,
+      id: +data.roomId,
     },
   });
 
-  if (!room) return res.status(500).json('No such room');
+  if (!room) return res.status(500).json('No room found');
 
   if (session.user.id !== room.creatorId) return res.status(401).json('Unauthorized');
 
-  await prisma.roomMember.deleteMany({
-    where: {
-      roomId: data.roomId,
-      userId: data.targetId,
-    },
-  });
+  try {
+    await prisma.roomBan.create({
+      data: {
+        roomId: +data.roomId,
+        userId: data.targetId,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json(e);
+  }
 
   res.socket.server.io.emit(`${data.roomId}:remove-member`, {
     targetId: data.targetId,
     reason: data.reason,
-    type: 'kick',
+    type: 'ban',
   });
 
   return res.status(200).json('success');

@@ -60,6 +60,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     if (!socket || !isConnected) return;
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
+
+    // todo: don't notify when a banned user unloads the page
     const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {
       setRoomMembers(data.members);
 
@@ -78,14 +80,14 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       notify({ message: 'Room deleted', data: { description: 'The room you were in has been deleted' } });
     };
 
-    const handleKickMember = (data: { targetId: string; reason: string }) => {
+    const handleRemoveMember = (data: { targetId: string; reason: string; type: 'ban' | 'kick' }) => {
       if (data.targetId !== session.user.id) {
         return;
       }
 
       router.push(`/games/${game}`);
       notify({
-        message: 'You have been kicked',
+        message: `You have been ${data.type === 'ban' ? 'banned' : 'kicked'}`,
         data: { description: data.reason ? `Reason: ${data.reason}` : undefined, duration: 5000 },
       });
     };
@@ -99,9 +101,17 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     }).then(async (resp) => {
       const data: { error?: string; messages?: Message[] } = await resp.json();
 
-      if (data.error == 'room_full') {
+      if (data.error === 'room_full') {
         router.push(`/games/${game}`);
         notify({ message: 'Room full', data: { description: 'The room you are trying to join is currently full' } });
+      }
+
+      if (data.error === 'banned') {
+        router.push(`/games/${game}`);
+        notify({
+          message: 'Unable to join',
+          data: { description: 'You are banned from the room you are trying to join' },
+        });
       }
 
       if (data.messages) {
@@ -110,7 +120,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       }
     });
 
-    socket.on(`${roomId}:kick-member`, handleKickMember);
+    socket.on(`${roomId}:remove-member`, handleRemoveMember);
     socket.on(`${roomId}:members-changed`, updateRoomMembers);
     socket.on(`${roomId}:receive-message`, receiveMessage);
     socket.on(`${roomId}:room-delete`, handleRoomDelete);

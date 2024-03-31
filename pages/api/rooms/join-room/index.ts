@@ -15,6 +15,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!roomId) return res.status(400).json({ error: 'Unauthorized' });
 
+  // check if member is banned
+  const isBanned = await prisma.roomBan.findFirst({
+    where: {
+      roomId: roomId,
+      userId: session.user.id,
+    },
+  });
+
+  if (isBanned) return res.status(401).json({ error: 'banned' });
+
   const insertId = await redis.hset(
     `roomId:${roomId}:members`,
     `userId:${session.user.id}`,

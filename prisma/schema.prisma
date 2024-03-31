@@ -47,6 +47,7 @@ model User {
   sessions      Session[]
   rooms         Room[]
   roomMember    RoomMember[]
+  roomBan       RoomBan[]
 }
 
 model VerificationToken {
@@ -67,6 +68,7 @@ model Room {
   createdAt DateTime @default(now())
 
   roomMembers RoomMember[]
+  roomBans RoomBan[]
 
   creator User @relation(fields: [creatorId], references: [id])
 
@@ -75,6 +77,16 @@ model Room {
 }
 
 model RoomMember {
+  roomId Int
+  userId String
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, userId])
+}
+
+model RoomBan {
   roomId Int
   userId String
 
