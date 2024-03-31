@@ -78,6 +78,18 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       notify({ message: 'Room deleted', data: { description: 'The room you were in has been deleted' } });
     };
 
+    const handleKickMember = (data: { targetId: string; reason: string }) => {
+      if (data.targetId !== session.user.id) {
+        return;
+      }
+
+      router.push(`/games/${game}`);
+      notify({
+        message: 'You have been kicked',
+        data: { description: data.reason ? `Reason: ${data.reason}` : undefined, duration: 5000 },
+      });
+    };
+
     fetch('/api/rooms/join-room', {
       body: JSON.stringify({ roomId }),
       method: 'POST',
@@ -98,6 +110,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       }
     });
 
+    socket.on(`${roomId}:kick-member`, handleKickMember);
     socket.on(`${roomId}:members-changed`, updateRoomMembers);
     socket.on(`${roomId}:receive-message`, receiveMessage);
     socket.on(`${roomId}:room-delete`, handleRoomDelete);
@@ -188,7 +201,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
           {roomMembers.map((member) => (
-            <UserItem user={member} key={member.id} roomCreatorId={roomCreatorId} />
+            <UserItem user={member} key={member.id} roomCreatorId={roomCreatorId} roomId={roomId} clientId={user.id} />
           ))}
         </div>
       </div>

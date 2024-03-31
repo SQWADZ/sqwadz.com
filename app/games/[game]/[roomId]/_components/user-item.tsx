@@ -7,15 +7,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown, faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
+import { useModal } from '@/components/modals-provider';
+import KickMemberModal from '../_components/kick-member-modal';
 
-const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string }> = ({ user, roomCreatorId }) => {
+const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: string; roomId: number }> = ({
+  user,
+  roomCreatorId,
+  clientId,
+  roomId,
+}) => {
   const [showControls, setShowControls] = React.useState(false);
+  const modal = useModal();
+
+  const canShowControls = React.useMemo(
+    () => clientId === roomCreatorId && user.id !== roomCreatorId,
+    [clientId, roomCreatorId, user.id]
+  );
 
   return (
     <div
       className="flex items-center justify-between gap-2 rounded-lg py-2"
-      onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => setShowControls(false)}
+      onMouseEnter={() => canShowControls && setShowControls(true)}
+      onMouseLeave={() => canShowControls && setShowControls(false)}
     >
       <div className="flex items-center gap-2">
         <Avatar>
@@ -29,7 +42,18 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string }> = ({ user,
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="text-destructive hover:text-destructive"
+                onClick={() =>
+                  modal.open({
+                    title: 'Kick member',
+                    children: <KickMemberModal targetId={user.id} roomId={roomId} />,
+                    description: `Are you sure you want to kick ${user.name}?`,
+                  })
+                }
+              >
                 <FontAwesomeIcon icon={faUserMinus} fixedWidth size="lg" />
               </Button>
             </TooltipTrigger>
