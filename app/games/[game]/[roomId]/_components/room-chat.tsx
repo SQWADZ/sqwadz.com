@@ -68,7 +68,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
           message: `Member ${data.isJoin ? 'joined' : 'left'} the room`,
           data: { description: data.message },
           playSound: localStorage.getItem('sqwadz.enable-sound') === 'true',
-        }).then();
+        });
       }
     };
 

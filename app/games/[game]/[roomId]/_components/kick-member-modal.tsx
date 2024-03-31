@@ -40,7 +40,7 @@ const KickMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ targe
     });
 
     if (resp.status !== 200) {
-      await notify({ message: 'Unable to kick member', data: { description: 'Something went wrong.' } });
+      notify({ message: 'Unable to kick member', data: { description: 'Something went wrong.' } });
     }
 
     setIsLoading(false);
