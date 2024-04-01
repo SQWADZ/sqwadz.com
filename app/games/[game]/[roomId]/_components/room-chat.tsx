@@ -61,7 +61,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
 
-    // todo: don't notify when a banned user unloads the page
     const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {
       setRoomMembers(data.members);
 

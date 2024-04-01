@@ -15,12 +15,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   await redis.hdel(`roomId:${roomId}:members`, `userId:${session.user.id}`);
 
-  await prisma.roomMember.deleteMany({
+  const { count } = await prisma.roomMember.deleteMany({
     where: {
       userId: session.user.id,
       roomId: roomId,
     },
   });
+
+  if (count === 0) {
+    return res.status(200).json('no members removed');
+  }
 
   const room = await prisma.room.findUnique({
     where: {
