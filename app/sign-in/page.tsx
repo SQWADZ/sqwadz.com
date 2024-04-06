@@ -6,12 +6,13 @@ import { signIn } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faTwitch } from '@fortawesome/free-brands-svg-icons';
 import { useParams, useSearchParams } from 'next/navigation';
+import Container from '@/components/container';
 
 const SignInPage: React.FC = () => {
   const params = useSearchParams();
 
   return (
-    <div className="flex w-full flex-1 items-center justify-center">
+    <Container className="flex items-center justify-center">
       <div className="flex w-full max-w-sm flex-1 flex-col gap-4 rounded-lg border-[1px] border-border p-4 shadow md:max-w-md">
         <div>
           <p className="text-xl">Sign in</p>
@@ -20,7 +21,7 @@ const SignInPage: React.FC = () => {
 
         {params?.get('error') && (
           <div className="rounded-lg border border-destructive p-2">
-            <p className="text-destructive">An unknown error occured. Please try again.</p>
+            <p className="text-destructive">An unknown error occurred. Please try again.</p>
           </div>
         )}
 
@@ -47,7 +48,7 @@ const SignInPage: React.FC = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
