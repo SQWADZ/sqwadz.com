@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import { signIn } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiscord, faTwitch } from '@fortawesome/free-brands-svg-icons';
+import { faBattleNet, faDiscord, faTwitch } from '@fortawesome/free-brands-svg-icons';
 import { useParams, useSearchParams } from 'next/navigation';
 import Container from '@/components/container';
 
@@ -45,6 +45,16 @@ const SignInPage: React.FC = () => {
               <FontAwesomeIcon icon={faTwitch} size="lg" fixedWidth />
             </div>
             Twitch
+          </Button>
+          <Button
+            className="flex items-center justify-start gap-2"
+            onClick={() => signIn('battlenet', { callbackUrl: '/' })}
+            variant="outline"
+          >
+            <div className="w-[20px]">
+              <FontAwesomeIcon icon={faBattleNet} size="lg" fixedWidth />
+            </div>
+            Battle.net
           </Button>
         </div>
       </div>

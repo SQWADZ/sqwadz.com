@@ -1,10 +1,17 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
-import DiscordProvider from 'next-auth/providers/discord';
-
 import prisma from '@/lib/prisma';
 import TwitchProvider from 'next-auth/providers/twitch';
+import BattleNetProvider from 'next-auth/providers/battlenet';
+import DiscordProvider from 'next-auth/providers/discord';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+type BattleNetIssuer =
+  | 'https://www.battlenet.com.cn/oauth'
+  | 'https://us.battle.net/oauth'
+  | 'https://eu.battle.net/oauth'
+  | 'https://kr.battle.net/oauth'
+  | 'https://tw.battle.net/oauth';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -42,7 +49,15 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  adapter: PrismaAdapter(prisma),
+  adapter: {
+    ...PrismaAdapter(prisma),
+
+    // Providers such as battle.net pass an aditional argument `sub` that prisma tries to insert
+    // into a `sub` column, which does not exist in our schema so we have to use this hacky workaround
+
+    // @ts-ignore
+    linkAccount: ({ sub, ...data }) => prisma.account.create({ data }),
+  },
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID as string,
@@ -52,6 +67,11 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.TWITCH_CLIENT_ID as string,
       clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
+    }),
+    BattleNetProvider({
+      clientId: process.env.BNET_CLIENT_ID as string,
+      clientSecret: process.env.BNET_CLIENT_SECRET as string,
+      issuer: process.env.BNET_ISSUER as BattleNetIssuer,
     }),
   ],
   pages: {
