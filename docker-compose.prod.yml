@@ -15,6 +15,11 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - EPIC_CLIENT_ID=${EPIC_CLIENT_ID}
+      - EPIC_CLIENT_SECRET=${EPIC_CLIENT_SECRET}
+      - BNET_CLIENT_ID=${BNET_CLIENT_ID}
+      - BNET_CLIENT_SECRET=${BNET_CLIENT_SECRET}
+      - BNET_ISSUER=${BNET_ISSUER}
     volumes:
       - app:/app
       - node_modules:/app/node_modules
