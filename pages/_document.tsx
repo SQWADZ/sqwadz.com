@@ -1,23 +1,17 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript } from "next/document";
 
-class MyDocument extends Document {
-  render() {
-    return (
-      <Html>
-        <Head>
-        </Head>
-        <body>
-          <script
-            defer
-            src={process.env.ANALYTICS_SRC}
-            data-website-id={process.env.ANALYTICS_WEBSITE_ID}
-          ></script>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    );
-  }
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head>
+        <meta charSet="UTF-8" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+      </Head>
+
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
 }
-
-export default MyDocument;
