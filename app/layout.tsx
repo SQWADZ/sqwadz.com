@@ -12,6 +12,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { SocketProvider } from '@/components/providers/socket-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { worker } from '@/lib/bullmq';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Provider>
         <Toaster />
       </body>
+      <Script defer src={process.env.ANALYTICS_SRC} data-website-id={process.env.ANALYTICS_WEBSITE_ID} />
     </html>
   );
 }
