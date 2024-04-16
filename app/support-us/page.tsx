@@ -8,7 +8,7 @@ const SupportUsPage: React.FC = () => {
       <div className="text-center">
         <p className="text-xl text-gray-600">Enjoy what we made? Consider supporting us!</p>
       </div>
-      <Link href="https://ko-fi.com/sqwadz" 
+      <Link href="https://ko-fi.com/sqwadz/donate" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="bg-red-500 hover:bg-red-600 text-white font-semibold text-lg px-6 py-3 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1">

@@ -1,44 +1,74 @@
 [
   {
+    "name": "Ashes of Creation",
+    "path": "aoc",
+    "image": "/images/aoc.webp",
+    "color": "#f1c40f"
+  },
+  {
+    "name": "Call of Duty",
+    "path": "cod",
+    "image": "/images/cod.webp",
+    "color": "#5f27cd"
+  },
+  {
+    "name": "Diablo II: Resurrected",
+    "path": "d2r",
+    "image": "/images/d2r.webp",
+    "color": "#d63031"
+  },
+  {
     "name": "Diablo IV",
     "path": "d4",
-    "image": "https://i.imgur.com/0Ax3Er8.png",
+    "image": "/images/d4.webp",
     "color": "#d63031"
+  },
+  {
+    "name": "Enshrouded",
+    "path": "enshrouded",
+    "image": "/images/enshrouded.webp",
+    "color": "#81ecec"
+  },
+  {
+    "name": "Helldivers 2",
+    "path": "helldivers2",
+    "image": "/images/helldivers2.webp",
+    "color": "#273c75"
   },
   {
     "name": "Last Epoch",
     "path": "le",
-    "image": "https://i.imgur.com/gNmCEwY.png",
+    "image": "/images/last-epoch.webp",
     "color": "#593FA3"
   },
   {
-    "name": "Path of Exile 2",
-    "path": "poe2",
-    "image": "https://i.imgur.com/OkoQEc6.png",
+    "name": "Minecraft",
+    "path": "minecraft",
+    "image": "/images/minecraft.webp",
+    "color": "#4cd137"
+  },
+  {
+    "name": "Path of Exile",
+    "path": "poe",
+    "image": "/images/poe.webp",
     "color": "#2ecc71"
-  },
-  {
-    "name": "Rust",
-    "path": "rust",
-    "image": "https://i.imgur.com/Js1Nf2L.png",
-    "color": "#e67e22"
-  },
-  {
-    "name": "Ashes of Creation",
-    "path": "aoc",
-    "image": "https://i.imgur.com/w25MoPM.png",
-    "color": "#f1c40f"
   },
   {
     "name": "Pax Dei",
     "path": "pax-dei",
-    "image": "https://i.imgur.com/lfwEvwL.png",
+    "image": "/images/paxdei.webp",
     "color": "#dfe6e9"
   },
   {
-    "name": "GTA6",
-    "path": "gta6",
-    "image": "https://i.imgur.com/UdJpzaz.png",
-    "color": "#fd79a8"
+    "name": "Rust",
+    "path": "rust",
+    "image": "/images/rust.webp",
+    "color": "#e67e22"
+  },
+  {
+    "name": "General",
+    "path": "general",
+    "image": "/images/general.webp",
+    "color": "#feca57"
   }
 ]
