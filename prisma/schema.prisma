@@ -70,7 +70,7 @@ model Room {
   roomMembers RoomMember[]
   roomBans RoomBan[]
 
-  creator User @relation(fields: [creatorId], references: [id])
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   @@index([creatorId])
   @@index([game])

@@ -2,9 +2,7 @@ import React from 'react';
 import { getServerAuthSession } from '@/server/auth';
 import { redirect } from 'next/navigation';
 import Container from '@/components/container';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { Button } from '@/components/ui/button';
+import DeleteAccountButton from './_components/delete-account-button';
 
 const SettingsPage: React.FC = async () => {
   const session = await getServerAuthSession();
@@ -18,17 +16,17 @@ const SettingsPage: React.FC = async () => {
           <p className="text-xl">Danger Zone</p>
           <p className="text-sm text-muted-foreground">Manage your account</p>
         </div>
-        <div className="border-boder flex items-center justify-between gap-4 rounded-lg border p-4">
+        <div className="border-boder flex flex-col justify-between gap-4 rounded-lg border p-4">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faTriangleExclamation} />
               <p className="text-base">Delete account</p>
             </div>
-            <p className="text-sm text-muted-foreground">This action is irreversible</p>
+            <p className="text-sm text-muted-foreground">
+              Removes all data associated with your account. This action is irreversible.
+            </p>
           </div>
-          <Button variant="destructive">Delete your account</Button>
+          <DeleteAccountButton />
         </div>
-        <Button className="self-end">Save settings</Button>
       </div>
     </Container>
   );
