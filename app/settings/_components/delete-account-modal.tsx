@@ -52,7 +52,7 @@ const DeleteAccountModal: React.FC = () => {
             'Delete account'
           )}
         </Button>
-        <Button variant="secondary" disabled={isLoading}>
+        <Button variant="secondary" disabled={isLoading} onClick={() => modal.close()}>
           Cancel
         </Button>
       </div>
