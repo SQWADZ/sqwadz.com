@@ -43,10 +43,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
   const { socket, isConnected } = useSocket();
   const chatRef = useRef<HTMLDivElement | null>(null);
-  const bottomRef = useRef(null);
   useChatScroll({
     chatRef,
-    bottomRef,
     shouldLoadMore: false,
     loadMore: () => {},
     count: messages.length,
@@ -176,7 +174,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
                 </div>
               </div>
             ))}
-            <div ref={bottomRef} />
           </>
         </div>
         <div className="flex items-center gap-2">
