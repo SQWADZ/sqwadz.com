@@ -1,13 +1,25 @@
 import Container from '@/components/container';
 import GameCard from '@/components/game-card';
 import games from '@/data/games.json';
+import { getServerAuthSession } from '@/server/auth';
+import GameRequestButton from '@/components/game-request-button';
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerAuthSession();
+
   return (
     <Container className="flex max-w-7xl flex-col gap-8">
       <div className="flex flex-col gap-0">
         <p className="text-xl">Games</p>
-        <p className="sm text-muted-foreground">Select a game to find a group in</p>
+        <p className="sm text-muted-foreground">
+          Select a game to find a group in
+          {session && (
+            <span>
+              {". Don't see your game? "}
+              <GameRequestButton />
+            </span>
+          )}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">

@@ -20,14 +20,14 @@ const formSchema = z.object({
   title: z.string(),
 });
 
-const FeedbackModal: React.FC = () => {
+const FeedbackModal: React.FC<{ type?: 'general' | 'game-request' | 'bug-report' }> = (props) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const modal = useModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: 'general',
+      type: props.type ?? 'general',
       comment: '',
       game: '',
       title: '',
