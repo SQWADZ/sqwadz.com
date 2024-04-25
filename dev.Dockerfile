@@ -14,7 +14,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Generate Prisma client
-RUN npx prisma migrate deploy
+RUN npx prisma generate
 
 # Define the command to run the app
 CMD ["pnpm", "start"]
