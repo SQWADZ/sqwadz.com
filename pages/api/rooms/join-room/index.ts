@@ -25,12 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (isBanned) return res.status(401).json({ error: 'banned' });
 
-  const insertId = await redis.hset(
-    `roomId:${roomId}:members`,
-    `userId:${session.user.id}`,
-    JSON.stringify(session.user)
-  );
-
   const room = await prisma.room.findUnique({
     where: {
       id: roomId,
@@ -51,25 +45,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   if (!room) return res.status(400);
 
-  // todo: check if room includes you to stop being kicked out on page refresh
-  if (room._count.roomMembers >= room.slots) {
+  const userExists = !!room.roomMembers.find((roomMember) => roomMember.user.id === session.user.id);
+
+  if (room._count.roomMembers >= room.slots && !userExists) {
     return res.status(307).json({ error: 'room_full' });
+  }
+
+  if (!userExists) {
+    try {
+      await prisma.roomMember.create({
+        data: {
+          roomId,
+          userId: session.user.id,
+        },
+      });
+    } catch (e) {
+      console.log(`failed to insert room member ${session.user.id} into room ${roomId}`);
+    }
   }
 
   const members: Record<RoomMember['id'], RoomMember> = {};
 
   room.roomMembers.forEach((member) => (members[member.user.id] = member.user));
-
-  try {
-    await prisma.roomMember.create({
-      data: {
-        roomId,
-        userId: session.user.id,
-      },
-    });
-  } catch (e) {
-    console.log(`failed to insert room member ${session.user.id} into room ${roomId}`);
-  }
 
   const user: RoomMember = {
     id: session.user.id,
