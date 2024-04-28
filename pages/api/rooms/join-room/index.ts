@@ -12,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   const { roomId: id } = req.body as { roomId: number };
   const roomId = +id;
+  const password = req.cookies[`${roomId}:password`];
 
   if (!roomId) return res.status(400).json({ error: 'Unauthorized' });
 
@@ -44,6 +45,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   });
 
   if (!room) return res.status(400);
+
+  if (room.password && room.password !== password) {
+    return res.status(401).json({ error: 'incorrect_password' });
+  }
 
   const userExists = !!room.roomMembers.find((roomMember) => roomMember.user.id === session.user.id);
 

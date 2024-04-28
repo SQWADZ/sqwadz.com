@@ -17,8 +17,8 @@ import { useSocket } from '@/components/providers/socket-provider';
 import { useChatScroll } from '@/client/hooks/useChatScroll';
 import { useModal } from '@/components/modals-provider';
 import ChatSettingsModal from '@/app/games/[game]/[roomId]/_components/chat-settings-modal';
-import { toast } from 'sonner';
 import { notify } from '@/client/utils';
+import RoomPasswordModal from '../../_components/room-password-modal';
 
 dayjs.extend(calendar);
 
@@ -108,6 +108,15 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         notify({
           message: 'Unable to join',
           data: { description: 'You are banned from the room you are trying to join' },
+        });
+      }
+
+      if (data.error === 'incorrect_password') {
+        router.push(`/games/${game}`);
+        modal.open({
+          title: 'Enter password',
+          description: "The room you're trying to join requires a password",
+          children: <RoomPasswordModal roomId={roomId} />,
         });
       }
 

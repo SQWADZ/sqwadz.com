@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import React from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -9,8 +9,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { usePathname, useRouter } from 'next/navigation';
 import { useModal } from '@/components/modals-provider';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 const formSchema = z.object({
   password: z.string().min(1),
@@ -38,8 +36,10 @@ const RoomPasswordModal: React.FC<{ roomId: number }> = ({ roomId }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ roomId, password }),
+      body: JSON.stringify({ roomId: +roomId, password }),
     });
+
+    form.reset();
 
     const data = await resp.json();
 

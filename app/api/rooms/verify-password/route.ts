@@ -1,5 +1,6 @@
 import { getServerAuthSession } from '@/server/auth';
 import prisma from '@/lib/prisma';
+import { cookies } from 'next/headers';
 
 async function handler(request: Request) {
   const session = await getServerAuthSession();
@@ -18,6 +19,11 @@ async function handler(request: Request) {
   });
 
   if (!room) return Response.json({ isCorrect: false }, { status: 200 });
+
+  cookies().set(`${data.roomId}:password`, data.password, {
+    secure: true,
+    httpOnly: true,
+  });
 
   return Response.json({ isCorrect: true }, { status: 200 });
 }
