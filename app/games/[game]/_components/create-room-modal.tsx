@@ -55,6 +55,10 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
       //   Maybe set some "Something went wrong" error?
     }
 
+    if (values.password) {
+      document.cookie = `${data.id}:password=${values.password}`;
+    }
+
     modal.close();
     router.push(`/games/${game}/${data.id}`);
   };
