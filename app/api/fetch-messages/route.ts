@@ -11,7 +11,6 @@ async function handler(req: Request) {
   const messages: Message[] = rawMessages.map((message) => JSON.parse(message));
   const hasMore =
     (await redis.zrevrange(`roomId:${data.roomId}:messages`, 25 * data.page + 25, 25 * data.page + 25 + 1)).length > 0;
-  console.log(hasMore);
 
   return NextResponse.json(
     {

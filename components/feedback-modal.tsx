@@ -77,8 +77,6 @@ const FeedbackModal: React.FC<{ type?: 'general' | 'game-request' | 'bug-report'
       notify({ message: 'Feedback successfully submitted.' });
       modal.close();
     }
-
-    console.log(values);
   }
 
   return (

@@ -31,7 +31,6 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
 
   const handleUpdateRoom = React.useCallback(
     (data: { activity: string; slots: number }) => {
-      console.log('handleUpdateRoom');
       setTitle(data.activity);
     },
     [roomId]

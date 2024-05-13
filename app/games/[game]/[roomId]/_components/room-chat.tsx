@@ -50,8 +50,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   async function handleLoadMore() {
     pageRef.current++;
 
-    console.log('handleLoadMore');
-
     const resp = await fetch('/api/fetch-messages', {
       body: JSON.stringify({
         page: pageRef.current,
@@ -69,8 +67,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     }
 
     const data: MessageData = await resp.json();
-
-    console.log(data);
 
     setMessagesData((prevMessagesData) => [...prevMessagesData, data]);
   }
@@ -164,7 +160,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       }
 
       if (data.messagesData) {
-        console.log(data.messagesData);
         setMessagesData(data.messagesData);
       }
     });
@@ -175,8 +170,6 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     socket.on(`${roomId}:room-delete`, handleRoomDelete);
 
     return () => {
-      console.log('cleanup');
-
       socket.removeAllListeners();
 
       fetch('/api/rooms/leave-room', {
