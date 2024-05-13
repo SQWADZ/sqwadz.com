@@ -1,6 +1,6 @@
 import { NextApiRequest } from 'next';
 import { getPagesServerAuthSession } from '@/server/auth';
-import { Message, RoomMember } from '@/types';
+import { Message, RoomMember, MessageData } from '@/types';
 import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 import prisma from '@/lib/prisma';
 import redis from '@/lib/redis';
@@ -87,8 +87,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     isJoin: true,
   });
 
-  const rawMessages = await redis.zrange(`roomId:${roomId}:messages`, 0, 50);
+  const rawMessages = await redis.zrevrange(`roomId:${roomId}:messages`, 0, 25 - 1);
   const parsedMessages: Message[] = rawMessages.map((rawMessage) => JSON.parse(rawMessage));
 
-  return res.status(200).json({ messages: parsedMessages });
+  const messagesData: MessageData[] = [
+    {
+      messages: parsedMessages || [],
+      hasMore: (await redis.zrevrange(`roomId:${roomId}:messages`, 25 - 1, 25)).length > 0,
+    },
+  ];
+
+  return res.status(200).json({ messagesData });
 }

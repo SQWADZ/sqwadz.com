@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import UserItem from '@/app/games/[game]/[roomId]/_components/user-item';
 import { Session } from 'next-auth';
-import { Message, RoomMember } from '@/types';
+import { Message, RoomMember, MessageData } from '@/types';
 import UserAvatar from '@/components/user-avatar';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
@@ -19,6 +19,7 @@ import { useModal } from '@/components/modals-provider';
 import ChatSettingsModal from '@/app/games/[game]/[roomId]/_components/chat-settings-modal';
 import { notify } from '@/client/utils';
 import RoomPasswordModal from '../../_components/room-password-modal';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 dayjs.extend(calendar);
 
@@ -29,7 +30,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   game,
 }) => {
   const router = useRouter();
-  const [messages, setMessages] = React.useState<Message[]>([]);
+  const [messagesData, setMessagesData] = React.useState<MessageData[]>([]);
   const [input, setInput] = React.useState('');
   const modal = useModal();
   const user: RoomMember = React.useMemo(
@@ -41,17 +42,59 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     [session]
   );
   const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
+  const pageRef = useRef(0);
   const { socket, isConnected } = useSocket();
   const chatRef = useRef<HTMLDivElement | null>(null);
+  const firstMessageRef = useRef<HTMLDivElement | null>(null);
+
+  async function handleLoadMore() {
+    pageRef.current++;
+
+    console.log('handleLoadMore');
+
+    const resp = await fetch('/api/fetch-messages', {
+      body: JSON.stringify({
+        page: pageRef.current,
+        roomId,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'post',
+    });
+
+    if (resp.status !== 200) {
+      pageRef.current--;
+      return;
+    }
+
+    const data: MessageData = await resp.json();
+
+    console.log(data);
+
+    setMessagesData((prevMessagesData) => [...prevMessagesData, data]);
+  }
+
   useChatScroll({
     chatRef,
-    shouldLoadMore: false,
-    loadMore: () => {},
-    count: messages.length,
+    shouldLoadMore: messagesData[messagesData.length - 1]?.hasMore,
+    loadMore: async () => {},
+    count: messagesData[0]?.messages.length || 0,
   });
 
-  const handleAddMessage = (message: Message) => {
-    setMessages((prev) => [...prev, message]);
+  const messages = React.useMemo(() => messagesData.flatMap((messageData) => messageData.messages), [messagesData]);
+
+  const handleAddMessage = (newMessage: Message) => {
+    setMessagesData((prevMessagesData) => {
+      const newMessagesData = [...prevMessagesData];
+
+      newMessagesData[0] = {
+        ...newMessagesData[0],
+        messages: [newMessage, ...(newMessagesData[0]?.messages || [])],
+      };
+
+      return newMessagesData;
+    });
   };
 
   React.useEffect(() => {
@@ -96,7 +139,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         'Content-Type': 'application/json',
       },
     }).then(async (resp) => {
-      const data: { error?: string; messages?: Message[] } = await resp.json();
+      const data: { error?: string; messagesData?: MessageData[] } = await resp.json();
 
       if (data.error === 'room_full') {
         router.push(`/games/${game}`);
@@ -120,9 +163,9 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         });
       }
 
-      if (data.messages) {
-        console.log(data.messages);
-        setMessages(data.messages);
+      if (data.messagesData) {
+        console.log(data.messagesData);
+        setMessagesData(data.messagesData);
       }
     });
 
@@ -166,10 +209,19 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
             <FontAwesomeIcon icon={faComment} fixedWidth size="lg" />
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2 overflow-y-auto" ref={chatRef}>
-          <>
+        <div className="flex flex-1 flex-col-reverse gap-2 overflow-y-auto" ref={chatRef} id="scrollableDiv">
+          <InfiniteScroll
+            scrollableTarget="scrollableDiv"
+            hasMore={messagesData[messagesData.length - 1]?.hasMore || false} //}
+            inverse={true}
+            loader="Loading..."
+            dataLength={messages.length}
+            next={handleLoadMore}
+            style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+          >
             {messages.map((message, index) => (
               <div
+                ref={index === 0 ? firstMessageRef : null}
                 key={`${message.name}-${message.createdAt}`}
                 className="flex w-fit items-center gap-4 rounded-lg p-2"
               >
@@ -183,7 +235,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
                 </div>
               </div>
             ))}
-          </>
+          </InfiniteScroll>
         </div>
         <div className="flex items-center gap-2">
           <form
