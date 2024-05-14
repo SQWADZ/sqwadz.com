@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="flex w-full flex-col items-center justify-between border-t bg-background p-4 text-center text-muted-foreground">
       <div className="flex w-full max-w-7xl flex-col">
-        <div className="flex w-full max-w-7xl flex-col items-start justify-between gap-10 py-10 md:flex-row">
+        <div className="flex w-full max-w-7xl flex-col items-start justify-between gap-10 px-4 py-10 md:flex-row">
           <Link href="/" className="self-center">
             <p className="logo text-4xl text-foreground">SQWADZ</p>
           </Link>
@@ -43,7 +43,6 @@ const Footer: React.FC = () => {
             </Link>
           </div>
         </div>
-        <p className="mt-8 self-start text-sm">© {currentYear} SQWADZ.com, All rights reserved.</p>
       </div>
     </footer>
   );

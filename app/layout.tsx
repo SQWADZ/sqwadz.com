@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
               <TooltipProvider disableHoverableContent delayDuration={0}>
                 <ModalsProvider>
-                  <div className="flex flex-col">
+                  <div className="flex h-full flex-col">
                     <Header />
                     {children}
                     <Footer />
