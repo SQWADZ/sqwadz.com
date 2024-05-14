@@ -194,7 +194,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   };
 
   return (
-    <div className="flex flex-[1_0_0] flex-col rounded-lg border border-border md:flex-row md:overflow-hidden">
+    <div className="flex flex-[0.9_0_0] flex-col rounded-lg border border-border md:flex-row md:overflow-hidden">
       <div className="flex flex-[0.7_0_0] flex-col justify-between gap-2 overflow-hidden border-r border-border p-4 md:flex-[0.7]">
         <div className="flex items-center justify-between text-muted-foreground">
           <p className="text-xl">Chat</p>
