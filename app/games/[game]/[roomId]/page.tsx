@@ -26,8 +26,8 @@ const RoomPage: React.FC<{ params: { roomId: number; game: string } }> = async (
   if (!room) return redirect(`/games/${params.game}`);
 
   return (
-    <Container>
-      <div className="flex h-full flex-col gap-8">
+    <Container className="flex flex-col">
+      <div className="flex h-full flex-1 flex-col gap-8">
         <RoomTitle
           activity={room.activity}
           slots={room.slots}
