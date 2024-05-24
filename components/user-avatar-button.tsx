@@ -3,10 +3,16 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { signOut } from 'next-auth/react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Session } from 'next-auth';
 import Link from 'next/link';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faComment, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 import UserAvatar from '@/components/user-avatar';
@@ -30,6 +36,8 @@ const UserAvatarButton: React.FC<{ session: Session | null }> = ({ session }) =>
           <UserAvatar image={session.user.image} name={session.user.name} />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuLabel className="text-muted-foreground">{session.user.name}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <DropdownMenuItem className="flex items-center gap-2" asChild>
             <Link href="/settings">
               <FontAwesomeIcon icon={faGear} fixedWidth />
