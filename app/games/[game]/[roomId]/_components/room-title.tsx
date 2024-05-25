@@ -4,11 +4,12 @@ import React from 'react';
 import EditButton from '@/app/games/[game]/[roomId]/_components/edit-button';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSocket } from '@/components/providers/socket-provider';
 import { useModal } from '@/components/modals-provider';
 import DeleteRoomModal from '../_components/delete-room-modal';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 interface Props {
   activity: string;
@@ -17,9 +18,10 @@ interface Props {
   userId: string;
   creatorId: string;
   createdAt: Date;
+  game: string;
 }
 
-const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId, createdAt }) => {
+const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId, createdAt, game }) => {
   const [title, setTitle] = React.useState(activity);
   const [time, setTime] = React.useState(() => {
     const minutes = dayjs(+createdAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
@@ -28,6 +30,8 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
   });
   const { socket } = useSocket();
   const modal = useModal();
+
+  const isCreator = React.useMemo(() => creatorId === userId, [creatorId, userId]);
 
   const handleUpdateRoom = React.useCallback(
     (data: { activity: string; slots: number }) => {
@@ -59,18 +63,28 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
 
   return (
     <div className="flex flex-col gap-0">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between">
         <p className="text-2xl font-bold">{title}</p>
         <div className="flex items-center gap-2">
-          <EditButton disabled={creatorId !== userId} roomId={roomId} activity={title} slots={slots} />
-          <Button
-            size="icon"
-            variant="destructive"
-            disabled={creatorId !== userId}
-            onClick={() => modal.open({ title: 'Delete room', children: <DeleteRoomModal roomId={roomId} /> })}
-          >
-            <FontAwesomeIcon icon={faTrash} fixedWidth size="lg" />
-          </Button>
+          {isCreator && (
+            <>
+              <EditButton disabled={!isCreator} roomId={roomId} activity={title} slots={slots} />
+              <Button
+                size="icon"
+                variant="destructive"
+                disabled={!isCreator}
+                onClick={() => modal.open({ title: 'Delete room', children: <DeleteRoomModal roomId={roomId} /> })}
+              >
+                <FontAwesomeIcon icon={faTrash} fixedWidth size="lg" />
+              </Button>
+            </>
+          )}
+          <Link href={`/games/${game}`}>
+            <Button variant="destructive">
+              <FontAwesomeIcon icon={faArrowLeft} fixedWidth size="lg" />
+              Leave room
+            </Button>
+          </Link>
         </div>
       </div>
       <p className="text-sm text-destructive">Room closing in: {time}</p>
