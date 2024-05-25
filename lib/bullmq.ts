@@ -15,7 +15,7 @@ export const worker = new Worker(
     try {
       await redis.del(`roomId:${job.data.roomId}:messages`);
 
-      await prisma.room.delete({
+      await prisma.room.deleteMany({
         where: {
           id: job.data.roomId,
         },

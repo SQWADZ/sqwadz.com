@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   if (!isOwner?._count) return res.status(401).json('Unauthorized');
 
   try {
-    await prisma.room.delete({
+    await prisma.room.deleteMany({
       where: {
         id: roomId,
       },
