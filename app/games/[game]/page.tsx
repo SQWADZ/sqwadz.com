@@ -19,7 +19,7 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
   return (
     <Container className="flex flex-col gap-10">
       <div className="flex items-center justify-between">
-      <p className="text-xl">{gameDetails ? gameDetails.name : 'Rooms'}</p>
+      <p className="text-xl">{gameDetails ? `${gameDetails.name} Rooms` : 'Rooms'}</p>
         <CreateRoom session={session} game={params.game} />
       </div>
       <RoomSearch />
