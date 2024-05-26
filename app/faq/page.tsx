@@ -4,7 +4,7 @@ import React from 'react';
 const FAQPage: React.FC = () => {
   return (
     <Container>
-      <h1 className="mb-4 text-3xl font-bold">Frequently Asked Questions (FAQ)</h1>
+      <h1 className="mb-4 text-3xl font-bold">Frequently Asked Questions</h1>
       
       <div className="mb-4">
         <h2 className="text-xl font-bold">1. What is OAuth?</h2>

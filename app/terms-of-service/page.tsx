@@ -4,7 +4,7 @@ import Container from '@/components/container';
 const TermsOfServicePage: React.FC = () => {
   return (
     <Container>
-      <h1 className="mb-4 text-3xl font-bold">Sqwadz Terms of Service</h1>
+      <h1 className="mb-4 text-3xl font-bold">Terms of Service</h1>
       <div className="mb-4">
         <h2 className="text-xl font-bold">1. Introduction</h2>
         <p>

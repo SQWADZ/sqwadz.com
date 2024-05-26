@@ -15,8 +15,9 @@ const Header: React.FC = async () => {
         <Link href="/">
           <p className="logo text-2xl">SQWADZ</p>
         </Link>
-        <HeaderLink path="/games" label="Games" />
-        <HeaderLink path="/support-us" label="Support us" />
+        <HeaderLink path="/games" label="GAMES" />
+        <HeaderLink path="/support-us" label="SUPPORT US" />
+        <HeaderLink path="/faq" label="FAQ" />
       </div>
       <div className="hidden gap-2 sm:flex">
         <ThemeToggle />
