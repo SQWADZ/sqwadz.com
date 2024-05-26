@@ -86,7 +86,7 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required>Slots</FormLabel>
-              <FormDescription>Number of slots available slots in the room</FormDescription>
+              <FormDescription>Number of members allowed in the room</FormDescription>
               <FormControl>
                 <Input {...field} onChange={(event) => field.onChange(+event.target.value)} />
               </FormControl>
