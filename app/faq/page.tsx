@@ -53,7 +53,7 @@ const FAQPage: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold">6. Where can I find more information?</h2>
         <p>
-          For more information about our data practices, please refer to our Privacy Policy and Terms of Service. If you have any additional questions or concerns, feel free to contact us at [your contact email].
+          For more information about our data practices, please refer to our Privacy Policy and Terms of Service.
         </p>
       </div>
     </Container>
