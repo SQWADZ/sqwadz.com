@@ -7,21 +7,14 @@ const FAQPage: React.FC = () => {
       <h1 className="mb-4 text-3xl font-bold">Frequently Asked Questions</h1>
       
       <div className="mb-4">
-        <h2 className="text-xl font-bold">1. What is OAuth?</h2>
+        <h2 className="text-xl font-bold">1. What is OAuth and is it safe to use?</h2>
         <p>
-          OAuth (Open Authorization) is a secure authorization protocol that allows you to grant limited access to your resources on one website to another website without exposing your credentials. For example, you can use your Discord, Twitch, Battle.net, or Epic Games account to sign into our platform without sharing your password with us.
+          OAuth is a secure protocol that allows you to sign into our platform using your accounts from other services like Discord, Twitch, Battle.net, and Epic Games without sharing your password with us. It uses token-based authentication, making it a safe way to grant access.
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">2. Is OAuth safe to use?</h2>
-        <p>
-          Yes, OAuth is designed to be a secure way to grant access to your account without sharing your password. It uses token-based authentication, which means that a temporary token is used instead of your actual credentials. This token is specific to our platform and can be revoked at any time without affecting your original account.
-        </p>
-      </div>
-
-      <div className="mb-4">
-        <h2 className="text-xl font-bold">3. What information do you receive when I sign in using OAuth?</h2>
+        <h2 className="text-xl font-bold">2. What information do you receive when I sign in using OAuth?</h2>
         <p>
           The information we receive depends on the OAuth provider you use:
         </p>
@@ -32,33 +25,33 @@ const FAQPage: React.FC = () => {
           <li><strong>Twitch:</strong> Username, email</li>
         </ul>
         <p>
-          This information is used to create and manage your account on our platform.
+          We do not have access to your passwords.
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">4. Will you have access to my passwords?</h2>
+        <h2 className="text-xl font-bold">3. Can I revoke access if I no longer want to use your platform?</h2>
         <p>
-          No, we do not have access to your passwords. OAuth allows you to sign in without sharing your password with us. You only authorize our platform to access specific information needed to create and manage your account.
+          Yes, you can revoke access at any time through the settings page of the respective OAuth provider.
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">5. Can I revoke access if I no longer want to use your platform?</h2>
+        <h2 className="text-xl font-bold">4. How do you protect my data?</h2>
         <p>
-          Yes, you can revoke access at any time by visiting the settings page of the respective OAuth provider. For example, you can manage your connected apps on Discord, Twitch, Battle.net, or Epic Games to revoke access to our platform.
+          We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, or misuse. However, no method of transmission or storage is completely secure.
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">6. How do you protect my data?</h2>
+        <h2 className="text-xl font-bold">5. Is this platform a competitor to services like Discord?</h2>
         <p>
-          We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, or misuse. Although no method of transmission or storage is completely secure, we continuously strive to enhance our security practices.
+          No, this platform is not meant to be a competitor or replacement for services like Discord, Twitch, Battle.net, or Epic Games. We aim to complement these services by providing additional tools for managing and coordinating teams and group activities.
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">7. Where can I find more information?</h2>
+        <h2 className="text-xl font-bold">6. Where can I find more information?</h2>
         <p>
           For more information about our data practices, please refer to our Privacy Policy and Terms of Service. If you have any additional questions or concerns, feel free to contact us at [your contact email].
         </p>
