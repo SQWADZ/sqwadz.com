@@ -19,7 +19,7 @@ interface Props {
 
 const formSchema = z.object({
   activity: z.string().max(50).min(1),
-  slots: z.number().min(1),
+  slots: z.number().min(2, 'Slots must be at least 2'),
 });
 
 const RoomSettingsModal: React.FC<Props> = ({ activity, slots, roomId }) => {
@@ -76,9 +76,9 @@ const RoomSettingsModal: React.FC<Props> = ({ activity, slots, roomId }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required>Slots</FormLabel>
-              <FormDescription>Number of members allowed in the room</FormDescription>
+              <FormDescription>Number of members allowed in the room (minimum 2)</FormDescription>
               <FormControl>
-                <Input {...field} onChange={(event) => field.onChange(+event.target.value)} />
+                <Input {...field} type="number" min={2} onChange={(event) => field.onChange(+event.target.value)} />
               </FormControl>
               <FormMessage />
             </FormItem>

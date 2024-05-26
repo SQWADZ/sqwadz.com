@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   activity: z.string().max(50),
-  slots: z.number(),
+  slots: z.number().min(2, 'Slots must be at least 2'),
   password: z.string().optional(),
 });
 
@@ -29,7 +29,7 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      slots: 1,
+      slots: 2,
       activity: '',
       password: '',
     },
@@ -86,9 +86,9 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required>Slots</FormLabel>
-              <FormDescription>Number of members allowed in the room</FormDescription>
+              <FormDescription>Number of members allowed in the room (minimum 2)</FormDescription>
               <FormControl>
-                <Input {...field} onChange={(event) => field.onChange(+event.target.value)} />
+                <Input {...field} type="number" min={2} onChange={(event) => field.onChange(+event.target.value)} />
               </FormControl>
               <FormMessage />
             </FormItem>
