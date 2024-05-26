@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
 import BanKickMemberModal from './ban-kick-member-modal';
+import { toast } from 'sonner';
 
 const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: string; roomId: number }> = ({
   user,
@@ -24,6 +25,12 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
     [clientId, roomCreatorId, user.id]
   );
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.success('Copied to clipboard');
+    });
+  };
+
   return (
     <div
       className="flex items-center justify-between gap-2 rounded-lg py-2"
@@ -35,7 +42,9 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <p>{user.name}</p>
+        <p onClick={() => user.name && handleCopyToClipboard(user.name)} className="cursor-pointer">
+          {user.name}
+        </p>
         {user.id === roomCreatorId && <FontAwesomeIcon icon={faCrown} fixedWidth className="text-primary" />}
       </div>
       {showControls && (
