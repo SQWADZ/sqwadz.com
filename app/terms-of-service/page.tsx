@@ -30,27 +30,31 @@ const TermsOfServicePage: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold">4. User Accounts</h2>
         <p>
-          You may be required to create an account to access certain features of the Website. You are responsible for
-          maintaining the confidentiality of your account credentials and for any activities that occur under your
-          account.
+          You may be required to create an account to access certain features of the Website. We use OAuth providers for account creation and sign-in, including Battle.net, Discord, Epic Games, and Twitch. By using these OAuth providers, you agree to share your username and, where applicable, your email and avatar with us. You are responsible for maintaining the confidentiality of your account credentials and for any activities that occur under your account.
         </p>
       </div>
       <div className="mb-4">
-        <h2 className="text-xl font-bold">5. Disclaimer of Warranties</h2>
+        <h2 className="text-xl font-bold">5. Analytics and Data Collection</h2>
+        <p>
+          We collect non-personal information for analytics purposes, such as location, devices, and operating systems. This data is anonymized and not tied to specific users. By using our Website, you agree to this data collection for the purpose of improving our services.
+        </p>
+      </div>
+      <div className="mb-4">
+        <h2 className="text-xl font-bold">6. Disclaimer of Warranties</h2>
         <p>
           We provide the Website and its services &quot;as is&quot; without any warranties or representations, express
           or implied. We do not guarantee the accuracy, reliability, or completeness of the Website or its content.
         </p>
       </div>
       <div className="mb-4">
-        <h2 className="text-xl font-bold">6. Limitation of Liability</h2>
+        <h2 className="text-xl font-bold">7. Limitation of Liability</h2>
         <p>
           In no event shall we be liable for any indirect, incidental, special, or consequential damages arising from
           your use of the Website or its services.
         </p>
       </div>
       <div className="mb-4">
-        <h2 className="text-xl font-bold">7. Modifications</h2>
+        <h2 className="text-xl font-bold">8. Modifications</h2>
         <p>We reserve the right to modify or terminate these Terms of Service at any time without prior notice.</p>
       </div>
     </Container>

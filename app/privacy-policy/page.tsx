@@ -16,9 +16,16 @@ const PrivacyPolicyPage: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold">2. Information We Collect</h2>
         <p>
-          We may collect personal information such as your name, email address, and other contact details when you
-          create an account or interact with our services. We may also collect non-personal information such as your
-          device information, browsing data, and usage statistics.
+          We collect personal information through various OAuth providers when you create an account or sign in to our platform:
+        </p>
+        <ul className="list-disc list-inside">
+          <li><strong>Battle.net:</strong> BattleTag (username)</li>
+          <li><strong>Discord:</strong> Username, email, avatar</li>
+          <li><strong>Epic Games:</strong> Username</li>
+          <li><strong>Twitch:</strong> Username, email</li>
+        </ul>
+        <p>
+          Additionally, we collect non-personal information for analytics purposes, such as location, devices, and operating systems. This information is not tied to specific users.
         </p>
       </div>
       <div className="mb-4">
