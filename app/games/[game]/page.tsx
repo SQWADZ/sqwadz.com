@@ -5,6 +5,7 @@ import { getServerAuthSession } from '@/server/auth';
 import RoomSearch from '@/app/games/[game]/_components/room-search';
 import Rooms from '@/app/games/[game]/_components/table/rooms';
 import TableLoadingSkeleton from '@/app/games/[game]/_components/table/table-loading-skeleton';
+import games from '@/data/games.json';
 
 const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: string; page?: string } }> = async ({
   params,
@@ -13,10 +14,12 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
   const session = await getServerAuthSession();
   const _page = searchParams.page ? +searchParams.page : undefined;
 
+  const gameDetails = games.find((game) => game.path === params.game);
+
   return (
     <Container className="flex flex-col gap-10">
       <div className="flex items-center justify-between">
-        <p className="text-xl">Rooms</p>
+      <p className="text-xl">{gameDetails ? gameDetails.name : 'Rooms'}</p>
         <CreateRoom session={session} game={params.game} />
       </div>
       <RoomSearch />
