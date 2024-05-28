@@ -25,6 +25,11 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
         },
       },
     },
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     take: 8,
     skip: (page ? (page >= 0 ? page : 0) : 0) * 8,
   });
