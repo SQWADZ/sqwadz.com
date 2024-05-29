@@ -193,6 +193,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     }).then();
   };
 
+  const sortedMembers = React.useMemo(() => {
+    const creator = roomMembers.find((member) => member.id === roomCreatorId);
+    const otherMembers = roomMembers.filter((member) => member.id !== roomCreatorId);
+    return creator ? [creator, ...otherMembers] : otherMembers;
+  }, [roomMembers, roomCreatorId]);
+
   return (
     <div className="flex flex-[0.9_0_0] flex-col rounded-lg border border-border md:flex-row md:overflow-hidden">
       <div className="flex flex-[0.7_0_0] flex-col justify-between gap-2 overflow-hidden border-r border-border p-4 md:flex-[0.7]">
@@ -205,12 +211,12 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         <div className="flex h-full flex-col-reverse gap-2 overflow-y-auto" ref={chatRef} id="scrollableDiv">
           <InfiniteScroll
             scrollableTarget="scrollableDiv"
-            hasMore={messagesData[messagesData.length - 1]?.hasMore || false} //}
+            hasMore={messagesData[messagesData.length - 1]?.hasMore || false}
             inverse={true}
             loader="Loading..."
             dataLength={messages.length}
             next={handleLoadMore}
-            style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+            style={{ display: 'flex', flexDirection: 'column-reverse' }} // To put endMessage and loader to the top.
           >
             {messages.map((message, index) => (
               <div
@@ -260,7 +266,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
           </div>
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
-          {roomMembers.map((member) => (
+          {sortedMembers.map((member) => (
             <UserItem user={member} key={member.id} roomCreatorId={roomCreatorId} roomId={roomId} clientId={user.id} />
           ))}
         </div>
