@@ -34,7 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   }
 
   await roomRemovalQueue.remove(roomId.toString());
-  res.socket.server.io.emit(`${roomId}:room-delete`);
+
+  res.socket.server.io.emit('room-delete', { roomId });
 
   return res.status(200).json({ ok: true });
 }

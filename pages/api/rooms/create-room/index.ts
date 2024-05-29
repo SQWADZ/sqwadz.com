@@ -30,5 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     { delay: 60 * 60 * 1000, removeOnComplete: true, removeOnFail: 100 }
   );
 
+  res.socket.server.io.emit('room-create', { id });
+
   return res.status(200).json({ id });
 }
