@@ -51,8 +51,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   }
 
   const userExists = !!room.roomMembers.find((roomMember) => roomMember.user.id === session.user.id);
-
-  if (room._count.roomMembers >= room.slots && !userExists) {
+  //bypass room full check for creator
+  if (room._count.roomMembers >= room.slots && !userExists && room.creatorId !== session.user.id) {
     return res.status(307).json({ error: 'room_full' });
   }
 

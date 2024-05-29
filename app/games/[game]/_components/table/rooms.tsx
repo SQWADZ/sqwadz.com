@@ -1,47 +1,46 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import RoomsTable from './rooms-table';
 import { Session } from 'next-auth';
-import prisma from '@/lib/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
+import Spinner from '@/components/spinner';
 
-const Rooms: React.FC<{ game: string; session: Session | null; query?: string; page?: number }> = async ({
+const Rooms: React.FC<{ game: string; session: Session | null; query?: string; page?: number }> = ({
   game,
   session,
   query,
   page,
 }) => {
-  const _rooms = await prisma.room.findMany({
-    where: {
-      game,
-      activity: {
-        contains: query,
-      },
-    },
-    include: {
-      _count: {
-        select: {
-          roomMembers: true,
-        },
-      },
-    },
-    take: 8,
-    skip: (page ? (page >= 0 ? page : 0) : 0) * 8,
-  });
+  const [roomsData, setRoomsData] = React.useState({ rooms: [], roomsCount: 0 });
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const rooms = _rooms.map((room) => ({ ...room, password: !!room.password }));
-
-  const roomsCount = await prisma.room.count({
-    where: {
-      game,
-      activity: {
-        contains: query,
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('/api/rooms/fetch-rooms', {
+      method: 'POST',
+      body: JSON.stringify({ game, query, page }),
+      headers: {
+        'Content-Type': 'application/json',
       },
-    },
-  });
+    }).then(async (resp) => {
+      setIsLoading(false);
+      if (resp.status !== 200) return;
 
-  return rooms.length > 0 ? (
-    <RoomsTable rooms={rooms} roomsCount={roomsCount} game={game} session={session} />
+      setRoomsData(await resp.json());
+    });
+  }, [setRoomsData, game, page, query]);
+
+  if (isLoading)
+    return (
+      <div className="w-100 flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+
+  return roomsData.rooms.length > 0 ? (
+    <RoomsTable rooms={roomsData.rooms} roomsCount={roomsData.roomsCount} game={game} session={session} />
   ) : (
     <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
       <FontAwesomeIcon icon={faBan} size="2x" fixedWidth />
