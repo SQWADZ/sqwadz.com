@@ -4,7 +4,6 @@ import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
 import RoomSearch from '@/app/games/[game]/_components/room-search';
 import Rooms from '@/app/games/[game]/_components/table/rooms';
-import TableLoadingSkeleton from '@/app/games/[game]/_components/table/table-loading-skeleton';
 import games from '@/data/games.json';
 import { redirect } from 'next/navigation';
 
