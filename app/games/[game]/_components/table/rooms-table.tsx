@@ -97,7 +97,7 @@ const RoomsTable: React.FC<Props> = (props) => {
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className={`border-b border-border p-2 text-sm text-muted-foreground ${
+                  className={`border-b border-border px-4 py-2 text-sm text-muted-foreground ${
                     header.column.id === 'activity' ? 'text-left' : 'text-center'
                   }`}
                   style={{
