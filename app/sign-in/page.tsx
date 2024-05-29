@@ -1,15 +1,26 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import React from 'react';
 import { signIn } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBattleNet, faDiscord, faTwitch } from '@fortawesome/free-brands-svg-icons';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Container from '@/components/container';
 
 const SignInPage: React.FC = () => {
   const params = useSearchParams();
+  const [cookiesEnabled, setCookiesEnabled] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setCookiesEnabled(navigator.cookieEnabled);
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Container className="flex items-center justify-center">
@@ -18,6 +29,12 @@ const SignInPage: React.FC = () => {
           <p className="text-xl">Sign in</p>
           <p className="text-sm text-muted-foreground">Create an account or use an existing one</p>
         </div>
+
+        {!cookiesEnabled && (
+          <div className="rounded-lg border border-destructive p-2">
+            <p className="text-xs text-destructive">Cookies are disabled in your browser. Please enable to sign in.</p>
+          </div>
+        )}
 
         {params?.get('error') && (
           <div className="rounded-lg border border-destructive p-2">
@@ -30,6 +47,7 @@ const SignInPage: React.FC = () => {
             className="flex items-center justify-start gap-2"
             onClick={() => signIn('discord', { callbackUrl: '/' })}
             variant="outline"
+            disabled={!cookiesEnabled}
           >
             <div className="w-[20px]">
               <FontAwesomeIcon icon={faDiscord} size="lg" fixedWidth />
@@ -40,6 +58,7 @@ const SignInPage: React.FC = () => {
             className="flex items-center justify-start gap-2"
             onClick={() => signIn('twitch', { callbackUrl: '/' })}
             variant="outline"
+            disabled={!cookiesEnabled}
           >
             <div className="w-[20px]">
               <FontAwesomeIcon icon={faTwitch} size="lg" fixedWidth />
@@ -50,6 +69,7 @@ const SignInPage: React.FC = () => {
             className="flex items-center justify-start gap-2"
             onClick={() => signIn('battlenet', { callbackUrl: '/' })}
             variant="outline"
+            disabled={!cookiesEnabled}
           >
             <div className="w-[20px]">
               <FontAwesomeIcon icon={faBattleNet} size="lg" fixedWidth />
@@ -60,6 +80,7 @@ const SignInPage: React.FC = () => {
             className="flex items-center justify-start gap-2"
             onClick={() => signIn('epic', { callbackUrl: '/' })}
             variant="outline"
+            disabled={!cookiesEnabled}
           >
             <div className="w-[20px]">
               <svg xmlns="http://www.w3.org/2000/svg" width="21.88" height="17.5" viewBox="0 0 24 24">

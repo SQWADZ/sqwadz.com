@@ -95,7 +95,24 @@ const RoomsTable: React.FC<Props> = (props) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id} className="border-b border-border p-2 text-sm text-muted-foreground">
+                <th
+                  key={header.id}
+                  className={`border-b border-border p-2 text-sm text-muted-foreground ${
+                    header.column.id === 'activity' ? 'text-left' : 'text-center'
+                  }`}
+                  style={{
+                    width:
+                      header.id === 'activity'
+                        ? '30%'
+                        : header.id === 'slots'
+                          ? '8%'
+                          : header.id === 'createdAt'
+                            ? '15%'
+                            : header.id === 'password'
+                              ? '5%'
+                              : '10%',
+                  }}
+                >
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
@@ -106,7 +123,22 @@ const RoomsTable: React.FC<Props> = (props) => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td className="truncate p-4 text-center" key={cell.id}>
+                <td
+                  className={`truncate p-4 ${cell.column.id === 'activity' ? 'text-left' : 'text-center'}`}
+                  key={cell.id}
+                  style={{
+                    width:
+                      cell.column.id === 'activity'
+                        ? '30%'
+                        : cell.column.id === 'slots'
+                          ? '8%'
+                          : cell.column.id === 'createdAt'
+                            ? '15%'
+                            : cell.column.id === 'password'
+                              ? '5%'
+                              : '10%',
+                  }}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
