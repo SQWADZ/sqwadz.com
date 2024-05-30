@@ -8,7 +8,7 @@ import { faCrown, faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
-import BanKickMemberModal from './ban-kick-member-modal';
+import BanMemberModal from './ban-member-modal';
 import { toast } from 'sonner';
 
 const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: string; roomId: number }> = ({
@@ -57,30 +57,9 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
                 className="text-destructive hover:text-destructive"
                 onClick={() =>
                   modal.open({
-                    title: 'Kick member',
-                    children: <BanKickMemberModal targetId={user.id} roomId={roomId} type="kick" />,
-                    description: `Are you sure you want to kick ${user.name}?`,
-                  })
-                }
-              >
-                <FontAwesomeIcon icon={faUserMinus} fixedWidth size="lg" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Kick</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="text-destructive hover:text-destructive"
-                onClick={() =>
-                  modal.open({
                     title: 'Ban member',
                     description: `Are you sure you want to ban ${user.name}?`,
-                    children: <BanKickMemberModal targetId={user.id} roomId={roomId} type="ban" />,
+                    children: <BanMemberModal targetId={user.id} roomId={roomId} />,
                   })
                 }
               >
