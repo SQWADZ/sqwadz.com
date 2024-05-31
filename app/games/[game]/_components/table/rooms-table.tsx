@@ -19,6 +19,7 @@ export type Room = {
   slots: number;
   createdAt: Date;
   password?: boolean;
+  creatorUsername: string;
   _count: {
     roomMembers: number;
   };
@@ -40,8 +41,13 @@ const RoomsTable: React.FC<Props> = (props) => {
     () => [
       columnHelper.accessor('id', {}),
       columnHelper.accessor('activity', {
-        cell: (info) => info.getValue(),
         header: 'Activity',
+        cell: (info) => (
+          <div>
+            <div>{info.getValue()}</div>
+            <div className="text-xs text-muted-foreground">Created by {info.row.original.creatorUsername}</div>
+          </div>
+        ),
       }),
       columnHelper.accessor('createdAt', {
         header: 'Created',
