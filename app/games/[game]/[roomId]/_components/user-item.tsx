@@ -4,11 +4,11 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCrown, faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons';
+import { faGavel, faPaste, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
-import BanKickMemberModal from './ban-kick-member-modal';
+import BanMemberModal from './ban-member-modal';
 import { toast } from 'sonner';
 
 const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: string; roomId: number }> = ({
@@ -18,6 +18,7 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
   roomId,
 }) => {
   const [showControls, setShowControls] = React.useState(false);
+  const [clipboardState, setClipboardState] = React.useState<'default' | 'checked'>('default');
   const modal = useModal();
 
   const canShowControls = React.useMemo(
@@ -28,6 +29,8 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       toast.success('Copied to clipboard');
+      setClipboardState('checked');
+      setTimeout(() => setClipboardState('default'), 2000); // Change back after 2 seconds
     });
   };
 
@@ -42,10 +45,17 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <p onClick={() => user.name && handleCopyToClipboard(user.name)} className="cursor-pointer">
+        <p className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}>
           {user.name}
         </p>
-        {user.id === roomCreatorId && <FontAwesomeIcon icon={faCrown} fixedWidth className="text-primary" />}
+        <Button
+          size="icon"
+          variant="ghost"
+          className="text-primary clipboard-button"
+          onClick={() => user.name && handleCopyToClipboard(user.name)}
+        >
+          <FontAwesomeIcon icon={clipboardState === 'default' ? faPaste : faCheck} fixedWidth />
+        </Button>
       </div>
       {showControls && (
         <div className="flex items-center gap-2">
@@ -57,30 +67,9 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
                 className="text-destructive hover:text-destructive"
                 onClick={() =>
                   modal.open({
-                    title: 'Kick member',
-                    children: <BanKickMemberModal targetId={user.id} roomId={roomId} type="kick" />,
-                    description: `Are you sure you want to kick ${user.name}?`,
-                  })
-                }
-              >
-                <FontAwesomeIcon icon={faUserMinus} fixedWidth size="lg" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Kick</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="text-destructive hover:text-destructive"
-                onClick={() =>
-                  modal.open({
                     title: 'Ban member',
                     description: `Are you sure you want to ban ${user.name}?`,
-                    children: <BanKickMemberModal targetId={user.id} roomId={roomId} type="ban" />,
+                    children: <BanMemberModal targetId={user.id} roomId={roomId} />,
                   })
                 }
               >

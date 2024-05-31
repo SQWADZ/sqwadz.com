@@ -99,3 +99,7 @@ a.logo {
   display: inline-block; /* or 'block', depending on your layout */
   margin-right: auto; /* Aligns to the left in a flex container */
 }
+
+.clipboard-button .fa-paste {
+  color: #fafafa;
+}
