@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </ThemeProvider>
           </SocketProvider>
         </Provider>
-        <Toaster />
+        <Toaster expand={true} />
       </body>
       <Script defer src={process.env.ANALYTICS_SRC} data-website-id={process.env.ANALYTICS_WEBSITE_ID} />
     </html>
