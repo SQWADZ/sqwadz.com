@@ -4,7 +4,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGavel, faUserMinus, faPaste } from '@fortawesome/free-solid-svg-icons';
+import { faGavel, faPaste, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
@@ -18,6 +18,7 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
   roomId,
 }) => {
   const [showControls, setShowControls] = React.useState(false);
+  const [clipboardState, setClipboardState] = React.useState<'default' | 'checked'>('default');
   const modal = useModal();
 
   const canShowControls = React.useMemo(
@@ -28,6 +29,8 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       toast.success('Copied to clipboard');
+      setClipboardState('checked');
+      setTimeout(() => setClipboardState('default'), 2000); // Change back after 2 seconds
     });
   };
 
@@ -42,19 +45,17 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <p
-          className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}
-        >
+        <p className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}>
           {user.name}
-          <Button
+        </p>
+        <Button
           size="icon"
           variant="ghost"
           className="text-primary clipboard-button"
           onClick={() => user.name && handleCopyToClipboard(user.name)}
         >
-          <FontAwesomeIcon icon={faPaste} fixedWidth />
+          <FontAwesomeIcon icon={clipboardState === 'default' ? faPaste : faCheck} fixedWidth />
         </Button>
-        </p>
       </div>
       {showControls && (
         <div className="flex items-center gap-2">
