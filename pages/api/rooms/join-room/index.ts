@@ -69,9 +69,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     }
   }
 
-  const members: Record<RoomMember['id'], RoomMember> = {};
-
-  room.roomMembers.forEach((member) => (members[member.user.id] = member.user));
+  const members: RoomMember[] = room.roomMembers.map((member) => ({
+    id: member.user.id,
+    name: member.user.name,
+    image: member.user.image,
+  }));
 
   const user: RoomMember = {
     id: session.user.id,
@@ -79,10 +81,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     image: session.user.image,
   };
 
-  members[user.id] = user;
+  if (!members.find((member) => member.id === user.id)) {
+    members.push(user);
+  }
 
   res.socket.server.io.emit(`${roomId}:members-changed`, {
-    members: Object.values(members),
+    members,
     message: `${user.name} has joined the room.`,
     isJoin: true,
   });
