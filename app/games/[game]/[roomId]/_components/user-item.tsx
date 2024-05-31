@@ -45,20 +45,10 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <p className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}>
-          {user.name}
-        </p>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="text-primary clipboard-button"
-          onClick={() => user.name && handleCopyToClipboard(user.name)}
-        >
-          <FontAwesomeIcon icon={clipboardState === 'default' ? faPaste : faCheck} fixedWidth />
-        </Button>
+        <p className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}>{user.name}</p>
       </div>
-      {showControls && (
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
+        {showControls && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -80,8 +70,16 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
               <p>Ban</p>
             </TooltipContent>
           </Tooltip>
-        </div>
-      )}
+        )}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="icon" variant="ghost" onClick={() => user.name && handleCopyToClipboard(user.name)}>
+              <FontAwesomeIcon icon={clipboardState === 'default' ? faPaste : faCheck} fixedWidth />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Copy username</TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   );
 };
