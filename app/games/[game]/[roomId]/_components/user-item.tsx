@@ -4,7 +4,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCrown, faGavel, faUserMinus } from '@fortawesome/free-solid-svg-icons';
+import { faGavel, faUserMinus, faPaste } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
@@ -42,10 +42,19 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
           <AvatarImage src={user?.image || undefined} />
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <p onClick={() => user.name && handleCopyToClipboard(user.name)} className="cursor-pointer">
+        <p
+          className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}
+        >
           {user.name}
+          <Button
+          size="icon"
+          variant="ghost"
+          className="text-primary clipboard-button"
+          onClick={() => user.name && handleCopyToClipboard(user.name)}
+        >
+          <FontAwesomeIcon icon={faPaste} fixedWidth />
+        </Button>
         </p>
-        {user.id === roomCreatorId && <FontAwesomeIcon icon={faCrown} fixedWidth className="text-primary" />}
       </div>
       {showControls && (
         <div className="flex items-center gap-2">
