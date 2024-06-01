@@ -21,8 +21,8 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
   }
 
   return (
-    <Container className="flex flex-col gap-10">
-      <div className="flex items-center justify-between">
+    <Container className="flex w-full flex-col gap-10">
+      <div className="flex w-full items-center justify-between">
         <p className="text-xl">{gameDetails.name} Rooms</p>
         <CreateRoom session={session} game={params.game} />
       </div>
