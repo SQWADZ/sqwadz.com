@@ -2,8 +2,8 @@ version: '3'
 
 services:
   app-dev:
-    container_name: sqwadz-prod
-    image: ipajudd/sqwadz:latest
+    container_name: sqwadz-dev
+    image: ipajudd/sqwadz-dev:latest
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
@@ -22,11 +22,11 @@ services:
       - ANALYTICS_SRC=${ANALYTICS_SRC}
       - ANALYTICS_WEBSITE_ID=${ANALYTICS_WEBSITE_ID}
     ports:
-      - 3000:3000
+      - 3006:3000
     networks:
       - SQWADZ-NET
     restart: unless-stopped
-    domainname: sqwadz.com
+    domainname: dev.sqwadz.com
 
 networks:
   SQWADZ-NET:
