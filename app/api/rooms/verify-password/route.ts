@@ -22,7 +22,6 @@ async function handler(request: Request) {
 
   cookies().set(`${data.roomId}:password`, data.password, {
     secure: true,
-    httpOnly: true,
   });
 
   return Response.json({ isCorrect: true }, { status: 200 });
