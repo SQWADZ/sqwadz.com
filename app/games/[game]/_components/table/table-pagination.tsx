@@ -4,8 +4,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Room } from './rooms-table';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 const PAGE_SIZE = 8;
 
