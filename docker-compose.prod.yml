@@ -1,11 +1,9 @@
 version: '3'
 
 services:
-  app-prod:
-    container_name: sqwadz-prod
-    build:
-      context: .
-      dockerfile: Dockerfile
+  app-dev:
+    container_name: sqwadz-dev
+    image: ipajudd/sqwadz:latest
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
@@ -23,21 +21,13 @@ services:
       - BNET_ISSUER=${BNET_ISSUER}
       - ANALYTICS_SRC=${ANALYTICS_SRC}
       - ANALYTICS_WEBSITE_ID=${ANALYTICS_WEBSITE_ID}
-    volumes:
-      - app:/app
-      - node_modules:/app/node_modules
     ports:
       - 3000:3000
     networks:
       - SQWADZ-NET
     restart: unless-stopped
-    pull_policy: build
     domainname: sqwadz.com
 
 networks:
   SQWADZ-NET:
     external: true
-
-volumes:
-  app:
-  node_modules:
