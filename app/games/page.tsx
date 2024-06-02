@@ -24,6 +24,8 @@ export const metadata: Metadata = {
 export default async function Home() {
   const session = await getServerAuthSession();
 
+  const enabledGames = games.filter((game) => game.status === 'enabled');
+
   return (
     <Container className="flex max-w-7xl flex-col gap-8">
       <div className="flex flex-col gap-0">
@@ -40,7 +42,7 @@ export default async function Home() {
       </div>
 
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">
-        {games.map((game) => (
+        {enabledGames.map((game) => (
           <GameCard key={game.name} name={game.name} image={game.image} path={game.path} color={game.color} />
         ))}
       </div>
