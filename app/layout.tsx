@@ -11,14 +11,43 @@ import { Provider } from 'jotai';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { SocketProvider } from '@/components/providers/socket-provider';
 import { Toaster } from '@/components/ui/sonner';
-import { worker } from '@/lib/bullmq';
 import Script from 'next/script';
+import { worker } from '@/lib/bullmq';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sqwadz.com'),
   title: 'Sqwadz',
   description: 'Find groups for games easily',
+  openGraph: {
+    title: 'Sqwadz',
+    description: 'Find groups for games easily',
+    images: [
+      {
+        url: '/images/og-image.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Finding Groups Made Easy',
+      },
+    ],
+  },
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  other: {
+    'application/ld+json': JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Finding Groups Made Easy",
+      "description": 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
+      "url": 'https://sqwadz.com/',
+    }),
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
