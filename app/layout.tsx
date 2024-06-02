@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: 'Find groups for games easily',
     images: [
       {
-        url: '/images/brand/og-image.webp',
+        url: '/images/brand/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Finding Groups Made Easy',
