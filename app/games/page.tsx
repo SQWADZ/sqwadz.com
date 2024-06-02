@@ -3,6 +3,23 @@ import GameCard from '@/components/game-card';
 import games from '@/data/games.json';
 import { getServerAuthSession } from '@/server/auth';
 import GameRequestButton from '@/components/game-request-button';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SQWADZ | Games',
+  description: 'Browse games and find groups to join on Sqwadz.',
+  openGraph: {
+    title: 'SQWADZ | Games',
+    description: 'Browse games and find groups to join on Sqwadz.',
+  },
+  alternates: {
+    canonical: '/games',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default async function Home() {
   const session = await getServerAuthSession();

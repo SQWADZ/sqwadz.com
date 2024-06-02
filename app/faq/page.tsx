@@ -1,5 +1,22 @@
 import Container from '@/components/container';
 import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SQWADZ | FAQ',
+  description: 'Frequently asked questions about Sqwadz.',
+  openGraph: {
+    title: 'SQWADZ | FAQ',
+    description: 'Frequently asked questions about Sqwadz.',
+  },
+  alternates: {
+    canonical: '/faq',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 const FAQPage: React.FC = () => {
   return (
@@ -71,10 +88,10 @@ const FAQPage: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold">7. What exactly is SQWADZ?</h2>
         <p className="text-sm text-muted-foreground">
-          Sqwadz is a platform designed to help gamers find other players to form squads/groups/etc... Whether you&apos;re
-          looking for a team to play competitive games or a casual group to enjoy multiplayer games, Sqwadz makes it
-          easy to browse games, select a room, and join a squad. Our platform leverages OAuth to connect with your
-          existing gaming accounts, making it seamless to find and join gaming groups.
+          Sqwadz is a platform designed to help gamers find other players to form squads/groups/etc... Whether
+          you&apos;re looking for a team to play competitive games or a casual group to enjoy multiplayer games, Sqwadz
+          makes it easy to browse games, select a room, and join a squad. Our platform leverages OAuth to connect with
+          your existing gaming accounts, making it seamless to find and join gaming groups.
         </p>
       </div>
     </Container>
