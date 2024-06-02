@@ -55,8 +55,9 @@ const FAQPage: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold">5. Is this platform a competitor to services like Discord?</h2>
         <p className="text-sm text-muted-foreground">
-          No, this platform is not meant to be a competitor or replacement for services like Discord, Teamspeak, or any other community platform. 
-          We aim to complement these services by providing additional tools for managing and coordinating "squads" and group activities.
+          No, this platform is not meant to be a competitor or replacement for services like Discord, Teamspeak, or any
+          other community platform. We aim to complement these services by providing additional tools for managing and
+          coordinating &quot;squads&quot; and group activities.
         </p>
       </div>
 
@@ -70,10 +71,10 @@ const FAQPage: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold">7. What exactly is SQWADZ?</h2>
         <p className="text-sm text-muted-foreground">
-          Sqwadz is a platform designed to help gamers find other players to form squads/groups/etc... Whether you're looking for a
-          team to play competitive games or a casual group to enjoy multiplayer games, Sqwadz makes it easy to browse
-          games, select a room, and join a squad. Our platform leverages OAuth to connect with your existing gaming
-          accounts, making it seamless to find and join gaming groups.
+          Sqwadz is a platform designed to help gamers find other players to form squads/groups/etc... Whether you&apos;re
+          looking for a team to play competitive games or a casual group to enjoy multiplayer games, Sqwadz makes it
+          easy to browse games, select a room, and join a squad. Our platform leverages OAuth to connect with your
+          existing gaming accounts, making it seamless to find and join gaming groups.
         </p>
       </div>
     </Container>
