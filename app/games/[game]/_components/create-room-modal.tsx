@@ -56,7 +56,7 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
     }
 
     if (values.password) {
-      document.cookie = `${data.id}:password=${values.password}`;
+      document.cookie = `${data.id}:password=${values.password};path=/;secure=true;`;
     }
 
     modal.close();
