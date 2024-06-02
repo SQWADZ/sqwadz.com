@@ -15,7 +15,7 @@ const nextConfig = {
               style-src 'self' 'unsafe-inline'; 
               frame-src 'self'; 
               font-src 'self'; 
-              connect-src 'self' https://umami.bawkbawk.net https://db.sqwadz.com https://us.battle.net/oauth; 
+              connect-src 'self' https://umami.bawkbawk.net https://db.sqwadz.com https://us.battle.net/oauth https://id.twitch.tv https://api.epicgames.dev https://discord.com; 
               base-uri 'self'; 
               form-action 'self'; 
               frame-ancestors 'self'; 
