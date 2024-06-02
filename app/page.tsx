@@ -3,6 +3,10 @@ import Container from '@/components/container';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getServerAuthSession } from '@/server/auth';
+import { Metadata } from 'next';
+import { metadata } from './metadata';
+
+export const getMetadata = (): Metadata => metadata;
 
 const HeroPage: React.FC = async () => {
   const session = await getServerAuthSession();
@@ -20,9 +24,7 @@ const HeroPage: React.FC = async () => {
           <Link href="/games">
             <Button variant="secondary">Browse games</Button>
           </Link>
-          <Link href={session?.user ? '/games' : '/sign-in'}>
-            {session?.user ? null : <Button>Sign in</Button>}
-          </Link>
+          <Link href={session?.user ? '/games' : '/sign-in'}>{session?.user ? null : <Button>Sign in</Button>}</Link>
         </div>
       </div>
       <div className="flex items-center md:flex-[0.7] md:justify-end">
