@@ -18,11 +18,24 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sqwadz.com'),
-  title: 'Sqwadz',
-  description: 'Find groups for games easily',
+  title: 'SQWADZ | Finding Groups Made Easy',
+  description: 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
   openGraph: {
-    title: 'Sqwadz',
-    description: 'Find groups for games easily',
+    title: 'SQWADZ | Finding Groups Made Easy',
+    description: 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
+    images: [
+      {
+        url: '/images/brand/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Finding Groups Made Easy',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SQWADZ | Finding Groups Made Easy',
+    description: 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
     images: [
       {
         url: '/images/brand/og-image.png',
