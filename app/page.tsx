@@ -1,44 +1,8 @@
-import { Metadata } from 'next';
 import React from 'react';
 import Container from '@/components/container';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getServerAuthSession } from '@/server/auth';
-
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'SQWADZ | Finding Groups Made Easy',
-    description: 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
-    openGraph: {
-      title: 'SQWADZ | Finding Groups Made Easy',
-      description: 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
-      images: [
-        {
-          url: '/images/og-image.webp',
-          width: 1200,
-          height: 630,
-          alt: 'Finding Groups Made Easy',
-        },
-      ],
-    },
-    alternates: {
-      canonical: '/',
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-    other: {
-      'application/ld+json': JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Finding Groups Made Easy",
-        "description": 'Browse games, select a room, and join the group effortlessly. Finding groups has never been easier.',
-        "url": 'https://sqwadz.com/',
-      }),
-    },
-  };
-}
 
 const HeroPage: React.FC = async () => {
   const session = await getServerAuthSession();
@@ -56,9 +20,7 @@ const HeroPage: React.FC = async () => {
           <Link href="/games">
             <Button variant="secondary">Browse games</Button>
           </Link>
-          <Link href={session?.user ? '/games' : '/sign-in'}>
-            {session?.user ? null : <Button>Sign in</Button>}
-          </Link>
+          <Link href={session?.user ? '/games' : '/sign-in'}>{session?.user ? null : <Button>Sign in</Button>}</Link>
         </div>
       </div>
       <div className="flex items-center md:flex-[0.7] md:justify-end">
