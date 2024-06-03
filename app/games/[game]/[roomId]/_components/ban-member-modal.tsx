@@ -41,7 +41,7 @@ const BanMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ target
 
     if (resp.status !== 200) {
       notify({
-        message: `Unable to ban member`,
+        message: `Unable to remove member`,
         data: { description: 'Something went wrong.' },
       });
     }
@@ -67,12 +67,12 @@ const BanMemberModal: React.FC<{ targetId: string; roomId: number }> = ({ target
           )}
         />
         <div className="flex justify-end gap-2">
-          <Button onClick={() => modal.close()} variant="secondary">
+          <Button type="button" onClick={() => modal.close()} variant="secondary">
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading} variant="destructive">
             {!isLoading ? (
-              'Ban'
+              'Remove'
             ) : (
               <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
             )}
