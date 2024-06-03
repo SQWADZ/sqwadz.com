@@ -13,7 +13,6 @@ import { SocketProvider } from '@/components/providers/socket-provider';
 import { Toaster } from '@/components/ui/sonner';
 import Script from 'next/script';
 import { worker } from '@/lib/bullmq';
-import Metrics from './metrics'
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -80,7 +79,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </SocketProvider>
         </Provider>
         <Toaster expand={true} />
-        <Metrics />
       </body>
       <Script defer src={process.env.ANALYTICS_SRC} data-website-id={process.env.ANALYTICS_WEBSITE_ID} />
     </html>
