@@ -119,6 +119,20 @@
     "status": "enabled"
   },
   {
+    "name": "Soulmask",
+    "path": "soulmask",
+    "image": "/images/games/soulmask.webp",
+    "color": "#DE3163",
+    "status": "enabled"
+  },
+  {
+    "name": "The Finals",
+    "path": "the-finals",
+    "image": "/images/games/thefinals.webp",
+    "color": "#a86add",
+    "status": "enabled"
+  },
+  {
     "name": "V Rising",
     "path": "v-rising",
     "image": "/images/games/vrising.webp",
