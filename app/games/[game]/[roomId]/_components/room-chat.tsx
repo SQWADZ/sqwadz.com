@@ -123,7 +123,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
       router.push(`/games/${game}`);
       notify({
-        message: `You have been banned`,
+        message: `You have been removed from the room`,
         data: { description: data.reason ? `Reason: ${data.reason}` : undefined, duration: 5000 },
       });
     };
@@ -146,7 +146,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
         router.push(`/games/${game}`);
         notify({
           message: 'Unable to join',
-          data: { description: 'You are banned from the room you are trying to join' },
+          data: { description: 'You were manually removed from this room and cannot rejoin' },
         });
       }
 

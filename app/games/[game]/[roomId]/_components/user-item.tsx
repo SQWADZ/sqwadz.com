@@ -4,7 +4,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGavel, faPaste, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faGavel, faPaste, faCheck, faCircleMinus } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
@@ -57,17 +57,17 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
                 className="text-destructive hover:text-destructive"
                 onClick={() =>
                   modal.open({
-                    title: 'Ban member',
-                    description: `Are you sure you want to ban ${user.name}?`,
+                    title: 'Remove member',
+                    description: `Are you sure you want to remove ${user.name}?`,
                     children: <BanMemberModal targetId={user.id} roomId={roomId} />,
                   })
                 }
               >
-                <FontAwesomeIcon icon={faGavel} fixedWidth size="lg" />
+                <FontAwesomeIcon icon={faCircleMinus} fixedWidth size="lg" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Ban</p>
+              <p>Remove</p>
             </TooltipContent>
           </Tooltip>
         )}
