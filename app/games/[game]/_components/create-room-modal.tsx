@@ -50,9 +50,9 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
     });
     const data: { id?: number } = await resp.json();
 
-    setIsLoading(false);
     if (resp.status !== 200) {
       //   Maybe set some "Something went wrong" error?
+      setIsLoading(false);
     }
 
     if (values.password) {
