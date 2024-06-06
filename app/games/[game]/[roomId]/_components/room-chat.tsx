@@ -118,6 +118,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
     const handleBanMember = (data: { targetId: string; reason: string }) => {
       if (data.targetId !== session.user.id) {
+        setRoomMembers((prev) => prev.filter((member) => member.id !== data.targetId));
+
         return;
       }
 
