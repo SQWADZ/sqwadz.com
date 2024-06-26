@@ -38,6 +38,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
       id: session.user.id,
       image: session.user.image,
       name: session.user.name,
+      joinedAt: Date.now(),
     }),
     [session]
   );
@@ -99,7 +100,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     const receiveMessage = (message: Message) => handleAddMessage(message);
 
     const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {
-      setRoomMembers(data.members);
+      setRoomMembers(data.members.sort((a, b) => a.joinedAt - b.joinedAt));
 
       if (!(localStorage.getItem('sqwadz.enable-notifications') === 'false')) {
         notify({
