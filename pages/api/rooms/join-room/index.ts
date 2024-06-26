@@ -73,12 +73,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     id: member.user.id,
     name: member.user.name,
     image: member.user.image,
+    joinedAt: new Date(member.joinedAt).valueOf(),
   }));
 
-  const user: RoomMember = {
+  const user: RoomMember & { joinedAt: number } = {
     id: session.user.id,
     name: session.user.name,
     image: session.user.image,
+    joinedAt: Date.now(),
   };
 
   if (!members.find((member) => member.id === user.id)) {

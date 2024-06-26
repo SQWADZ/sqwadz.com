@@ -45,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     id: member.user.id,
     name: member.user.name,
     image: member.user.image,
+    joinedAt: new Date(member.joinedAt).valueOf(),
   }));
 
   res.socket.server.io.emit(`${id}:members-changed`, {
