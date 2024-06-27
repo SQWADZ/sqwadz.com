@@ -24,6 +24,7 @@ const RoomSearch: React.FC = () => {
       placeholder="Search..."
       onChange={(e) => handleSearch(e.target.value)}
       defaultValue={searchParams?.get('query')?.toString()}
+      className="w-full self-end md:w-[300px]"
     />
   );
 };
