@@ -6,12 +6,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faBan, faLock } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '@/components/spinner';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Room } from '.prisma/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
+
+type Room = {
+  id: number;
+  creatorId: number;
+  activity: string;
+  slots: number;
+  password?: string;
+  game: string;
+  createdAt: Date;
+};
 
 const Rooms: React.FC<{ game: string; session: Session | null; query?: string; page?: number }> = ({
   game,
