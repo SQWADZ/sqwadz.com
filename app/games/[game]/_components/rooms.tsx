@@ -52,8 +52,6 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
 
     const data = await resp.json();
 
-    console.log(data);
-
     setRoomsData((prev) => ({ ...prev, rooms: [...prev.rooms, ...data.rooms], hasMore: data.hasMore }));
     setIsLoading(false);
   }, 0.5);
@@ -72,9 +70,6 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
       if (resp.status !== 200) return;
 
       const roomsData = await resp.json();
-
-      console.log(roomsData);
-
       setRoomsData(roomsData);
     });
   }, [setRoomsData, game, query]);
@@ -88,7 +83,6 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
           key={room.id}
           className="flex flex-col justify-between"
           ref={roomsData.hasMore && index === roomsData.rooms.length - 1 ? ref : null}
-          style={{ backgroundColor: roomsData.hasMore && index === roomsData.rooms.length - 1 ? 'red' : undefined }}
         >
           <CardHeader className="p-4">
             <CardTitle className="text-lg">{room.activity}</CardTitle>
