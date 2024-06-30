@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Session } from 'next-auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faBan, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,8 @@ import { Badge } from '@/components/ui/badge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
+import { useIntersection } from '@/client/hooks/useIntersection';
+import { useInfiniteScroll } from '@/client/hooks/useInfiniteScroll';
 
 type Room = {
   id: number;
@@ -26,22 +28,42 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
   game,
   session,
   query,
-  page,
 }) => {
   const [roomsData, setRoomsData] = React.useState<{
     rooms: Array<Room & { creator: { name: string }; _count: { roomMembers: number } }>;
-    roomsCount: number;
+    hasMore: boolean;
   }>({
     rooms: [],
-    roomsCount: 0,
+    hasMore: false,
   });
-  const [isLoading, setIsLoading] = React.useState(false);
+
+  const pageRef = useRef(0);
+
+  const [isLoading, setIsLoading] = React.useState(true);
+  const { ref } = useInfiniteScroll(async () => {
+    setIsLoading(true);
+    const resp = await fetch('/api/rooms/fetch-rooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ game, query, page: ++pageRef.current }),
+    });
+
+    const data = await resp.json();
+
+    console.log(data);
+
+    setRoomsData((prev) => ({ ...prev, rooms: [...prev.rooms, ...data.rooms], hasMore: data.hasMore }));
+    setIsLoading(false);
+  }, 0.5);
 
   useEffect(() => {
     setIsLoading(true);
+    pageRef.current = 0;
     fetch('/api/rooms/fetch-rooms', {
       method: 'POST',
-      body: JSON.stringify({ game, query, page }),
+      body: JSON.stringify({ game, query, page: 0 }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -49,30 +71,28 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
       setIsLoading(false);
       if (resp.status !== 200) return;
 
-      setRoomsData(await resp.json());
+      const roomsData = await resp.json();
+
+      console.log(roomsData);
+
+      setRoomsData(roomsData);
     });
-  }, [setRoomsData, game, page, query]);
-
-  console.log(roomsData);
-
-  if (isLoading)
-    return (
-      <div className="w-100 flex items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  }, [setRoomsData, game, query]);
 
   dayjs.extend(relativeTime);
 
-  return roomsData.rooms.length > 0 ? (
+  return (
     <div className="grid grid-cols-1 gap-4">
-      {roomsData.rooms.map((room) => (
-        <Card key={room.id} className="flex flex-col justify-between">
+      {roomsData.rooms.map((room, index) => (
+        <Card
+          key={room.id}
+          className="flex flex-col justify-between"
+          ref={roomsData.hasMore && index === roomsData.rooms.length - 1 ? ref : null}
+          style={{ backgroundColor: roomsData.hasMore && index === roomsData.rooms.length - 1 ? 'red' : undefined }}
+        >
           <CardHeader className="p-4">
             <CardTitle className="text-lg">{room.activity}</CardTitle>
-            <CardDescription>
-              <p className="text-sm text-muted-foreground">Host: {room.creator.name}</p>
-            </CardDescription>
+            <CardDescription className="text-sm text-muted-foreground">Host: {room.creator.name}</CardDescription>
           </CardHeader>
           <CardContent className="p-0 px-4 text-sm">Created {dayjs(room.createdAt as Date).fromNow()}</CardContent>
           <CardFooter className="flex flex-col items-start gap-4 p-4">
@@ -88,11 +108,19 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
           </CardFooter>
         </Card>
       ))}
-    </div>
-  ) : (
-    <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-      <FontAwesomeIcon icon={faBan} size="2x" fixedWidth />
-      <p>No rooms found</p>
+
+      {isLoading && (
+        <div className="w-100 flex items-center justify-center">
+          <Spinner />
+        </div>
+      )}
+
+      {roomsData.rooms.length === 0 && !isLoading && (
+        <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
+          <FontAwesomeIcon icon={faBan} size="2x" fixedWidth />
+          <p>No rooms found</p>
+        </div>
+      )}
     </div>
   );
 };
