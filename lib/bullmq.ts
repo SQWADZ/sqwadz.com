@@ -9,7 +9,7 @@ export const roomRemovalQueue = new Queue('roomRemovalQueue', {
 
 export const worker = new Worker(
   'roomRemovalQueue',
-  async (job: Job<{ roomId: number }>) => {
+  async (job: Job<{ roomId: number; game: string }>) => {
     console.log(`job - ${job.data.roomId}`);
 
     try {

@@ -103,11 +103,28 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
       });
     }
 
+    function handleRoomRemoved(roomId: number) {
+      setRoomsData((prev) => {
+        const roomIndex = prev.rooms.findIndex((item) => item.id === roomId);
+
+        if (roomIndex === -1) return prev;
+
+        const updatedRooms = prev.rooms.filter((prevRoom) => prevRoom.id !== roomId);
+
+        return {
+          ...prev,
+          rooms: updatedRooms,
+        };
+      });
+    }
+
     socket.on(`${game}:room-created`, handleRoomCreated);
+    socket.on(`${game}:room-removed`, handleRoomRemoved);
     socket.on(`${game}:members-updated`, handleRoomMembersUpdated);
 
     return () => {
       socket.off(`${game}:room-created`, handleRoomCreated);
+      socket.off(`${game}:room-removed`, handleRoomRemoved);
       socket.off(`${game}:members-updated`, handleRoomMembersUpdated);
     };
   }, [game, socket, isConnected]);

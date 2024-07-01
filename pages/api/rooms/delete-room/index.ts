@@ -11,17 +11,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   const { roomId } = req.body;
 
-  const isOwner = await prisma.room.findFirst({
+  const room = await prisma.room.findFirst({
     where: {
-      creatorId: session.user.id,
       id: roomId,
-    },
-    select: {
-      _count: true,
     },
   });
 
-  if (!isOwner?._count) return res.status(401).json('Unauthorized');
+  if (!room) return res.status(500).json('Error');
+
+  if (room.creatorId !== session.user.id) return res.status(401).json('Unauthorized');
 
   try {
     await prisma.room.deleteMany({
@@ -35,6 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   await roomRemovalQueue.remove(roomId.toString());
   res.socket.server.io.emit(`${roomId}:room-delete`);
+  res.socket.server.io.emit(`${room.game}:room-removed`, room.id);
 
   return res.status(200).json({ ok: true });
 }

@@ -31,8 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   await roomRemovalQueue.add(
     id.toString(),
-    { roomId: id },
-    { delay: 60 * 60 * 1000, removeOnComplete: true, removeOnFail: 100 }
+    { roomId: id, game: data.game },
+    { delay: 5000, removeOnComplete: true, removeOnFail: 100 }
   );
 
   const createdRoom = await prisma.room.findFirst({
