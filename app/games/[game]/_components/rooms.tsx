@@ -13,16 +13,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
 import { useIntersection } from '@/client/hooks/useIntersection';
 import { useInfiniteScroll } from '@/client/hooks/useInfiniteScroll';
-
-type Room = {
-  id: number;
-  creatorId: number;
-  activity: string;
-  slots: number;
-  password?: string;
-  game: string;
-  createdAt: Date;
-};
+import { Room } from '@/types';
+import RoomCard from '@/app/games/[game]/_components/room-card';
 
 const Rooms: React.FC<{ game: string; session: Session | null; query?: string; page?: number }> = ({
   game,
@@ -79,28 +71,12 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
   return (
     <div className="grid grid-cols-1 gap-4">
       {roomsData.rooms.map((room, index) => (
-        <Card
+        <RoomCard
           key={room.id}
-          className="flex flex-col justify-between"
+          room={room}
+          session={session}
           ref={roomsData.hasMore && index === roomsData.rooms.length - 1 ? ref : null}
-        >
-          <CardHeader className="p-4">
-            <CardTitle className="text-lg">{room.activity}</CardTitle>
-            <CardDescription className="text-sm text-muted-foreground">Host: {room.creator.name}</CardDescription>
-          </CardHeader>
-          <CardContent className="p-0 px-4 text-sm">Created {dayjs(room.createdAt as Date).fromNow()}</CardContent>
-          <CardFooter className="flex flex-col items-start gap-4 p-4">
-            <div className="flex w-full items-center justify-between">
-              <Badge variant="secondary" className="h-fit">
-                {room._count.roomMembers}/{room.slots}
-              </Badge>
-              <div className="flex items-center gap-4">
-                {room.password && <FontAwesomeIcon icon={faLock} />}
-                <JoinRoomButton game={room.game} roomId={room.id} session={session} />
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
+        />
       ))}
 
       {isLoading && (

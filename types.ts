@@ -23,3 +23,13 @@ export type BugReport = {
   title: string;
   comment: string;
 };
+
+export type Room = {
+  id: number;
+  creatorId: number;
+  activity: string;
+  slots: number;
+  password?: string;
+  game: string;
+  createdAt: Date;
+};
