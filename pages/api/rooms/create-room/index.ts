@@ -29,12 +29,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     },
   });
 
-  console.log(`Add job to queue: ${id}`);
   await roomRemovalQueue.add(
     id.toString(),
     { roomId: id },
     { delay: 60 * 60 * 1000, removeOnComplete: true, removeOnFail: 100 }
   );
+
+  const createdRoom = await prisma.room.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      creator: {
+        select: {
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          roomMembers: true,
+        },
+      },
+    },
+  });
+
+  if (createdRoom) {
+    res.socket.server.io.emit(`${data.game}:room-created`, { ...createdRoom, password: !!createdRoom.password });
+  }
 
   return res.status(200).json({ id });
 }

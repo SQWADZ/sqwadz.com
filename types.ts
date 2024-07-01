@@ -33,3 +33,8 @@ export type Room = {
   game: string;
   createdAt: Date;
 };
+
+export type RoomListing = Room & {
+  creator: { name: string };
+  _count: { roomMembers: number };
+};

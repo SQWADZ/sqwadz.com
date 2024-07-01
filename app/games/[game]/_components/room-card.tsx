@@ -5,11 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
-import { Room } from '@/types';
+import { RoomListing } from '@/types';
 import { Session } from 'next-auth';
 
 interface Props {
-  room: Room & { creator: { name: string }; _count: { roomMembers: number } };
+  room: RoomListing;
   session: Session | null;
 }
 

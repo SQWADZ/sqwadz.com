@@ -5,16 +5,14 @@ import { Session } from 'next-auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faBan, faLock } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '@/components/spinner';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
-import { useIntersection } from '@/client/hooks/useIntersection';
 import { useInfiniteScroll } from '@/client/hooks/useInfiniteScroll';
-import { Room } from '@/types';
+import { RoomListing } from '@/types';
 import RoomCard from '@/app/games/[game]/_components/room-card';
+import { useSocket } from '@/components/providers/socket-provider';
+
+dayjs.extend(relativeTime);
 
 const Rooms: React.FC<{ game: string; session: Session | null; query?: string; page?: number }> = ({
   game,
@@ -22,16 +20,19 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
   query,
 }) => {
   const [roomsData, setRoomsData] = React.useState<{
-    rooms: Array<Room & { creator: { name: string }; _count: { roomMembers: number } }>;
+    rooms: Array<RoomListing>;
     hasMore: boolean;
   }>({
     rooms: [],
     hasMore: false,
   });
 
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  const { socket, isConnected } = useSocket();
+
   const pageRef = useRef(0);
 
-  const [isLoading, setIsLoading] = React.useState(true);
   const { ref } = useInfiniteScroll(async () => {
     setIsLoading(true);
     const resp = await fetch('/api/rooms/fetch-rooms', {
@@ -44,7 +45,13 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
 
     const data = await resp.json();
 
-    setRoomsData((prev) => ({ ...prev, rooms: [...prev.rooms, ...data.rooms], hasMore: data.hasMore }));
+    setRoomsData((prev) => {
+      return {
+        ...prev,
+        rooms: [...prev.rooms, ...data.rooms],
+        hasMore: data.hasMore,
+      };
+    });
     setIsLoading(false);
   }, 0.5);
 
@@ -66,7 +73,44 @@ const Rooms: React.FC<{ game: string; session: Session | null; query?: string; p
     });
   }, [setRoomsData, game, query]);
 
-  dayjs.extend(relativeTime);
+  React.useEffect(() => {
+    if (!socket || !isConnected) return;
+
+    function handleRoomCreated(newRoom: RoomListing) {
+      setRoomsData((prev) => ({ ...prev, rooms: [newRoom, ...prev.rooms] }));
+    }
+
+    function handleRoomMembersUpdated(data: { roomId: number; newMemberCount: number }) {
+      setRoomsData((prev) => {
+        const roomIndex = prev.rooms.findIndex((item) => item.id === data.roomId);
+
+        if (roomIndex === -1) return prev;
+
+        const updatedRooms = prev.rooms.map((room, index) => {
+          if (index === roomIndex) {
+            return {
+              ...room,
+              _count: { ...room._count, roomMembers: data.newMemberCount },
+            };
+          }
+          return room;
+        });
+
+        return {
+          ...prev,
+          rooms: updatedRooms,
+        };
+      });
+    }
+
+    socket.on(`${game}:room-created`, handleRoomCreated);
+    socket.on(`${game}:members-updated`, handleRoomMembersUpdated);
+
+    return () => {
+      socket.off(`${game}:room-created`, handleRoomCreated);
+      socket.off(`${game}:members-updated`, handleRoomMembersUpdated);
+    };
+  }, [game, socket, isConnected]);
 
   return (
     <div className="grid grid-cols-1 gap-4">
