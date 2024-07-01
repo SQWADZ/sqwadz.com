@@ -53,5 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     message: `${session.user.name} has left the room.`,
   });
 
+  res.socket.server.io.emit(`${room.game}:members-updated`, { roomId: room.id, newMemberCount: roomMembers.length });
+
   return res.status(200).json({ members: roomMembers });
 }
