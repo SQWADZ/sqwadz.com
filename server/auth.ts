@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
+import { getServerSession, type DefaultSession, type NextAuthOptions, DefaultUser, Session, User } from 'next-auth';
 import prisma from '@/lib/prisma';
 import TwitchProvider from 'next-auth/providers/twitch';
 import BattleNetProvider from 'next-auth/providers/battlenet';
@@ -25,7 +25,12 @@ declare module 'next-auth' {
       id: string;
       // ...other properties
       // role: UserRole;
+      isVerified?: boolean;
     } & DefaultSession['user'];
+  }
+
+  interface User extends DefaultUser {
+    isVerified?: boolean;
   }
 
   // interface User {
@@ -41,11 +46,12 @@ declare module 'next-auth' {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, user }: { session: Session; user: User }) => ({
       ...session,
       user: {
         ...session.user,
         id: user.id,
+        isVerified: user.isVerified,
       },
     }),
   },

@@ -19,12 +19,13 @@ interface Props {
   creatorId: string;
   createdAt: Date;
   game: string;
+  expiresAt: Date;
 }
 
-const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId, createdAt, game }) => {
+const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId, createdAt, game, expiresAt }) => {
   const [title, setTitle] = React.useState(activity);
   const [time, setTime] = React.useState(() => {
-    const minutes = dayjs(+createdAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
+    const minutes = dayjs(+expiresAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
 
     return minutes <= 1 ? 'Pending deletion...' : `${minutes} minutes`;
   });
@@ -52,7 +53,7 @@ const RoomTitle: React.FC<Props> = ({ activity, slots, roomId, userId, creatorId
 
   React.useEffect(() => {
     const intervalId = setInterval(() => {
-      const minutes = dayjs(+createdAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
+      const minutes = dayjs(+expiresAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
       const time = minutes <= 1 ? 'Pending deletion...' : `${minutes} minutes`;
 
       setTime(time);

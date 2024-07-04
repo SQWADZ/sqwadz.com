@@ -73,6 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     id: member.user.id,
     name: member.user.name,
     image: member.user.image,
+    isVerified: member.user.isVerified,
     joinedAt: new Date(member.joinedAt).valueOf(),
   }));
 
@@ -80,6 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     id: session.user.id,
     name: session.user.name,
     image: session.user.image,
+    isVerified: session.user.isVerified,
     joinedAt: Date.now(),
   };
 
