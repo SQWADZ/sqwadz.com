@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { getPagesServerAuthSession } from '@/server/auth';
 import { RoomMember } from '@/types';
 import redis from '@/lib/redis';
+import { roomRemovalQueue } from '@/lib/bullmq';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
@@ -47,6 +48,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     image: member.user.image,
     joinedAt: new Date(member.joinedAt).valueOf(),
   }));
+
+  if (roomMembers.length < 1) {
+    await roomRemovalQueue.add(
+      `${room.id}-empty`,
+      { roomId: room.id, game: room.game },
+      { delay: 2 * 60 * 1000, jobId: `${room.id}-empty` }
+    );
+  }
 
   res.socket.server.io.emit(`${id}:members-changed`, {
     members: roomMembers,

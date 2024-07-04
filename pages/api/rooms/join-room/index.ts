@@ -4,6 +4,7 @@ import { Message, RoomMember, MessageData } from '@/types';
 import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 import prisma from '@/lib/prisma';
 import redis from '@/lib/redis';
+import { roomRemovalQueue } from '@/lib/bullmq';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
@@ -84,6 +85,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     isVerified: session.user.isVerified,
     joinedAt: Date.now(),
   };
+
+  const emptyRoomJob = await roomRemovalQueue.getJob(`${room.id}-empty`);
+  await emptyRoomJob?.remove();
 
   if (!members.find((member) => member.id === user.id)) {
     members.push(user);
