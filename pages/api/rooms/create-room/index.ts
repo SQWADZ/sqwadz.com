@@ -57,6 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
       creator: {
         select: {
           name: true,
+          isVerified: true,
         },
       },
       _count: {
