@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faBars, faComment, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -77,6 +77,11 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
             <Link href="/support-us" onClick={() => setOpen(false)}>
               <Button variant="outline" className="flex w-full justify-start">
                 Support us
+              </Button>
+            </Link>
+            <Link href="/faq" onClick={() => setOpen(false)}>
+              <Button variant="outline" className="flex w-full justify-start">
+                FAQ
               </Button>
             </Link>
           </div>
