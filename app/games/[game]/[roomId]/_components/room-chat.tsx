@@ -107,8 +107,14 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
 
       if (localStorage.getItem('sqwadz.enable-sound') === 'true') {
         if (data.isJoin) {
-          joinSoundRef.current?.play();
+          if (!joinSoundRef.current) return;
+
+          joinSoundRef.current.volume = 0.3;
+          joinSoundRef.current.play();
         } else {
+          if (!leaveSoundRef.current) return;
+
+          leaveSoundRef.current.volume = 0.3;
           leaveSoundRef.current?.play();
         }
       }
