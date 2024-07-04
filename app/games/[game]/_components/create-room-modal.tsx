@@ -4,7 +4,7 @@ import React from 'react';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faLock, faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,16 +13,21 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useModal } from '@/components/modals-provider';
 import { useRouter } from 'next/navigation';
+import { Session } from 'next-auth';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { setEngine } from 'crypto';
 
 const formSchema = z.object({
-  activity: z.string().max(50),
+  activity: z.string().max(50).min(1, { message: 'Activity is required' }),
   slots: z.number().min(2, 'Slots must be at least 2'),
   password: z.string().optional(),
+  duration: z.number().min(1).max(6),
 });
 
-const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
+const CreateRoomModal: React.FC<{ game: string; session: Session | null }> = ({ game, session }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
+  const [isLongDuration, setIsLongDuration] = React.useState(false);
   const router = useRouter();
   const modal = useModal();
 
@@ -32,6 +37,7 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
       slots: 2,
       activity: '',
       password: '',
+      duration: 1,
     },
   });
 
@@ -41,6 +47,7 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
     values.password = !isPrivate ? '' : values.password;
 
     const formData: z.infer<typeof formSchema> & { game: string } = { ...values, game };
+
     const resp = await fetch('/api/rooms/create-room', {
       method: 'POST',
       headers: {
@@ -123,6 +130,49 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
                 <FormLabel className={cn(!isPrivate && 'text-muted-foreground')}>Password</FormLabel>
                 <FormControl>
                   <Input {...field} type="password" disabled={!isPrivate} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex flex-col gap-4 rounded-lg border p-4">
+          <div className="flex items-center justify-between gap-8">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faClock} fixedWidth />
+                <label htmlFor="private-room" className="text-base">
+                  Long duration room
+                </label>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Sets the room duration up to a maximum of 6 hours. Verified creators only.
+              </p>
+            </div>
+            <Switch
+              id="long-room"
+              disabled={!session?.user.isVerified}
+              checked={isLongDuration}
+              onCheckedChange={() => setIsLongDuration((prev) => !prev)}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={cn(!isLongDuration && 'text-muted-foreground')}>Hours</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    onChange={(event) => {
+                      const value = +event.target.value;
+                      if (isNaN(value)) return;
+
+                      field.onChange(+event.target.value);
+                    }}
+                    disabled={!isLongDuration}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

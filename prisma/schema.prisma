@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -20,8 +20,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -43,11 +42,12 @@ model User {
   email         String?      @unique
   emailVerified DateTime?
   image         String?
+  isVerified    Boolean      @default(false)
   accounts      Account[]
-  sessions      Session[]
   rooms         Room[]
-  roomMember    RoomMember[]
   roomBan       RoomBan[]
+  roomMember    RoomMember[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -59,40 +59,39 @@ model VerificationToken {
 }
 
 model Room {
-  id        Int      @id @default(autoincrement())
-  creatorId String
-  activity  String
-  slots     Int
-  password  String?
-  game      String
-  createdAt DateTime @default(now())
-
+  id          Int          @id @default(autoincrement())
+  creatorId   String
+  activity    String
+  slots       Int
+  password    String?
+  game        String
+  createdAt   DateTime     @default(now())
+  expiresAt   DateTime     @default(dbgenerated("(current_timestamp() + interval 1 hour)")) @db.DateTime(0)
+  creator     User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  roomBans    RoomBan[]
   roomMembers RoomMember[]
-  roomBans RoomBan[]
-
-  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   @@index([creatorId])
   @@index([game])
 }
 
 model RoomMember {
-  roomId Int
-  userId String
+  roomId   Int
+  userId   String
   joinedAt DateTime @default(now())
-
-  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room     Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([roomId, userId])
+  @@index([userId], map: "RoomMember_userId_fkey")
 }
 
 model RoomBan {
   roomId Int
   userId String
-
-  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([roomId, userId])
+  @@index([userId], map: "RoomBan_userId_fkey")
 }

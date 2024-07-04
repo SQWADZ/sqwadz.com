@@ -14,6 +14,7 @@ async function handler(request: Request) {
       creator: {
         select: {
           name: true,
+          isVerified: true,
         },
       },
       _count: {
@@ -27,8 +28,8 @@ async function handler(request: Request) {
         createdAt: 'desc',
       },
     ],
-    take: 8,
-    skip: (page ? (page >= 0 ? page : 0) : 0) * 8,
+    take: 10,
+    skip: (page ? (page >= 0 ? page : 0) : 0) * 10,
   });
 
   const rooms = _rooms.map((room) => ({
@@ -37,19 +38,25 @@ async function handler(request: Request) {
     creatorUsername: room.creator.name,
   }));
 
-  const roomsCount = await prisma.room.count({
-    where: {
-      game,
-      activity: {
-        contains: query,
+  const hasMore =
+    (await prisma.room.findFirst({
+      where: {
+        game,
+        activity: {
+          contains: query,
+        },
       },
-    },
-  });
+      select: {
+        id: true,
+      },
+      take: 1,
+      skip: (page + 1) * 10,
+    })) !== null;
 
   return new Response(
     JSON.stringify({
       rooms,
-      roomsCount,
+      hasMore,
     }),
     { status: 200 }
   );

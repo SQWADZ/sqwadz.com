@@ -23,3 +23,18 @@ export type BugReport = {
   title: string;
   comment: string;
 };
+
+export type Room = {
+  id: number;
+  creatorId: number;
+  activity: string;
+  slots: number;
+  password?: string;
+  game: string;
+  createdAt: Date;
+};
+
+export type RoomListing = Room & {
+  creator: { name: string; isVerified?: boolean };
+  _count: { roomMembers: number };
+};

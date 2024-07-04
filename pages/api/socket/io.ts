@@ -28,8 +28,9 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     res.socket.server.io = io;
 
     worker.on('completed', (job) => {
-      console.log(`completed - ${job.data.roomId}`);
+      console.log(`completed - ${job.data.roomId} - ${job.data.game}`);
       io.emit(`${job.data.roomId}:room-delete`);
+      io.emit(`${job.data.game}:room-removed`, job.data.roomId);
     });
   }
 

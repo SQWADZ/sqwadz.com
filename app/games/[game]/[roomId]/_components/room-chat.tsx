@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faComment, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Input } from '@/components/ui/input';
@@ -30,10 +30,10 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   game,
 }) => {
   const router = useRouter();
-  const [messagesData, setMessagesData] = React.useState<MessageData[]>([]);
-  const [input, setInput] = React.useState('');
+  const [messagesData, setMessagesData] = useState<MessageData[]>([]);
+  const [input, setInput] = useState('');
   const modal = useModal();
-  const user: RoomMember = React.useMemo(
+  const user: RoomMember = useMemo(
     () => ({
       id: session.user.id,
       image: session.user.image,
@@ -42,11 +42,14 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     }),
     [session]
   );
-  const [roomMembers, setRoomMembers] = React.useState<RoomMember[]>([]);
+  const [roomMembers, setRoomMembers] = useState<RoomMember[]>([]);
   const pageRef = useRef(0);
   const { socket, isConnected } = useSocket();
   const chatRef = useRef<HTMLDivElement | null>(null);
   const firstMessageRef = useRef<HTMLDivElement | null>(null);
+
+  const joinSoundRef = useRef<HTMLAudioElement | null>(null);
+  const leaveSoundRef = useRef<HTMLAudioElement | null>(null);
 
   async function handleLoadMore() {
     pageRef.current++;
@@ -79,7 +82,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     count: messagesData[0]?.messages.length || 0,
   });
 
-  const messages = React.useMemo(() => messagesData.flatMap((messageData) => messageData.messages), [messagesData]);
+  const messages = useMemo(() => messagesData.flatMap((messageData) => messageData.messages), [messagesData]);
 
   const handleAddMessage = (newMessage: Message) => {
     setMessagesData((prevMessagesData) => {
@@ -94,13 +97,27 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!socket || !isConnected) return;
 
     const receiveMessage = (message: Message) => handleAddMessage(message);
 
     const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {
       setRoomMembers(data.members.sort((a, b) => a.joinedAt - b.joinedAt));
+
+      if (localStorage.getItem('sqwadz.enable-sound') === 'true') {
+        if (data.isJoin) {
+          if (!joinSoundRef.current) return;
+
+          joinSoundRef.current.volume = 0.3;
+          joinSoundRef.current.play();
+        } else {
+          if (!leaveSoundRef.current) return;
+
+          leaveSoundRef.current.volume = 0.3;
+          leaveSoundRef.current?.play();
+        }
+      }
 
       if (!(localStorage.getItem('sqwadz.enable-notifications') === 'false')) {
         notify({
@@ -196,7 +213,7 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
     }).then();
   };
 
-  const sortedMembers = React.useMemo(() => {
+  const sortedMembers = useMemo(() => {
     const creator = roomMembers.find((member) => member.id === roomCreatorId);
     const otherMembers = roomMembers.filter((member) => member.id !== roomCreatorId);
     return creator ? [creator, ...otherMembers] : otherMembers;
@@ -274,6 +291,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
           ))}
         </div>
       </div>
+      <audio ref={joinSoundRef} src="/audio/join.mp3" />
+      <audio ref={leaveSoundRef} src="/audio/leave.mp3" />
     </div>
   );
 };

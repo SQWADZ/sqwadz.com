@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
+import { faLock, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const RoomSearch: React.FC = () => {
   const searchParams = useSearchParams();
@@ -22,8 +23,10 @@ const RoomSearch: React.FC = () => {
   return (
     <Input
       placeholder="Search..."
+      startIcon={faSearch}
       onChange={(e) => handleSearch(e.target.value)}
       defaultValue={searchParams?.get('query')?.toString()}
+      className="w-full self-start md:w-[300px]"
     />
   );
 };

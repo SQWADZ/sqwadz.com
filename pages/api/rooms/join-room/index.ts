@@ -4,6 +4,7 @@ import { Message, RoomMember, MessageData } from '@/types';
 import { NextApiResponseServerIo } from '@/pages/api/socket/io';
 import prisma from '@/lib/prisma';
 import redis from '@/lib/redis';
+import { roomRemovalQueue } from '@/lib/bullmq';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   const session = await getPagesServerAuthSession(req, res);
@@ -73,6 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     id: member.user.id,
     name: member.user.name,
     image: member.user.image,
+    isVerified: member.user.isVerified,
     joinedAt: new Date(member.joinedAt).valueOf(),
   }));
 
@@ -80,8 +82,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     id: session.user.id,
     name: session.user.name,
     image: session.user.image,
+    isVerified: session.user.isVerified,
     joinedAt: Date.now(),
   };
+
+  const emptyRoomJob = await roomRemovalQueue.getJob(`${room.id}-empty`);
+  await emptyRoomJob?.remove();
 
   if (!members.find((member) => member.id === user.id)) {
     members.push(user);
@@ -92,6 +98,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     message: `${user.name} has joined the room.`,
     isJoin: true,
   });
+
+  res.socket.server.io.emit(`${room.game}:members-updated`, { roomId: room.id, newMemberCount: members.length });
 
   const rawMessages = await redis.zrevrange(`roomId:${roomId}:messages`, 0, 25 - 1);
   const parsedMessages: Message[] = rawMessages.map((rawMessage) => JSON.parse(rawMessage));

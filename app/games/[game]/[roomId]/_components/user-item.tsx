@@ -10,6 +10,7 @@ import { RoomMember } from '@/types';
 import { useModal } from '@/components/modals-provider';
 import BanMemberModal from './ban-member-modal';
 import { toast } from 'sonner';
+import VerifiedCreatorBadge from '@/components/verified-creator-badge';
 
 const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: string; roomId: number }> = ({
   user,
@@ -46,6 +47,7 @@ const UserItem: React.FC<{ user: RoomMember; roomCreatorId: string; clientId: st
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <p className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}>{user.name}</p>
+        {user.isVerified && <VerifiedCreatorBadge />}
       </div>
       <div className="flex items-center gap-2">
         {showControls && (
