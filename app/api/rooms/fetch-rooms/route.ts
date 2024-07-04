@@ -14,6 +14,7 @@ async function handler(request: Request) {
       creator: {
         select: {
           name: true,
+          isVerified: true,
         },
       },
       _count: {

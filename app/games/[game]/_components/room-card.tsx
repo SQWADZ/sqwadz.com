@@ -7,6 +7,7 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 import JoinRoomButton from '@/app/games/[game]/_components/join-room-button';
 import { RoomListing } from '@/types';
 import { Session } from 'next-auth';
+import VerifiedCreatorBadge from '@/components/verified-creator-badge';
 
 interface Props {
   room: RoomListing;
@@ -18,7 +19,9 @@ const RoomCard: React.ForwardRefRenderFunction<HTMLDivElement | null, Props> = (
     <Card key={room.id} className="flex flex-col justify-between" ref={ref}>
       <CardHeader className="p-4">
         <CardTitle className="text-lg">{room.activity}</CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">Host: {room.creator.name}</CardDescription>
+        <CardDescription className="text-sm text-muted-foreground">
+          Host: {room.creator.name} {room.creator.isVerified && <VerifiedCreatorBadge />}
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-0 px-4 text-sm">Created {dayjs(room.createdAt as Date).fromNow()}</CardContent>
       <CardFooter className="flex flex-col items-start gap-4 p-4">

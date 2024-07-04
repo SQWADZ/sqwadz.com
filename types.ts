@@ -35,6 +35,6 @@ export type Room = {
 };
 
 export type RoomListing = Room & {
-  creator: { name: string };
+  creator: { name: string; isVerified?: boolean };
   _count: { roomMembers: number };
 };
