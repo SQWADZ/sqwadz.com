@@ -1,9 +1,9 @@
 import Container from '@/components/container';
 import GameCard from '@/components/game-card';
-import games from '@/data/games.json';
 import { getServerAuthSession } from '@/server/auth';
 import GameRequestButton from '@/components/game-request-button';
 import { Metadata } from 'next';
+import prisma from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'SQWADZ | Games',
@@ -22,9 +22,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const session = await getServerAuthSession();
+  const games = await prisma.game.findMany({
+    where: {
+      status: 'enabled',
+    },
+    orderBy: [
+      {
+        name: 'asc',
+      },
+    ],
+  });
 
-  const enabledGames = games.filter((game) => game.status === 'enabled');
+  const session = await getServerAuthSession();
 
   return (
     <Container className="flex max-w-7xl flex-col gap-8">
@@ -42,7 +51,7 @@ export default async function Home() {
       </div>
 
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">
-        {enabledGames.map((game) => (
+        {games.map((game) => (
           <GameCard key={game.name} name={game.name} image={game.image} path={game.path} color={game.color} />
         ))}
       </div>

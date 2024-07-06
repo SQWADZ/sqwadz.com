@@ -5,7 +5,9 @@ async function handler(request: Request) {
 
   const _rooms = await prisma.room.findMany({
     where: {
-      game,
+      game: {
+        path: game,
+      },
       activity: {
         contains: query,
       },
@@ -41,7 +43,9 @@ async function handler(request: Request) {
   const hasMore =
     (await prisma.room.findFirst({
       where: {
-        game,
+        game: {
+          path: game,
+        },
         activity: {
           contains: query,
         },

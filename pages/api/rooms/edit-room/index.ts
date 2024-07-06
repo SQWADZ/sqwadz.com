@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     select: {
       creatorId: true,
       id: true,
-      game: true,
+      gamePath: true,
     },
   });
 
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   });
 
   res.socket.server.io.emit(`${room.id}:update_room`, data);
-  res.socket.server.io.emit(`${room.game}:room-updated`, data);
+  res.socket.server.io.emit(`${room.gamePath}:room-updated`, data);
 
   return res.status(200).json({ ok: true });
 }

@@ -37,6 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
           roomMembers: true,
         },
       },
+      game: {
+        include: {},
+      },
       roomMembers: {
         include: {
           user: true,

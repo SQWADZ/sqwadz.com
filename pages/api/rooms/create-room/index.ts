@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
       password: data.password === '' ? undefined : data.password,
       slots: data.slots,
       creatorId: session.user.id,
-      game: data.game,
+      gamePath: data.game,
       expiresAt,
     },
   });

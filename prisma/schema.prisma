@@ -61,7 +61,7 @@ model VerificationToken {
 model Room {
   id          Int          @id @default(autoincrement())
   creatorId   String
-  gameId      Int
+  gamePath     String
   activity    String
   slots       Int
   password    String?
@@ -70,7 +70,7 @@ model Room {
   roomBans    RoomBan[]
   roomMembers RoomMember[]
 
-  game    Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  game    Game @relation(fields: [gamePath], references: [path], onDelete: Cascade)
   creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   @@index([creatorId])
@@ -100,9 +100,8 @@ model RoomBan {
 }
 
 model Game {
-  id     Int    @id @default(autoincrement())
+  path   String @id @unique
   name   String
-  path   String @unique
   image  String
   color  String
   status String
