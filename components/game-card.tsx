@@ -3,15 +3,17 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import rooms from '@/app/games/[game]/_components/rooms';
 
 interface Props {
   name: string;
   image: string;
   path: string;
   color: string;
+  roomsCount: number;
 }
 
-const GameCard: React.FC<Props> = ({ name, image, path, color }) => {
+const GameCard: React.FC<Props> = ({ name, image, path, color, roomsCount }) => {
   const gamePageUrl = `/games/${encodeURIComponent(path)}`;
 
   return (
@@ -39,7 +41,10 @@ const GameCard: React.FC<Props> = ({ name, image, path, color }) => {
               className="absolute bottom-0 right-0 h-[8px] w-[8px] origin-bottom-right rotate-45 scale-0 transition-all duration-100 group-hover:z-0 group-hover:scale-100"
             />
           </div>
-          <p className="line-clamp-1">{name}</p>
+          <div>
+            <p className="line-clamp-1">{name}</p>
+            <p className="text-sm text-muted-foreground">{roomsCount} rooms</p>
+          </div>
         </div>
       </div>
     </Link>

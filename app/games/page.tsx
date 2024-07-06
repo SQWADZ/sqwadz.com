@@ -26,6 +26,17 @@ export default async function Home() {
     where: {
       status: 'enabled',
     },
+    select: {
+      name: true,
+      image: true,
+      path: true,
+      color: true,
+      _count: {
+        select: {
+          rooms: true,
+        },
+      },
+    },
     orderBy: [
       {
         name: 'asc',
@@ -52,7 +63,14 @@ export default async function Home() {
 
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">
         {games.map((game) => (
-          <GameCard key={game.name} name={game.name} image={game.image} path={game.path} color={game.color} />
+          <GameCard
+            key={game.name}
+            name={game.name}
+            image={game.image}
+            path={game.path}
+            color={game.color}
+            roomsCount={game._count.rooms}
+          />
         ))}
       </div>
     </Container>
