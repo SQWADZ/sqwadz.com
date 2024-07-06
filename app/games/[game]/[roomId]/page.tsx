@@ -25,14 +25,14 @@ const RoomPage: React.FC<{ params: { roomId: number; game: string } }> = async (
         <RoomTitle
           activity={room.activity}
           slots={room.slots}
-          game={params.game}
+          game={room.gamePath}
           roomId={room.id}
           userId={session.user.id}
           creatorId={room.creatorId}
           createdAt={room.createdAt}
           expiresAt={room.expiresAt}
         />
-        <RoomChat session={session} roomId={params.roomId} roomCreatorId={room.creatorId} game={params.game} />
+        <RoomChat session={session} roomId={params.roomId} roomCreatorId={room.creatorId} game={room.gamePath} />
       </div>
     </Container>
   );

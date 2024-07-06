@@ -30,7 +30,7 @@ export type Room = {
   activity: string;
   slots: number;
   password?: string;
-  game: string;
+  gamePath: string;
   createdAt: Date;
 };
 

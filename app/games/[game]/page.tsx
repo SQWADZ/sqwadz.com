@@ -19,6 +19,7 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
     },
     select: {
       name: true,
+      path: true,
     },
   });
 
@@ -30,11 +31,11 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
     <Container className="flex flex-col gap-10">
       <div className="flex items-center justify-between">
         <p className="text-xl">{gameDetails.name} Rooms</p>
-        <CreateRoom session={session} game={params.game} />
+        <CreateRoom session={session} game={gameDetails.path} />
       </div>
       <div className="flex flex-col gap-4">
         <RoomSearch />
-        <Rooms game={params.game} session={session} query={searchParams.query} />
+        <Rooms game={gameDetails.path} session={session} query={searchParams.query} />
       </div>
     </Container>
   );

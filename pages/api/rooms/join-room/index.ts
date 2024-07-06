@@ -102,7 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     isJoin: true,
   });
 
-  res.socket.server.io.emit(`${room.game}:members-updated`, { roomId: room.id, newMemberCount: members.length });
+  res.socket.server.io.emit(`${room.gamePath}:members-updated`, { roomId: room.id, newMemberCount: members.length });
 
   const rawMessages = await redis.zrevrange(`roomId:${roomId}:messages`, 0, 25 - 1);
   const parsedMessages: Message[] = rawMessages.map((rawMessage) => JSON.parse(rawMessage));

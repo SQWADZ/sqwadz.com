@@ -31,7 +31,7 @@ const RoomCard: React.ForwardRefRenderFunction<HTMLDivElement | null, Props> = (
           </Badge>
           <div className="flex items-center gap-4">
             {room.password && <FontAwesomeIcon icon={faLock} />}
-            <JoinRoomButton game={room.game} roomId={room.id} session={session} />
+            <JoinRoomButton game={room.gamePath} roomId={room.id} session={session} />
           </div>
         </div>
       </CardFooter>
