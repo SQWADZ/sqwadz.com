@@ -1,7 +1,7 @@
 import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const SkeletonGameCard: React.FC = () => {
+const SkeletonGameCards: React.FC = () => {
   const arr = Array.from(Array(9).keys());
 
   return (
@@ -17,4 +17,4 @@ const SkeletonGameCard: React.FC = () => {
   );
 };
 
-export default SkeletonGameCard;
+export default SkeletonGameCards;
