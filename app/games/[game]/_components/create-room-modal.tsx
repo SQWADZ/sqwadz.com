@@ -110,7 +110,7 @@ const CreateRoomModal: React.FC<{ game: string; session: Session | null }> = ({ 
           )}
         />
         <div className="flex flex-col gap-4 rounded-lg border p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-8">
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faLock} fixedWidth />
