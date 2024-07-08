@@ -1,6 +1,7 @@
 import Container from '@/components/container';
 import React from 'react';
 import { Metadata } from 'next';
+import VerifiedCreatorBadge from '@/components/verified-creator-badge';
 
 export const metadata: Metadata = {
   title: 'SQWADZ | FAQ',
@@ -92,6 +93,20 @@ const FAQPage: React.FC = () => {
           you&apos;re looking for a team to play competitive games or a casual group to enjoy multiplayer games, Sqwadz
           makes it easy to browse games, select a room, and join a squad. Our platform leverages OAuth to connect with
           your existing gaming accounts, making it seamless to find and join gaming groups.
+        </p>
+      </div>
+
+      <div className="mb-4">
+        <h2 className="text-xl font-bold">8. What are Verified Creators?</h2>
+        <p className="mb-4  text-sm text-muted-foreground">
+          Verified Creators are streamers or content creators that we have manually verified.
+        </p>
+        <ul className="mb-4 list-inside list-disc text-muted-foreground">
+          <li>Ability to set room time to a maximum of 6 hours</li>
+          <li>Receive a &quot;Verified Creator&quot; badge next to their username <VerifiedCreatorBadge /></li>
+        </ul>
+        <p className="mb-4  text-sm text-muted-foreground">
+          Reach out to us on discord to get verified.
         </p>
       </div>
     </Container>
