@@ -1,9 +1,13 @@
 import Container from '@/components/container';
 import GameCard from '@/components/game-card';
-import games from '@/data/games.json';
 import { getServerAuthSession } from '@/server/auth';
 import GameRequestButton from '@/components/game-request-button';
 import { Metadata } from 'next';
+import prisma from '@/lib/prisma';
+import GamesSort from '@/app/games/_components/games-sort';
+import { Suspense } from 'react';
+import GamesGrid from '@/app/games/_components/games-grid';
+import SkeletonGameCards from '@/app/games/_components/skeleton-game-cards';
 
 export const metadata: Metadata = {
   title: 'SQWADZ | Games',
@@ -21,10 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams?: { sort?: string } }) {
   const session = await getServerAuthSession();
-
-  const enabledGames = games.filter((game) => game.status === 'enabled');
 
   return (
     <Container className="flex max-w-7xl flex-col gap-8">
@@ -41,10 +43,14 @@ export default async function Home() {
         </p>
       </div>
 
+      <div className="flex flex-col">
+        <GamesSort />
+      </div>
+
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">
-        {enabledGames.map((game) => (
-          <GameCard key={game.name} name={game.name} image={game.image} path={game.path} color={game.color} />
-        ))}
+        <Suspense key={searchParams?.sort} fallback={<SkeletonGameCards />}>
+          <GamesGrid searchParams={searchParams} />
+        </Suspense>
       </div>
     </Container>
   );

@@ -100,6 +100,8 @@ const RoomChat: React.FC<{ session: Session; roomId: number; roomCreatorId: stri
   useEffect(() => {
     if (!socket || !isConnected) return;
 
+    modal.close();
+
     const receiveMessage = (message: Message) => handleAddMessage(message);
 
     const updateRoomMembers = (data: { members: RoomMember[]; message: string; isJoin?: boolean }) => {

@@ -57,7 +57,7 @@
   },
   {
     "name": "Light No Fire",
-    "path": "last-epoch",
+    "path": "lightnofire",
     "image": "/images/games/lightnofire.webp",
     "color": "#593FA3",
     "status": "disabled"

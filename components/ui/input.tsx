@@ -12,7 +12,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
   return (
     <div className="relative">
       {StartIcon && (
-        <div className="pointer-events-none absolute top-1/2 flex h-full w-[34px] -translate-y-1/2 transform items-center justify-center">
+        <div className="pointer-events-none absolute top-1/2 flex h-full w-[34px] -translate-y-1/2 transform items-center justify-center text-muted-foreground">
           <FontAwesomeIcon icon={StartIcon} fixedWidth />
         </div>
       )}

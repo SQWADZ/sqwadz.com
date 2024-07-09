@@ -4,8 +4,8 @@ import CreateRoom from './_components/create-room';
 import { getServerAuthSession } from '@/server/auth';
 import RoomSearch from '@/app/games/[game]/_components/room-search';
 import Rooms from '@/app/games/[game]/_components/rooms';
-import games from '@/data/games.json';
 import { redirect } from 'next/navigation';
+import prisma from '@/lib/prisma';
 
 const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: string } }> = async ({
   params,
@@ -13,7 +13,15 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
 }) => {
   const session = await getServerAuthSession();
 
-  const gameDetails = games.find((game) => game.path === params.game);
+  const gameDetails = await prisma.game.findFirst({
+    where: {
+      path: params.game,
+    },
+    select: {
+      name: true,
+      path: true,
+    },
+  });
 
   if (!gameDetails) {
     redirect('/games');
@@ -23,11 +31,11 @@ const GamePage: React.FC<{ params: { game: string }; searchParams: { query?: str
     <Container className="flex flex-col gap-10">
       <div className="flex items-center justify-between">
         <p className="text-xl">{gameDetails.name} Rooms</p>
-        <CreateRoom session={session} game={params.game} />
+        <CreateRoom session={session} game={gameDetails.path} />
       </div>
       <div className="flex flex-col gap-4">
         <RoomSearch />
-        <Rooms game={params.game} session={session} query={searchParams.query} />
+        <Rooms game={gameDetails.path} session={session} query={searchParams.query} />
       </div>
     </Container>
   );

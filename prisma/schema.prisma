@@ -61,26 +61,28 @@ model VerificationToken {
 model Room {
   id          Int          @id @default(autoincrement())
   creatorId   String
+  gamePath     String
   activity    String
   slots       Int
   password    String?
-  game        String
   createdAt   DateTime     @default(now())
   expiresAt   DateTime     @default(dbgenerated("(current_timestamp() + interval 1 hour)")) @db.DateTime(0)
-  creator     User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   roomBans    RoomBan[]
   roomMembers RoomMember[]
 
+  game    Game @relation(fields: [gamePath], references: [path], onDelete: Cascade)
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
   @@index([creatorId])
-  @@index([game])
 }
 
 model RoomMember {
   roomId   Int
   userId   String
   joinedAt DateTime @default(now())
-  room     Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([roomId, userId])
   @@index([userId], map: "RoomMember_userId_fkey")
@@ -89,9 +91,19 @@ model RoomMember {
 model RoomBan {
   roomId Int
   userId String
-  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([roomId, userId])
   @@index([userId], map: "RoomBan_userId_fkey")
+}
+
+model Game {
+  path   String @id @unique
+  name   String
+  image  String
+  color  String
+  status String
+  rooms  Room[]
 }

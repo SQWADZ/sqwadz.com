@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
 
   await roomRemovalQueue.remove(roomId.toString());
   res.socket.server.io.emit(`${roomId}:room-delete`);
-  res.socket.server.io.emit(`${room.game}:room-removed`, room.id);
+  res.socket.server.io.emit(`${room.gamePath}:room-removed`, room.id);
 
   return res.status(200).json({ ok: true });
 }

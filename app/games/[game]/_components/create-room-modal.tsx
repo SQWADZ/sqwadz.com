@@ -4,7 +4,7 @@ import React from 'react';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch, faLock, faStopwatch } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faLock, faStopwatch, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,8 @@ import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { setEngine } from 'crypto';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
 
 const formSchema = z.object({
   activity: z.string().max(50).min(1, { message: 'Activity is required' }),
@@ -28,6 +30,7 @@ const CreateRoomModal: React.FC<{ game: string; session: Session | null }> = ({ 
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
   const [isLongDuration, setIsLongDuration] = React.useState(false);
+  const [hasRoom, setHasRoom] = React.useState<false | number>(false);
   const router = useRouter();
   const modal = useModal();
 
@@ -55,11 +58,12 @@ const CreateRoomModal: React.FC<{ game: string; session: Session | null }> = ({ 
       },
       body: JSON.stringify(formData),
     });
-    const data: { id?: number } = await resp.json();
+    const data: { id?: number; error?: string; roomId?: number } = await resp.json();
 
-    if (resp.status !== 200) {
-      //   Maybe set some "Something went wrong" error?
+    if (resp.status !== 200 && data.error) {
+      if (data.error === 'room_exists') setHasRoom(data.roomId || false);
       setIsLoading(false);
+      return;
     }
 
     if (values.password) {
@@ -73,6 +77,19 @@ const CreateRoomModal: React.FC<{ game: string; session: Session | null }> = ({ 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        {hasRoom !== false && (
+          <Alert variant="destructive">
+            <FontAwesomeIcon icon={faWarning} fixedWidth />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              You can only have a single room active at a time, click{' '}
+              <Link className="underline" href={`/games/${game}/${hasRoom}`}>
+                here
+              </Link>{' '}
+              to find your room.
+            </AlertDescription>
+          </Alert>
+        )}
         <FormField
           control={form.control}
           name="activity"
@@ -110,7 +127,7 @@ const CreateRoomModal: React.FC<{ game: string; session: Session | null }> = ({ 
           )}
         />
         <div className="flex flex-col gap-4 rounded-lg border p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-8">
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faLock} fixedWidth />

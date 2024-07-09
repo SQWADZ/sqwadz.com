@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
   if (roomMembers.length < 1) {
     await roomRemovalQueue.add(
       `${room.id}-empty`,
-      { roomId: room.id, game: room.game },
+      { roomId: room.id, game: room.gamePath },
       { delay: 2 * 60 * 1000, jobId: `${room.id}-empty` }
     );
   }
@@ -62,7 +62,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     message: `${session.user.name} has left the room.`,
   });
 
-  res.socket.server.io.emit(`${room.game}:members-updated`, { roomId: room.id, newMemberCount: roomMembers.length });
+  res.socket.server.io.emit(`${room.gamePath}:members-updated`, {
+    roomId: room.id,
+    newMemberCount: roomMembers.length,
+  });
 
   return res.status(200).json({ members: roomMembers });
 }
