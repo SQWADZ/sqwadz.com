@@ -29,6 +29,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     return res.status(400).json({ error: 'Activity name contains inappropriate language' });
   }
 
+  const hasRoom = await prisma.room.findFirst({
+    where: {
+      creatorId: session.user.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (hasRoom) {
+    return res.status(500).json({ error: 'room_exists', roomId: hasRoom.id });
+  }
+
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + data.duration);
 
