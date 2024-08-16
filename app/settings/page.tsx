@@ -19,7 +19,7 @@ const SettingsPage: React.FC = async () => {
         <div className="border-boder flex flex-col justify-between gap-4 rounded-lg border p-4">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <p className="text-base">Delete account</p>
+              <p className="text-base">Delete account data</p>
             </div>
             <p className="text-sm text-muted-foreground">
               Removes all data associated with your account. This action is irreversible.
