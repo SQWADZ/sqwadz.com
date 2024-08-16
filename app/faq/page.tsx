@@ -63,7 +63,20 @@ const FAQPage: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">4. How do you protect my data?</h2>
+        <h2 className="text-xl font-bold">
+          4. I deleted my account data but I can still sign in without authorizing a provider, is my data actually
+          deleted?
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Yes, when you delete your account data, all associated data is permanently removed from our database. However,
+          to completely prevent any future sign-ins, you will need to revoke access from your OAuth provider (See
+          question number 3). This step ensures that no further sign-in attempts can be made using your previously
+          authorized credentials.
+        </p>
+      </div>
+
+      <div className="mb-4">
+        <h2 className="text-xl font-bold">5. How do you protect my data?</h2>
         <p className="text-sm text-muted-foreground">
           We implement reasonable security measures to protect your personal information from unauthorized access,
           disclosure, or misuse. However, no method of transmission or storage is completely secure.
@@ -71,7 +84,7 @@ const FAQPage: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">5. Is this platform a competitor to services like Discord?</h2>
+        <h2 className="text-xl font-bold">6. Is this platform a competitor to services like Discord?</h2>
         <p className="text-sm text-muted-foreground">
           No, this platform is not meant to be a competitor or replacement for services like Discord, Teamspeak, or any
           other community platform. We aim to complement these services by providing additional tools for managing and
@@ -80,14 +93,14 @@ const FAQPage: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">6. Where can I find more information?</h2>
+        <h2 className="text-xl font-bold">7. Where can I find more information?</h2>
         <p className="text-sm text-muted-foreground">
           For more information about our data practices, please refer to our Privacy Policy and Terms of Service.
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">7. What exactly is SQWADZ?</h2>
+        <h2 className="text-xl font-bold">8. What exactly is SQWADZ?</h2>
         <p className="text-sm text-muted-foreground">
           Sqwadz is a platform designed to help gamers find other players to form squads/groups/etc... Whether
           you&apos;re looking for a team to play competitive games or a casual group to enjoy multiplayer games, Sqwadz
@@ -97,17 +110,17 @@ const FAQPage: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h2 className="text-xl font-bold">8. What are Verified Creators?</h2>
+        <h2 className="text-xl font-bold">9. What are Verified Creators?</h2>
         <p className="mb-4  text-sm text-muted-foreground">
           Verified Creators are streamers or content creators that we have manually verified.
         </p>
         <ul className="mb-4 list-inside list-disc text-muted-foreground">
           <li>Ability to set room time to a maximum of 6 hours</li>
-          <li>Receive a &quot;Verified Creator&quot; badge next to their username <VerifiedCreatorBadge /></li>
+          <li>
+            Receive a &quot;Verified Creator&quot; badge next to their username <VerifiedCreatorBadge />
+          </li>
         </ul>
-        <p className="mb-4  text-sm text-muted-foreground">
-          Reach out to us on discord to get verified.
-        </p>
+        <p className="mb-4  text-sm text-muted-foreground">Reach out to us on discord to get verified.</p>
       </div>
     </Container>
   );
