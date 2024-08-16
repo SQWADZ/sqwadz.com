@@ -14,12 +14,14 @@ const DeleteAccountButton: React.FC = () => {
       className="self-start"
       onClick={() =>
         modal.open({
-          title: 'Delete account',
+          title: 'Delete account data',
+          description: 'Are you sure you want to delete your account data?',
           children: <DeleteAccountModal />,
+          size: 'lg',
         })
       }
     >
-      Delete account
+      Delete account data
     </Button>
   );
 };

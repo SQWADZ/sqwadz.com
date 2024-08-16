@@ -39,17 +39,17 @@ const DeleteAccountModal: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <p>Are you sure you want to delete your account?</p>
-        <p className="text-destructive">This action is irreversible.</p>
-      </div>
+      <p className="text-destructive">
+        NOTE: Deleting your account data will wipe the data from our database, however to completely prevent sign-ins
+        you will have to un-authorize the sqwadz app in the settings of your OAuth provider.
+      </p>
 
       <div className="flex gap-2 self-end">
         <Button variant="destructive" disabled={isLoading} onClick={() => handleDeleteAccount()}>
           {isLoading ? (
             <FontAwesomeIcon icon={faCircleNotch} fixedWidth className="animate-spin" size="lg" />
           ) : (
-            'Delete account'
+            'Delete account data'
           )}
         </Button>
         <Button variant="secondary" disabled={isLoading} onClick={() => modal.close()}>
