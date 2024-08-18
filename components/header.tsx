@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getServerAuthSession } from '@/server/auth';
 import HeaderLink from './header-link';
 import MobileNavMenu from '@/components/mobile-nav-menu';
+import HeaderFeedbackButton from '@/components/header-feedback-button';
 
 const Header: React.FC = async () => {
   const session = await getServerAuthSession();
@@ -19,8 +20,9 @@ const Header: React.FC = async () => {
         <HeaderLink path="/support-us" label="SUPPORT US" />
         <HeaderLink path="/faq" label="FAQ" />
       </div>
-      <div className="hidden gap-2 sm:flex">
+      <div className="hidden gap-4 sm:flex">
         <ThemeToggle />
+        {session && <HeaderFeedbackButton />}
         <UserAvatarButton session={session} />
       </div>
       <div className="flex items-center justify-center sm:hidden">
