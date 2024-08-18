@@ -74,7 +74,10 @@ const FeedbackModal: React.FC<{ type?: 'general' | 'game-request' | 'bug-report'
     }
 
     if (resp.status === 200) {
-      notify({ message: 'Feedback successfully submitted.' });
+      notify({
+        message: 'Feedback submitted',
+        data: { description: 'Thank you for your feedback.' },
+      });
       modal.close();
     }
   }
