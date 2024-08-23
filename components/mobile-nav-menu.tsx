@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faBars, faComment, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +25,7 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
         <FontAwesomeIcon icon={faBars} fixedWidth size="xl" />
       </Button>
       <SheetContent>
+        <SheetTitle></SheetTitle>
         <div className="flex flex-col gap-4">
           <p className="self-start text-sm text-muted-foreground">Account</p>
           {session?.user && (
