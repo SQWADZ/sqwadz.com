@@ -57,6 +57,8 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
+        no-cache: true
         tags: |
           ${{ github.ref == 'refs/heads/main' && 'ipajudd/sqwadz:latest' || '' }}
           ${{ github.ref == 'refs/heads/dev' && 'ipajudd/sqwadz-dev:latest' || '' }}
+      
