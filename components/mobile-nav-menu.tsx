@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useModal } from '@/components/modals-provider';
 import FeedbackModal from '@/components/feedback-modal';
+import KofiLink from '@/components/kofi-link';
 
 const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
   const [open, setOpen] = React.useState(false);
@@ -74,16 +75,12 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
                 Games
               </Button>
             </Link>
-            <Link href="/support-us" onClick={() => setOpen(false)}>
-              <Button variant="outline" className="flex w-full justify-start">
-                Support us
-              </Button>
-            </Link>
             <Link href="/faq" onClick={() => setOpen(false)}>
               <Button variant="outline" className="flex w-full justify-start">
                 FAQ
               </Button>
             </Link>
+            <KofiLink />
           </div>
         </div>
       </SheetContent>
