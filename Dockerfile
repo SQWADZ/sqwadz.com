@@ -11,6 +11,7 @@ COPY package.json pnpm-lock.yaml ./
 # Install project dependencies
 RUN pnpm install
 
+COPY prisma ./prisma
 COPY . .
 
 # Generate Prisma client
