@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faBars, faComment, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useModal } from '@/components/modals-provider';
 import FeedbackModal from '@/components/feedback-modal';
+import KofiLink from '@/components/kofi-link';
 
 const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
   const [open, setOpen] = React.useState(false);
@@ -24,6 +25,7 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
         <FontAwesomeIcon icon={faBars} fixedWidth size="xl" />
       </Button>
       <SheetContent>
+        <SheetTitle></SheetTitle>
         <div className="flex flex-col gap-4">
           <p className="self-start text-sm text-muted-foreground">Account</p>
           {session?.user && (
@@ -74,16 +76,12 @@ const MobileNavMenu: React.FC<{ session: Session | null }> = ({ session }) => {
                 Games
               </Button>
             </Link>
-            <Link href="/support-us" onClick={() => setOpen(false)}>
-              <Button variant="outline" className="flex w-full justify-start">
-                Support us
-              </Button>
-            </Link>
             <Link href="/faq" onClick={() => setOpen(false)}>
               <Button variant="outline" className="flex w-full justify-start">
                 FAQ
               </Button>
             </Link>
+            <KofiLink />
           </div>
         </div>
       </SheetContent>

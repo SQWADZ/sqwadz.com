@@ -6,6 +6,10 @@ import { getServerAuthSession } from '@/server/auth';
 import HeaderLink from './header-link';
 import MobileNavMenu from '@/components/mobile-nav-menu';
 import HeaderFeedbackButton from '@/components/header-feedback-button';
+import { Button } from './ui/button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMugHot } from '@fortawesome/free-solid-svg-icons';
+import KofiLink from '@/components/kofi-link';
 
 const Header: React.FC = async () => {
   const session = await getServerAuthSession();
@@ -17,8 +21,8 @@ const Header: React.FC = async () => {
           <p className="logo text-2xl">SQWADZ</p>
         </Link>
         <HeaderLink path="/games" label="GAMES" />
-        <HeaderLink path="/support-us" label="SUPPORT US" />
         <HeaderLink path="/faq" label="FAQ" />
+        <KofiLink className="hidden sm:block" />
       </div>
       <div className="hidden gap-4 sm:flex">
         <ThemeToggle />
