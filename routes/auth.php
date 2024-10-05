@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GamesController;
 use App\Http\Controllers\LoginController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -8,7 +9,7 @@ use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 
-Route::get('/games', fn () => Inertia::render('Games'))->name('games');
+Route::get('/games', [GamesController::class, 'show'])->name('games');
 Route::get('/faq')->name('faq');
 Route::get('/privacy-policy')->name('privacy-policy');
 Route::get('/terms-of-service')->name('terms-of-service');
