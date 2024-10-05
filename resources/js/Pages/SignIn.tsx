@@ -1,6 +1,5 @@
 import Container from '@/Components/Container';
 import { Button } from '@/Components/ui/button';
-import { Link } from '@inertiajs/react';
 import React from 'react';
 
 const SignIn: React.FC = () => {
@@ -14,7 +13,7 @@ const SignIn: React.FC = () => {
 
         <div className="flex flex-col gap-2">
           <Button className="flex items-center justify-start gap-2" variant="outline" asChild>
-            <a href={route('discord.redirect')}>Discord</a>
+            <a href={route('auth.redirect', 'discord')}>Discord</a>
           </Button>
         </div>
       </div>
