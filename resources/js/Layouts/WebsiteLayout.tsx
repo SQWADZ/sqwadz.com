@@ -1,10 +1,13 @@
 import ThemeToggle from '@/Components/ThemeToggle';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import React from 'react';
-import { PageProps, User } from '@/types';
+import { PageProps } from '@/types';
 import { Button } from '@/Components/ui/button';
 
-const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ children, auth }) => {
+const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ children }) => {
+  const page = usePage();
+  const { auth } = page.props;
+
   return (
     <div>
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between bg-background p-4">
@@ -22,7 +25,9 @@ const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ chi
         <div className="hidden gap-4 sm:flex">
           <ThemeToggle />
           {auth?.user ? (
-            <p>Avatar</p>
+            <Button asChild>
+              <Link href={route('logout')}>Logout</Link>
+            </Button>
           ) : (
             <Button asChild>
               <Link href={route('sign-in')}>Sign-in</Link>
