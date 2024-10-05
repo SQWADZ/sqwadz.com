@@ -1,12 +1,12 @@
 import ThemeToggle from '@/Components/ThemeToggle';
 import { Link, usePage } from '@inertiajs/react';
 import React from 'react';
-import { PageProps } from '@/types';
+import { PageProps, User } from '@/types';
 import { Button } from '@/Components/ui/button';
 
 const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ children }) => {
   const page = usePage();
-  const { auth } = page.props;
+  const { auth } = page.props as { auth?: { user: User } };
 
   return (
     <div>
