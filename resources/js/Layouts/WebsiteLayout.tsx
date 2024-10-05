@@ -24,7 +24,7 @@ const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ chi
         </div>
         <div className="hidden gap-4 sm:flex">
           <ThemeToggle />
-          {auth?.user ? (
+          {auth && auth.user ? (
             <Button asChild>
               <Link href={route('logout')}>Logout</Link>
             </Button>
