@@ -1,42 +1,12 @@
-import ThemeToggle from '@/Components/ThemeToggle';
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import React from 'react';
-import { PageProps, User } from '@/types';
-import { Button } from '@/Components/ui/button';
+import { PageProps } from '@/types';
+import Header from '@/Components/header/Header';
 
 const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ children }) => {
-  const page = usePage();
-  const { auth } = page.props as { auth?: { user: User } };
-
   return (
     <div>
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between bg-background p-4">
-        <div className="flex items-center gap-4 md:gap-6">
-          <Link href={route('/')}>
-            <p className="logo text-2xl">SQWADZ</p>
-          </Link>
-          <Link href={route('games')}>
-            <p className="">GAMES</p>
-          </Link>
-          <Link href={route('faq')}>
-            <p className="">FAQ</p>
-          </Link>
-        </div>
-        <div className="hidden gap-4 sm:flex">
-          <ThemeToggle />
-          {auth && auth.user ? (
-            <Button asChild>
-              <Link href={route('logout')}>Logout</Link>
-            </Button>
-          ) : (
-            <Button asChild>
-              <Link href={route('sign-in')}>Sign in</Link>
-            </Button>
-          )}
-          {/*TODO: session avatar, feedback*/}
-        </div>
-        <div className="flex items-center justify-center sm:hidden">{/*<MobileNavMenu session={session} />*/}</div>
-      </div>
+      <Header />
       {children}
       <footer className="flex w-full flex-col items-center justify-between border-t bg-background p-4 text-center text-muted-foreground">
         <div className="flex w-full max-w-7xl flex-col">
