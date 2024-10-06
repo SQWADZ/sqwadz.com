@@ -22,9 +22,11 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@radix-ui/react-dialog": "^1.1.2",
         "@radix-ui/react-slot": "^1.1.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "jotai": "^2.10.0",
         "lucide-react": "^0.445.0",
         "prettier": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.6",
