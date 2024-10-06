@@ -2,6 +2,8 @@ import { Link } from '@inertiajs/react';
 import React from 'react';
 import { PageProps } from '@/types';
 import Header from '@/Components/header/Header';
+import Discord from '@/Components/icons/Discord';
+import Twitter from '@/Components/icons/Twitter';
 
 const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ children }) => {
   return (
@@ -28,17 +30,17 @@ const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ chi
               <Link
                 href="https://twitter.com/sqwadzplatform"
                 target="_blank"
-                className="flex items-center gap-2 hover:text-foreground"
+                className="flex items-center gap-2 fill-muted-foreground hover:fill-secondary-foreground hover:text-foreground"
               >
-                [ICON]
+                <Twitter />
                 <p>Twitter</p>
               </Link>
               <Link
                 href="https://discord.sqwadz.com"
                 target="_blank"
-                className="flex items-center gap-2 hover:text-foreground"
+                className="flex items-center gap-2 fill-muted-foreground hover:fill-secondary-foreground hover:text-foreground"
               >
-                [ICON]
+                <Discord />
                 <p>Discord</p>
               </Link>
             </div>
