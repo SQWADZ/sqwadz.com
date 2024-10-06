@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 
 Route::get('/games', [GamesController::class, 'index'])->name('games');
 Route::get('/faq', fn () => Inertia::render("Faq"))->name('faq');
-Route::get('/privacy-policy')->name('privacy-policy');
-Route::get('/terms-of-service')->name('terms-of-service');
+Route::get('/privacy-policy', fn () => Inertia::render("PrivacyPolicy"))->name('privacy-policy');
+Route::get('/terms-of-service', fn () => Inertia::render("TermsOfService"))->name('terms-of-service');
 Route::get("/games/{game}", [GamesController::class, 'show'])->name("game");
 
 Route::middleware('guest')->group(function () {
