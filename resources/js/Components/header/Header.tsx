@@ -3,10 +3,11 @@ import { Link, usePage } from '@inertiajs/react';
 import ThemeToggle from '@/Components/ThemeToggle';
 import { Button } from '@/Components/ui/button';
 import HeaderLink from './HeaderLink';
+import { User } from '@/types';
 
 const Header: React.FC = () => {
   const page = usePage();
-  const { auth } = page.props;
+  const { auth } = page.props as { auth?: { user: User } };
 
   return (
     <div className="mx-auto flex w-full max-w-7xl items-center justify-between bg-background p-4">
