@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@/Components/Container';
 import { PageProps } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 type Game = {
   path: string;
@@ -19,7 +19,7 @@ const Games: React.FC<PageProps<{ games: Game[] }>> = ({ games }) => {
       <Head title="Games" />
 
       {games.map((game) => (
-        <div>
+        <Link href={route('game', game.path)}>
           <div className="group flex cursor-pointer items-center justify-start gap-8">
             <div className="relative flex flex-col items-start justify-center gap-2">
               <div
@@ -49,7 +49,7 @@ const Games: React.FC<PageProps<{ games: Game[] }>> = ({ games }) => {
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </Container>
   );
