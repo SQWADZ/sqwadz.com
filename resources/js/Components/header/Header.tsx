@@ -4,6 +4,7 @@ import ThemeToggle from '@/Components/ThemeToggle';
 import { Button } from '@/Components/ui/button';
 import HeaderLink from './HeaderLink';
 import { User } from '@/types';
+import { Coffee } from 'lucide-react';
 
 const Header: React.FC = () => {
   const page = usePage();
@@ -19,6 +20,12 @@ const Header: React.FC = () => {
         </Link>
         <HeaderLink label="Games" path="games" isActive={page.url === '/games'} />
         <HeaderLink label="FAQ" path="faq" isActive={page.url === '/faq'} />
+        <Button asChild variant="destructive">
+          <a href="https://ko-fi.com/sqwadz" target="_blank" className="flex items-center gap-2">
+            <Coffee size={18} />
+            Buy us a coffee
+          </a>
+        </Button>
       </div>
       <div className="hidden gap-4 sm:flex">
         <ThemeToggle />
