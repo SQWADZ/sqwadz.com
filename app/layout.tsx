@@ -12,7 +12,6 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { SocketProvider } from '@/components/providers/socket-provider';
 import { Toaster } from '@/components/ui/sonner';
 import Script from 'next/script';
-import { worker } from '@/lib/bullmq';
 
 const inter = Inter({ subsets: ['latin'] });
 
