@@ -5,6 +5,7 @@ import { Button } from '@/Components/ui/button';
 import HeaderLink from './HeaderLink';
 import { User } from '@/types';
 import { Coffee } from 'lucide-react';
+import UserAvatarButton from '@/Components/header/UserAvatarButton';
 
 const Header: React.FC = () => {
   const page = usePage();
@@ -30,9 +31,7 @@ const Header: React.FC = () => {
       <div className="hidden gap-4 sm:flex">
         <ThemeToggle />
         {auth && auth.user ? (
-          <Button asChild>
-            <Link href={route('logout')}>Logout</Link>
-          </Button>
+          <UserAvatarButton />
         ) : (
           <Button asChild>
             <Link href={route('sign-in')}>Sign in</Link>
