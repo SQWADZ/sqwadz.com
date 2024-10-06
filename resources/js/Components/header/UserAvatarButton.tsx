@@ -21,7 +21,7 @@ const UserAvatarButton: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
+        <Avatar className="h-9 w-9">
           <AvatarImage src={auth.user.avatar} />
           <AvatarFallback>{auth.user.username.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
