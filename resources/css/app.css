@@ -60,6 +60,25 @@
     }
 }
 
+@keyframes draw {
+    from {
+        fill: transparent;
+    }
+    to {
+        stroke-dashoffset: 0;
+        fill: transparent;
+    }
+}
+
+@keyframes fill-bg {
+    from {
+        fill: transparent;
+    }
+    to {
+        fill: hsl(var(--secondary-foreground));
+    }
+}
+
 @layer base {
   * {
     @apply border-border;

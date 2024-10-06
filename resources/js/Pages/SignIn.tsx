@@ -1,11 +1,13 @@
 import Container from '@/Components/Container';
 import { Button } from '@/Components/ui/button';
 import React from 'react';
+import LogoSvg from '@/Components/LogoSvg';
 
 const SignIn: React.FC = () => {
   return (
-    <Container className="flex items-center justify-center">
-      <div className="flex w-full max-w-sm flex-1 flex-col gap-4 rounded-lg border-[1px] border-border p-4 shadow md:max-w-md">
+    <Container className="flex flex-col items-center justify-center">
+      <LogoSvg width={150} height={150} />
+      <div className="flex w-full max-w-sm flex-col gap-4 rounded-lg border-[1px] border-border p-4 shadow md:max-w-md">
         <div>
           <p className="text-xl">Sign in</p>
           <p className="text-sm text-muted-foreground">Create an account or use an existing one</p>

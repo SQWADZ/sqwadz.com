@@ -30,7 +30,7 @@ const WebsiteLayout: React.FC<PageProps<{ children: React.ReactNode }>> = ({ chi
             </Button>
           ) : (
             <Button asChild>
-              <Link href={route('sign-in')}>Sign-in</Link>
+              <Link href={route('sign-in')}>Sign in</Link>
             </Button>
           )}
           {/*TODO: session avatar, feedback*/}
