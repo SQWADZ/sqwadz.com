@@ -4,6 +4,7 @@ import Container from '@/Components/Container';
 import { Button } from '@/Components/ui/button';
 import { useModal } from '@/Components/ModalsProvider';
 import { Plus } from 'lucide-react';
+import { Head } from '@inertiajs/react';
 
 interface Props {
   game: {
@@ -18,6 +19,7 @@ const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
 
   return (
     <Container className="flex flex-col gap-10">
+      <Head title={game.name} />
       <div className="flex items-center justify-between">
         <p className="text-xl">{game.name} Rooms</p>
         <Button
