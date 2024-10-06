@@ -7,6 +7,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ThemeProvider } from '@/Components/ThemeProvider';
 import WebsiteLayout from '@/Layouts/WebsiteLayout';
 import ModalsProvider from '@/Components/ModalsProvider';
+import { TooltipProvider } from '@/Components/ui/tooltip';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -25,9 +26,11 @@ createInertiaApp({
 
     root.render(
       <ThemeProvider>
-        <ModalsProvider>
-          <App {...props} />
-        </ModalsProvider>
+        <TooltipProvider>
+          <ModalsProvider>
+            <App {...props} />
+          </ModalsProvider>
+        </TooltipProvider>
       </ThemeProvider>
     );
   },
