@@ -25,6 +25,7 @@ class GamesController extends Controller
         $rooms = [];
         $targetGame = DB::table('games')->select('name', 'path')->where('path', $game)->first();
 
+
         return Inertia::render('Game', [
             'rooms' => $rooms,
             'game' => [
