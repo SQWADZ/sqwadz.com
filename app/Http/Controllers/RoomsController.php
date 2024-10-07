@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades;
+use Redis;
 
 class RoomsController extends Controller
 {
@@ -21,6 +22,10 @@ class RoomsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        global $validated;
+        global $game;
+        global $user;
+
         $validated = $request->validate([
             "activity" => "required|max:50",
             "slots" => "required|integer|min:2",
@@ -29,10 +34,28 @@ class RoomsController extends Controller
         ]);
 
         $game = $request->game;
-        $time = time();
+        $user = $request->user();
 
-        Redis::sadd("rooms:{$game}", $time);
-        Redis::hSet("rooms:{$game}:{$time}", "id", $time, "activity", $validated["activity"], "slots", $validated["slots"], "duration", $validated["duration"], "password", $validated["password"]);
+        $transaction = Facades\Redis::transaction(function ($redis) {
+            global $game, $validated, $user;
+
+            $time = time();
+
+            $redis->sadd("rooms:{$game}", $time);
+            $redis->hMSet("rooms:{$game}:{$time}", [
+                "id" => $time,
+                "activity" => $validated["activity"],
+                "slots" => $validated["slots"],
+                "duration" => $validated["duration"],
+                "password" => (bool) $validated["password"],
+                "creatorName" => $user->username,
+                "creatorVerified" => false,
+                "membersCount" => 0,
+                "createdAt" => $time,
+            ]);
+        });
+
+        // TODO: check if transaction is ok
 
         return redirect("/games/{$game}");
     }

@@ -8,6 +8,8 @@ import { ThemeProvider } from '@/Components/ThemeProvider';
 import WebsiteLayout from '@/Layouts/WebsiteLayout';
 import ModalsProvider from '@/Components/ModalsProvider';
 import { TooltipProvider } from '@/Components/ui/tooltip';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -23,6 +25,7 @@ createInertiaApp({
   },
   setup({ el, App, props }) {
     const root = createRoot(el);
+    dayjs.extend(relativeTime);
 
     root.render(
       <ThemeProvider>

@@ -1,18 +1,19 @@
 import React from 'react';
-import { PageProps } from '@/types';
+import { PageProps, Room } from '@/types';
 import Container from '@/Components/Container';
 import { Button } from '@/Components/ui/button';
 import { useModal } from '@/Components/ModalsProvider';
 import { Plus } from 'lucide-react';
 import { Head } from '@inertiajs/react';
 import CreateRoomModal from '@/Pages/Game/Partials/modals/CreateRoomModal';
+import RoomCard from './Partials/RoomCard';
 
 interface Props {
   game: {
     name: string;
     path: string;
   };
-  rooms: unknown[];
+  rooms: Room[];
 }
 
 const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
@@ -35,7 +36,11 @@ const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
           Create a room
         </Button>
       </div>
-      <div className="flex flex-col gap-4"></div>
+      <div className="flex flex-col gap-4">
+        {rooms.map((room) => (
+          <RoomCard key={room.id} room={room} />
+        ))}
+      </div>
     </Container>
   );
 };
