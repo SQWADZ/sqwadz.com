@@ -7,7 +7,7 @@ import LogoSvg from '@/Components/LogoSvg';
 export default function Welcome({ auth }: PageProps) {
   return (
     <Container className="flex flex-1 flex-col-reverse items-center justify-center gap-12 md:flex-row">
-      <Head title="SQWADZ" />
+      <Head title="Landing" />
       <div className="flex flex-col items-center justify-between gap-8 md:flex-[0.3] md:items-start">
         <div className="flex flex-col items-center gap-2 md:items-start">
           <p className="text-center text-4xl md:text-left">
