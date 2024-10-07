@@ -1,7 +1,5 @@
 import React from 'react';
 import { useForm } from '@inertiajs/react';
-import { Label } from '@/Components/ui/label';
-import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { useModal } from '@/Components/ModalsProvider';
 import FormField from '@/Components/FormField';
@@ -10,9 +8,9 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
   const modal = useModal();
   const form = useForm({
     activity: '',
-    slots: 2,
+    slots: "2",
     password: '',
-    duration: 1,
+    duration: "1",
     game,
   });
 
