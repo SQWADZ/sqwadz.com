@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GamesController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RoomsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +25,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/logout', fn () => Auth::logout())->name('logout');
+    Route::get("/games/{game}/{roomId}", [RoomsController::class, 'show'])->name("room");
+    Route::resource("rooms", RoomsController::class)->only(['store', 'update', 'destroy']);
 });

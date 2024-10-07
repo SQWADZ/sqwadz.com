@@ -22,7 +22,7 @@ services:
     container_name: sqwadz-dev-redis
     image: redis
     restart: unless-stopped
-    command: ['redis-server', '--requirepass', '${REDIS_PASSWORD}']
+    command: ['redis-server']
     networks:
       - sqwadz-net
     volumes:

@@ -22,11 +22,16 @@ class GamesController extends Controller
 
     public function show(string $game): Response
     {
-        $rooms = [];
         $targetGame = DB::table('games')->select('name', 'path')->where('path', $game)->first();
+        $rooms = [];
 
+        $roomKeys = Redis::sscan("rooms:{$targetGame->path}", 0)[1];
 
-        return Inertia::render('Game', [
+        foreach ($roomKeys as $roomKey) {
+            $rooms[] = Redis::hscan("rooms:{$targetGame->path}:{$roomKey}", 0)[1];
+        }
+
+        return Inertia::render('Game/Game', [
             'rooms' => $rooms,
             'game' => [
                 "name" => $targetGame->name,
