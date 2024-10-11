@@ -3,19 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\RemoveRoom;
+use App\Models\Game;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades;
-use Redis;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\DB;
 
 class RoomsController extends Controller
 {
 
-    public function show(string $game, string $roomId): Response {
-        return Inertia::render('Room/Room');
+    public function show(string $gamePath, string $roomId): Response {
+        $room = Redis::hscan("rooms:{$gamePath}:{$roomId}", 0)[1];
+
+        return Inertia::render('Room/Room', [
+            'room' => $room,
+            "gamePath" => $gamePath,
+        ]);
     }
 
     /**
@@ -36,10 +43,10 @@ class RoomsController extends Controller
         $user = $request->user();
         $time = time();
 
-        $transaction = Facades\Redis::transaction(function ($redis) {
+        $transaction = Redis::transaction(function ($redis) {
             global $game, $validated, $user, $time;
 
-            $redis->sadd("rooms:{$game}", $time);
+            $redis->zadd("rooms:{$game}", $time, $time);
             $redis->hMSet("rooms:{$game}:{$time}", [
                 "id" => $time,
                 "activity" => $validated["activity"],
@@ -47,6 +54,7 @@ class RoomsController extends Controller
                 "duration" => $validated["duration"],
                 "password" => (bool) $validated["password"],
                 "creatorName" => $user->username,
+                "creatorId" => $user->provider_id,
                 "creatorVerified" => false,
                 "membersCount" => 0,
                 "createdAt" => $time,
@@ -57,7 +65,7 @@ class RoomsController extends Controller
 
         // TODO: check if transaction is ok
 
-        return redirect("/games/{$game}");
+        return redirect("/games/$game/$time");
     }
 
 

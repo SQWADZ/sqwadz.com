@@ -6,6 +6,7 @@ import VerifiedCreatorBadge from '@/Components/VerifiedCreatorBadge';
 import { ArrowRight, Lock } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { Room } from '@/types';
+import { Link } from '@inertiajs/react';
 
 interface Props {
   room: Room;
@@ -28,9 +29,11 @@ const RoomCard: React.ForwardRefRenderFunction<HTMLDivElement | null, Props> = (
           </Badge>
           <div className="flex items-center gap-4">
             {room.password && <Lock size={18} />}
-            <Button className="flex items-center gap-2">
-              Join room
-              <ArrowRight size={18} />
+            <Button className="flex items-center gap-2" asChild>
+              <Link href={route('room', { gamePath: 'd4', roomId: room.id })}>
+                Join room
+                <ArrowRight size={18} />
+              </Link>
             </Button>
           </div>
         </div>

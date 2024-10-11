@@ -25,6 +25,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/logout', fn () => Auth::logout())->name('logout');
-    Route::get("/games/{game}/{roomId}", [RoomsController::class, 'show'])->name("room");
+    Route::get("/games/{gamePath}/{roomId}", [RoomsController::class, 'show'])->name("room");
     Route::resource("rooms", RoomsController::class)->only(['store', 'update', 'destroy']);
 });

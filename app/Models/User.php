@@ -22,5 +22,5 @@ class User extends Authenticatable
         'username'
     ];
 
-    protected $visible = ['provider_id', 'avatar', 'username'];
+    protected $visible = ['provider_id', 'avatar', 'username', "is_verified_creator"];
 }
