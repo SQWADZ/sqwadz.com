@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RemoveRoom;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +23,7 @@ class RoomsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        global $validated;
-        global $game;
-        global $user;
+        global $validated, $game, $user, $time;
 
         $validated = $request->validate([
             "activity" => "required|max:50",
@@ -35,11 +34,10 @@ class RoomsController extends Controller
 
         $game = $request->game;
         $user = $request->user();
+        $time = time();
 
         $transaction = Facades\Redis::transaction(function ($redis) {
-            global $game, $validated, $user;
-
-            $time = time();
+            global $game, $validated, $user, $time;
 
             $redis->sadd("rooms:{$game}", $time);
             $redis->hMSet("rooms:{$game}:{$time}", [
@@ -54,6 +52,8 @@ class RoomsController extends Controller
                 "createdAt" => $time,
             ]);
         });
+
+        RemoveRoom::dispatch($game, $time)->delay(now()->addHour());
 
         // TODO: check if transaction is ok
 
