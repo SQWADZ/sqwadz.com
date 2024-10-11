@@ -74,15 +74,20 @@ class RoomsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
+{
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $game, string $roomId): RedirectResponse
     {
-        //
+
+        // TODO: check for creator
+        Redis::del("rooms:{$game}:{$roomId}");
+        Redis::zrem("rooms:{$game}", $roomId);
+
+        return redirect("/games/$game");
     }
 }

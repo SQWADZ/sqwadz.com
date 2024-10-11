@@ -8,16 +8,16 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
   const modal = useModal();
   const form = useForm({
     activity: '',
-    slots: "2",
+    slots: '2',
     password: '',
-    duration: "1",
+    duration: '1',
     game,
   });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    form.post('/rooms', {
+    form.post(`/rooms/${game}`, {
       onSuccess: () => {
         modal.close();
       },

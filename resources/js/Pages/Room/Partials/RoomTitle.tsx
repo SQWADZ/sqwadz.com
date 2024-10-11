@@ -5,6 +5,7 @@ import { PageProps, Room } from '@/types';
 import { Button } from '@/Components/ui/button';
 import { ArrowLeft, Trash } from 'lucide-react';
 import dayjs from 'dayjs';
+import DeleteRoomModal from '@/Pages/Room/Partials/modals/DeleteRoomModal';
 
 interface Props extends PageProps {
   room: Room;
@@ -42,8 +43,7 @@ const RoomTitle: React.FC<Props> = ({ room, gamePath, isRoomCreator }) => {
                 onClick={() =>
                   modal.open({
                     title: 'Delete room',
-                    // children: <DeleteRoomModal roomId={roomId} />,
-                    children: '',
+                    children: <DeleteRoomModal gamePath={gamePath} roomId={room.id} />,
                   })
                 }
               >
