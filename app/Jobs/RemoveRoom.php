@@ -30,7 +30,7 @@ class RemoveRoom implements ShouldQueue
 
         try {
             Redis::del("rooms:{$game}:{$roomId}");
-            Redis::srem("rooms:{$game}", $roomId);
+            Redis::zrem("rooms:{$game}", $roomId);
         } catch (\Throwable $exception) {
             error_log($exception->getMessage());
         }

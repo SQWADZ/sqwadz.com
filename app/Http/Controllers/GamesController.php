@@ -25,7 +25,7 @@ class GamesController extends Controller
         $targetGame = DB::table('games')->select('name', 'path')->where('path', $game)->first();
         $rooms = [];
 
-        $roomKeys = Redis::sscan("rooms:{$targetGame->path}", 0)[1];
+        $roomKeys = Redis::zscan("rooms:{$targetGame->path}", 0)[1];
 
         foreach ($roomKeys as $roomKey) {
             $rooms[] = Redis::hscan("rooms:{$targetGame->path}:{$roomKey}", 0)[1];

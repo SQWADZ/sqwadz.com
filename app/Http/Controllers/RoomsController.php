@@ -61,7 +61,7 @@ class RoomsController extends Controller
             ]);
         });
 
-        RemoveRoom::dispatch($game, $time)->delay(now()->addHour());
+        RemoveRoom::dispatch($game, $time)->delay(now()->addSeconds(10));
 
         // TODO: check if transaction is ok
 
