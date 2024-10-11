@@ -21,4 +21,5 @@ export interface Room {
   creatorId: string;
   slots: number;
   password?: boolean;
+  expiresAt: number;
 }

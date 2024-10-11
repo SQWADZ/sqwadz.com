@@ -58,6 +58,7 @@ class RoomsController extends Controller
                 "creatorVerified" => false,
                 "membersCount" => 0,
                 "createdAt" => $time,
+                "expiresAt" => $time + 3600
             ]);
         });
 
