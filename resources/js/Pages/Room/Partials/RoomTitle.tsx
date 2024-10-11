@@ -1,6 +1,6 @@
 import React from 'react';
 import { useModal } from '@/Components/ModalsProvider';
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { PageProps, Room } from '@/types';
 import { Button } from '@/Components/ui/button';
 import { ArrowLeft, Trash } from 'lucide-react';
@@ -11,7 +11,7 @@ interface Props extends PageProps {
   isRoomCreator: boolean;
 }
 
-const RoomTitle: React.FC<Props> = ({ auth, room, gamePath, isRoomCreator }) => {
+const RoomTitle: React.FC<Props> = ({ room, gamePath, isRoomCreator }) => {
   const modal = useModal();
 
   const time = 0;
