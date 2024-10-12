@@ -7,6 +7,7 @@ use App\Models\Game;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades;
@@ -74,7 +75,7 @@ class RoomsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
+    {
         //
     }
 
@@ -84,7 +85,10 @@ class RoomsController extends Controller
     public function destroy(string $game, string $roomId): RedirectResponse
     {
 
-        // TODO: check for creator
+        if (!Gate::allows("remove-room", [$game, $roomId])) {
+            abort(403);
+        }
+
         Redis::del("rooms:{$game}:{$roomId}");
         Redis::zrem("rooms:{$game}", $roomId);
 
