@@ -3,8 +3,9 @@ import { useForm } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
 import { useModal } from '@/Components/ModalsProvider';
 import FormField from '@/Components/FormField';
+import { User } from '@/types';
 
-const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
+const CreateRoomModal: React.FC<{ game: string; user?: User }> = ({ game, user }) => {
   const modal = useModal();
   const form = useForm({
     activity: '',
@@ -63,9 +64,10 @@ const CreateRoomModal: React.FC<{ game: string }> = ({ game }) => {
         error={form.errors.duration}
         value={form.data.duration}
         onChange={(e) => form.setData('duration', e.target.value)}
+        disabled={!user || !user.is_verified_creator}
       />
 
-      <Button className="self-end" type="submit">
+      <Button className="self-end" type="submit" disabled={form.processing}>
         {form.processing ? 'Loading...' : 'Create a room'}
       </Button>
     </form>

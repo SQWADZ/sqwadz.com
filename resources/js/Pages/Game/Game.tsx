@@ -19,8 +19,6 @@ interface Props {
 const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
   const modal = useModal();
 
-  console.log(rooms);
-
   return (
     <Container className="flex flex-col gap-10">
       <Head title={game.name} />
@@ -30,7 +28,9 @@ const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
           disabled={!auth?.user}
           variant="secondary"
           className="flex items-center gap-2"
-          onClick={() => modal.open({ title: 'Create a room', children: <CreateRoomModal game={game.path} /> })}
+          onClick={() =>
+            modal.open({ title: 'Create a room', children: <CreateRoomModal game={game.path} user={auth?.user} /> })
+          }
         >
           <Plus size={18} />
           Create a room

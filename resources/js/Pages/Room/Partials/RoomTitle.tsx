@@ -14,16 +14,16 @@ interface Props extends PageProps {
 }
 
 function getRemainingMinutes(expiresAt: number) {
-  const minutes = dayjs(+expiresAt + 60 * 60 * 1000).diff(dayjs(), 'minute');
+  const minutes = dayjs(+expiresAt * 1000).diff(dayjs(), 'minute');
   return minutes <= 1 ? 'Pending deletion...' : `${minutes} minutes`;
 }
 
 const RoomTitle: React.FC<Props> = ({ room, gamePath, isRoomCreator }) => {
   const modal = useModal();
-  const [time, setTime] = React.useState(getRemainingMinutes(room.createdAt * 1000));
+  const [time, setTime] = React.useState(getRemainingMinutes(room.expiresAt));
 
   React.useEffect(() => {
-    const intervalId = setInterval(() => setTime(getRemainingMinutes(room.createdAt * 1000)), 60000);
+    const intervalId = setInterval(() => setTime(getRemainingMinutes(room.expiresAt)), 60000);
 
     return () => clearInterval(intervalId);
   }, [room.createdAt]);

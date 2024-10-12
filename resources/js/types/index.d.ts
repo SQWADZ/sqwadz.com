@@ -2,7 +2,7 @@ export interface User {
   provider_id: string;
   username: string;
   avatar?: string;
-  is_verified_creator?: booelan;
+  is_verified_creator?: boolean;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
@@ -22,4 +22,5 @@ export interface Room {
   slots: number;
   password?: boolean;
   expiresAt: number;
+  duration: number;
 }

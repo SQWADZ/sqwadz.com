@@ -58,7 +58,7 @@ class RoomsController extends Controller
                 "creatorVerified" => false,
                 "membersCount" => 0,
                 "createdAt" => $time,
-                "expiresAt" => $time + 3600
+                "expiresAt" => $time + ($validated['duration'] * 60 * 60)
             ]);
         });
 
