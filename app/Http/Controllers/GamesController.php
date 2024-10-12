@@ -28,7 +28,7 @@ class GamesController extends Controller
         $roomKeys = Redis::zscan("rooms:{$targetGame->path}", 0)[1];
 
         foreach ($roomKeys as $roomKey) {
-            $rooms[] = Redis::hscan("rooms:{$targetGame->path}:{$roomKey}", 0)[1];
+            $rooms[] = Redis::hgetall("rooms:{$targetGame->path}:{$roomKey}");
         }
 
         return Inertia::render('Game/Game', [
