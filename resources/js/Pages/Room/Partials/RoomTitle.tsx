@@ -33,6 +33,12 @@ const RoomTitle: React.FC<Props> = ({ room, gamePath, isRoomCreator }) => {
       <div className="flex flex-wrap items-center justify-between">
         <p className="text-2xl font-bold">{room.activity}</p>
         <div className="flex items-center gap-2">
+          <Button asChild variant="secondary" className="flex items-center gap-2">
+            <Link href={route(`game`, gamePath)}>
+              <ArrowLeft size={18} />
+              Leave room
+            </Link>
+          </Button>
           {isRoomCreator && (
             <>
               {/*<EditButton disabled={!isRoomCreator} roomId={roomId} activity={title} slots={slots} />*/}
@@ -51,12 +57,6 @@ const RoomTitle: React.FC<Props> = ({ room, gamePath, isRoomCreator }) => {
               </Button>
             </>
           )}
-          <Button asChild variant="destructive" className="flex items-center gap-2">
-            <Link href={route(`game`, gamePath)}>
-              <ArrowLeft size={18} />
-              Leave room
-            </Link>
-          </Button>
         </div>
       </div>
       <p className="text-sm text-destructive">Room closing in: {time}</p>
