@@ -27,7 +27,7 @@ class GamesController extends Controller
 
         $roomKeys = Redis::zscan("rooms:{$targetGame->path}", 0)[1];
 
-        foreach ($roomKeys as $roomKey) {
+        foreach ($roomKeys as $roomKey => $timestamp) {
             $rooms[] = Redis::hgetall("rooms:{$targetGame->path}:{$roomKey}");
         }
 

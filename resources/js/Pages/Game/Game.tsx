@@ -26,7 +26,7 @@ const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
         setShownRooms((prev) => [room, ...prev]);
       })
       .listen('.room.removed', (data: { roomId: string }) =>
-        setShownRooms((prev) => prev.filter((room) => +room.id !== +data.roomId))
+        setShownRooms((prev) => prev.filter((room) => room.id !== data.roomId))
       );
 
     return () => window.Echo.leave(`rooms.${game.path}`);

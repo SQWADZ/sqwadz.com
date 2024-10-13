@@ -33,7 +33,7 @@ class RoomsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        global $validated, $game, $user, $time, $newRoom;
+        global $validated, $game, $user, $roomId, $newRoom;
 
         $validated = $request->validate([
             "activity" => "required|max:50",
@@ -44,13 +44,15 @@ class RoomsController extends Controller
 
         $game = $request->game;
         $user = $request->user();
-        $time = time();
+        $roomId = uniqid();
 
         $transaction = Redis::transaction(function ($redis) {
-            global $game, $validated, $user, $time, $newRoom;
+            global $game, $validated, $user, $roomId, $newRoom;
+
+            $time = time();
 
             $newRoom = [
-                "id" => $time,
+                "id" => $roomId,
                 "activity" => $validated["activity"],
                 "slots" => $validated["slots"],
                 "duration" => $validated["duration"],
@@ -63,14 +65,14 @@ class RoomsController extends Controller
                 "expiresAt" => $time + ($validated['duration'] * 60 * 60)
             ];
 
-            $redis->zadd("rooms:{$game}", $time, $time);
-            $redis->hMSet("rooms:{$game}:{$time}", $newRoom);
+            $redis->zadd("rooms:{$game}", $time, $roomId);
+            $redis->hMSet("rooms:{$game}:{$roomId}", $newRoom);
         });
 
         RoomCreated::dispatch($game, $newRoom);
-        RemoveRoomJob::dispatch($game, $time)->delay(now()->addHour());
+        RemoveRoomJob::dispatch($game, $roomId)->delay(now()->addHour());
 
-        return redirect("/games/$game/$time");
+        return redirect("/games/$game/$roomId");
     }
 
 
@@ -91,6 +93,7 @@ class RoomsController extends Controller
         if (!Gate::allows("remove-room", [$game, $roomId])) {
             abort(403);
         }
+
 
         Redis::del("rooms:{$game}:{$roomId}");
         Redis::zrem("rooms:{$game}", $roomId);

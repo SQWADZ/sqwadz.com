@@ -16,7 +16,7 @@ class RemoveRoomJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public string $game, public int $roomId)
+    public function __construct(public string $game, public string $roomId)
     {
     }
 
