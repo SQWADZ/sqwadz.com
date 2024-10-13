@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\RoomCreated;
-use App\Jobs\RemoveRoom;
+use App\Events\RoomRemoved;
+use App\Jobs\RemoveRoomJob;
 use App\Models\Game;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class RoomsController extends Controller
         });
 
         RoomCreated::dispatch($game, $newRoom);
-        RemoveRoom::dispatch($game, $time)->delay(now()->addHour());
+        RemoveRoomJob::dispatch($game, $time)->delay(now()->addHour());
 
         return redirect("/games/$game/$time");
     }
@@ -93,6 +94,8 @@ class RoomsController extends Controller
 
         Redis::del("rooms:{$game}:{$roomId}");
         Redis::zrem("rooms:{$game}", $roomId);
+
+        RoomRemoved::dispatch($game, $roomId);
 
         return redirect("/games/$game");
     }

@@ -21,10 +21,13 @@ const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
   const [shownRooms, setShownRooms] = React.useState(rooms);
 
   React.useEffect(() => {
-    window.Echo.channel(`rooms.${game.path}`).listen('.room.created', (room: Room) => {
-      console.log(room);
-      setShownRooms((prev) => [room, ...prev]);
-    });
+    window.Echo.channel(`rooms.${game.path}`)
+      .listen('.room.created', (room: Room) => {
+        setShownRooms((prev) => [room, ...prev]);
+      })
+      .listen('.room.removed', (data: { roomId: string }) =>
+        setShownRooms((prev) => prev.filter((room) => +room.id !== +data.roomId))
+      );
 
     return () => window.Echo.leave(`rooms.${game.path}`);
   }, []);

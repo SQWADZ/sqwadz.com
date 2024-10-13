@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Redis;
 
-class RemoveRoom implements ShouldQueue
+class RemoveRoomJob implements ShouldQueue
 {
     use Queueable;
 
