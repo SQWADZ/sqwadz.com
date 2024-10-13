@@ -2,11 +2,14 @@ import { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { AxiosInstance } from 'axios';
 import { route as ziggyRoute } from 'ziggy-js';
 import { PageProps as AppPageProps } from './';
-import { User } from '@/types/index';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 declare global {
   interface Window {
     axios: AxiosInstance;
+    Echo: Echo;
+    Pusher: typeof Pusher;
   }
 
   var route: typeof ziggyRoute;

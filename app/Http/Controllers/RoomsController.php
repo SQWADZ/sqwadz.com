@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RoomCreated;
 use App\Jobs\RemoveRoom;
 use App\Models\Game;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +32,7 @@ class RoomsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        global $validated, $game, $user, $time;
+        global $validated, $game, $user, $time, $newRoom;
 
         $validated = $request->validate([
             "activity" => "required|max:50",
@@ -45,10 +46,9 @@ class RoomsController extends Controller
         $time = time();
 
         $transaction = Redis::transaction(function ($redis) {
-            global $game, $validated, $user, $time;
+            global $game, $validated, $user, $time, $newRoom;
 
-            $redis->zadd("rooms:{$game}", $time, $time);
-            $redis->hMSet("rooms:{$game}:{$time}", [
+            $newRoom = [
                 "id" => $time,
                 "activity" => $validated["activity"],
                 "slots" => $validated["slots"],
@@ -60,12 +60,14 @@ class RoomsController extends Controller
                 "membersCount" => 0,
                 "createdAt" => $time,
                 "expiresAt" => $time + ($validated['duration'] * 60 * 60)
-            ]);
+            ];
+
+            $redis->zadd("rooms:{$game}", $time, $time);
+            $redis->hMSet("rooms:{$game}:{$time}", $newRoom);
         });
 
-        RemoveRoom::dispatch($game, $time)->delay(now()->addSeconds(10));
-
-        // TODO: check if transaction is ok
+        RoomCreated::dispatch($game, $newRoom);
+        RemoveRoom::dispatch($game, $time)->delay(now()->addHour());
 
         return redirect("/games/$game/$time");
     }

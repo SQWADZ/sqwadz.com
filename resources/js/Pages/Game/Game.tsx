@@ -18,6 +18,16 @@ interface Props {
 
 const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
   const modal = useModal();
+  const [shownRooms, setShownRooms] = React.useState(rooms);
+
+  React.useEffect(() => {
+    window.Echo.channel(`rooms.${game.path}`).listen('.room.created', (room: Room) => {
+      console.log(room);
+      setShownRooms((prev) => [room, ...prev]);
+    });
+
+    return () => window.Echo.leave(`rooms.${game.path}`);
+  }, []);
 
   return (
     <Container className="flex flex-col gap-10">
@@ -37,7 +47,7 @@ const Game: React.FC<PageProps & Props> = ({ auth, game, rooms }) => {
         </Button>
       </div>
       <div className="flex flex-col gap-4">
-        {rooms.map((room) => (
+        {shownRooms.map((room) => (
           <RoomCard key={room.id} room={room} />
         ))}
       </div>

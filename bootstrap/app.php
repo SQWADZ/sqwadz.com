@@ -11,6 +11,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
@@ -23,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
+        $exceptions->respond(function (mixed $response, Throwable $exception, Request $request) {
             if (!app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [500, 503, 404, 403])) {
                 return Inertia::render('Error', ['status' => $response->getStatusCode()])
                     ->toResponse($request)
