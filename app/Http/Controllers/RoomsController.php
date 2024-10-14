@@ -70,7 +70,7 @@ class RoomsController extends Controller
         });
 
         RoomCreated::dispatch($game, $newRoom);
-        RemoveRoomJob::dispatch($game, $roomId)->delay(now()->addHour());
+        RemoveRoomJob::dispatch($game, $roomId)->delay(now()->addSeconds(20));
 
         return redirect("/games/$game/$roomId");
     }
@@ -89,11 +89,9 @@ class RoomsController extends Controller
      */
     public function destroy(string $game, string $roomId): RedirectResponse
     {
-
         if (!Gate::allows("remove-room", [$game, $roomId])) {
             abort(403);
         }
-
 
         Redis::del("rooms:{$game}:{$roomId}");
         Redis::zrem("rooms:{$game}", $roomId);

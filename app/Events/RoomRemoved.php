@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 
 class RoomRemoved implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
