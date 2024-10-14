@@ -45,7 +45,7 @@ const Games: React.FC<PageProps<{ games: Game[] }>> = ({ auth, games }) => {
 
       <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-3">
         {games.map((game) => (
-          <Link href={route('game', game.path)}>
+          <Link key={game.path} href={route('game', game.path)}>
             <div className="group flex cursor-pointer items-center justify-start gap-8">
               <div className="relative flex flex-col items-start justify-center gap-2">
                 <div
