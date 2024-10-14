@@ -38,13 +38,17 @@ class RoomsController extends Controller
         $validated = $request->validate([
             "activity" => "required|max:50",
             "slots" => "required|integer|min:2",
-            "duration" => "required|integer|min:1",
+            "duration" => "required|integer|min:1|max:6",
             "password" => "nullable|string"
         ]);
 
         $game = $request->game;
         $user = $request->user();
         $roomId = uniqid();
+
+        if ($validated['duration'] > 1 && !$user->is_verified_creator) {
+            $validated['duration'] = 1;
+        }
 
         $transaction = Redis::transaction(function ($redis) {
             global $game, $validated, $user, $roomId, $newRoom;
@@ -71,7 +75,7 @@ class RoomsController extends Controller
 
         RoomCreated::dispatch($game, $newRoom);
 
-        RemoveRoomJob::dispatch($game, $roomId)->delay(now()->addSeconds(20));
+        RemoveRoomJob::dispatch($game, $roomId)->delay(now()->addHours((int) $validated['duration']));
 
         return redirect("/games/$game/$roomId");
     }
