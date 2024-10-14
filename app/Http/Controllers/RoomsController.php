@@ -69,7 +69,12 @@ class RoomsController extends Controller
             $redis->hMSet("rooms:{$game}:{$roomId}", $newRoom);
         });
 
-        RoomCreated::dispatch($game, $newRoom);
+        try {
+            RoomCreated::dispatch($game, $newRoom);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
         RemoveRoomJob::dispatch($game, $roomId)->delay(now()->addSeconds(20));
 
         return redirect("/games/$game/$roomId");
@@ -96,7 +101,11 @@ class RoomsController extends Controller
         Redis::del("rooms:{$game}:{$roomId}");
         Redis::zrem("rooms:{$game}", $roomId);
 
-        RoomRemoved::dispatch($game, $roomId);
+        try {
+            RoomRemoved::dispatch($game, $roomId);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
         return redirect("/games/$game");
     }
