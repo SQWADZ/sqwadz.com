@@ -3,8 +3,10 @@ import { MessageCircle, Send, Settings, Users } from 'lucide-react';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { useModal } from '@/Components/ModalsProvider';
+import { User } from '@/types';
+import MemberItem from './MemberItem';
 
-const RoomChat: React.FC = () => {
+const RoomChat: React.FC<{ members: User[] }> = ({ members }) => {
   const [input, setInput] = React.useState('');
   const modal = useModal();
 
@@ -87,10 +89,9 @@ const RoomChat: React.FC = () => {
           </div>
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
-          {/*{sortedMembers.map((member) => (*/}
-          {/*    <UserItem user={member} key={member.id} roomCreatorId={roomCreatorId} roomId={roomId}*/}
-          {/*              clientId={user.id} />*/}
-          {/*))}*/}
+          {members.map((member) => (
+            <MemberItem user={member} />
+          ))}
         </div>
       </div>
       {/*<audio ref={joinSoundRef} src="/audio/join.mp3" />*/}
