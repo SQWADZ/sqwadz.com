@@ -1,9 +1,10 @@
 import React from 'react';
 import Container from '@/Components/Container';
 import RoomTitle from '@/Pages/Room/Partials/RoomTitle';
-import { PageProps, User, type Room } from '@/types';
+import { PageProps, User, type Room, Message } from '@/types';
 import RoomChat from '@/Pages/Room/Partials/RoomChat';
 import { router } from '@inertiajs/react';
+import { useSetMembers, useSetMessages } from '@/state/room';
 
 interface Props extends PageProps {
   room: Room;
@@ -11,24 +12,27 @@ interface Props extends PageProps {
 }
 
 const Room: React.FC<Props> = ({ auth, room, gamePath }) => {
-  const [members, setMemebers] = React.useState<User[]>([]);
+  const setMembers = useSetMembers();
+  const setMessages = useSetMessages();
 
   React.useEffect(() => {
     window.Echo.join(`room.${gamePath}.${room.id}`)
       .here((users: User[]) => {
-        setMemebers(users);
+        setMembers(users);
       })
       .joining((user: User) => {
-        console.log('joining', user);
-        setMemebers((prev) => [...prev, user]);
+        setMembers((prev) => [...prev, user]);
       })
       .leaving((user: User) => {
-        console.log('leaving', user);
-        setMemebers((prev) => prev.filter((prevUser) => prevUser.provider_id !== user.provider_id));
+        setMembers((prev) => prev.filter((prevUser) => prevUser.provider_id !== user.provider_id));
       })
       .error(() => {
         router.visit(`/games/${gamePath}`);
         // TODO: notification?
+      })
+      .listen('.room.message', (data: { message: Message }) => {
+        console.log(data);
+        setMessages((prev) => [...prev, data.message]);
       });
 
     return () => {
@@ -44,7 +48,7 @@ const Room: React.FC<Props> = ({ auth, room, gamePath }) => {
           gamePath={gamePath}
           isRoomCreator={!!(auth?.user && auth.user.provider_id === room.creatorId)}
         />
-        <RoomChat members={members} />
+        <RoomChat />
       </div>
     </Container>
   );

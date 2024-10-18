@@ -3,14 +3,29 @@ import { MessageCircle, Send, Settings, Users } from 'lucide-react';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { useModal } from '@/Components/ModalsProvider';
-import { User } from '@/types';
 import MemberItem from './MemberItem';
+import { useMembers, useMessages } from '@/state/room';
+import { usePage } from '@inertiajs/react';
+import { Room } from '@/types';
+import dayjs from 'dayjs';
+import UserAvatar from '@/Components/UserAvatar';
 
-const RoomChat: React.FC<{ members: User[] }> = ({ members }) => {
+const RoomChat: React.FC = () => {
   const [input, setInput] = React.useState('');
   const modal = useModal();
 
-  function handleSendMessage() {}
+  const page = usePage() as { props: { gamePath: string; room: Room } };
+
+  const members = useMembers();
+  const messages = useMessages();
+
+  function handleSendMessage() {
+    setInput('');
+
+    window.axios
+      .post(route('room.message', { game: page.props.gamePath, roomId: page.props.room.id }), { message: input })
+      .then((resp) => console.log('resp', resp));
+  }
 
   return (
     <div className="flex flex-[0.9_0_0] flex-col rounded-lg border border-border md:flex-row md:overflow-hidden">
@@ -21,7 +36,22 @@ const RoomChat: React.FC<{ members: User[] }> = ({ members }) => {
             <MessageCircle />
           </div>
         </div>
-        <div className="flex h-full flex-col-reverse gap-2 overflow-y-auto" ref={null} id="scrollableDiv">
+        <div className="flex h-full flex-col gap-2 overflow-y-auto" ref={null} id="scrollableDiv">
+          {messages.map((message) => (
+            <div
+              key={`${message.sender.username}-${message.sentAt}`}
+              className="flex w-fit items-center gap-4 rounded-lg p-2"
+            >
+              <UserAvatar name={message.sender.username} image={message.sender.avatar} />
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <p>{message.sender.username}</p>
+                  <p className="text-xs text-muted-foreground">{dayjs(message.sentAt).calendar()}</p>
+                </div>
+                <p className="text-message text-sm">{message.contents}</p>
+              </div>
+            </div>
+          ))}
           {/*<InfiniteScroll*/}
           {/*    scrollableTarget="scrollableDiv"*/}
           {/*    hasMore={messagesData[messagesData.length - 1]?.hasMore || false}*/}
@@ -57,7 +87,7 @@ const RoomChat: React.FC<{ members: User[] }> = ({ members }) => {
             className="flex-1"
             onSubmit={(e) => {
               e.preventDefault();
-              // handleSendMessage({ ...user, contents: input });
+              handleSendMessage();
             }}
           >
             <Input placeholder="Message..." value={input} onChange={({ target }) => setInput(target.value)} />
@@ -90,7 +120,7 @@ const RoomChat: React.FC<{ members: User[] }> = ({ members }) => {
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
           {members.map((member) => (
-            <MemberItem user={member} />
+            <MemberItem key={member.provider_id} user={member} />
           ))}
         </div>
       </div>

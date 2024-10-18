@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel("room.{gamePath}.{roomId}", function(User $user, string $gamePath, string $roomId) {
+Broadcast::channel("room.{gamePath}.{roomId}", function(User $user) {
     // TODO: check for room space
 
     return [

@@ -24,3 +24,12 @@ export interface Room {
   expiresAt: number;
   duration: number;
 }
+
+export interface Message {
+  sender: {
+    avatar: string;
+    username: string;
+  };
+  contents: string;
+  sentAt: number;
+}

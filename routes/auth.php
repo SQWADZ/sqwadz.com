@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
+use App\Http\Controllers\MessagesController;
 
 Route::get('/games', [GamesController::class, 'index'])->name('games');
 Route::get('/faq', fn () => Inertia::render("Faq"))->name('faq');
@@ -31,4 +32,5 @@ Route::middleware('auth')->group(function () {
     Route::post("/rooms/{game}", [RoomsController::class, 'store'])->name("room.store");
     Route::put("/rooms/{game}/{roomId}", [RoomsController::class, 'update'])->name("room.update");
     Route::delete("/rooms/{game}/{roomId}", [RoomsController::class, 'destroy'])->name("room.delete");
+    Route::post("/message/{game}/{roomId}", MessagesController::class)->name("room.message");
 });
