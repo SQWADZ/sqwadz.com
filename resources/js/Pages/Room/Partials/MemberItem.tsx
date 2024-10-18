@@ -7,7 +7,7 @@ import { User } from '@/types';
 import { Check, CircleMinus, Clipboard } from 'lucide-react';
 import React from 'react';
 
-const UserItem: React.FC<{ user: User }> = ({ user }) => {
+const UserItem: React.FC<{ user: User; creatorId: string }> = ({ user, creatorId }) => {
   const [copied, setCopied] = React.useState(false);
   const [showControls, setShowControls] = React.useState(false);
   const modal = useModal();
@@ -25,11 +25,7 @@ const UserItem: React.FC<{ user: User }> = ({ user }) => {
           <AvatarImage src={user.avatar || undefined} />
           <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <p
-        //   className={`${user.id === roomCreatorId ? 'text-primary' : ''}`}
-        >
-          {user.username}
-        </p>
+        <p className={`${user.provider_id === creatorId ? 'text-primary' : ''}`}>{user.username}</p>
         {user.is_verified_creator ? <VerifiedCreatorBadge /> : null}
       </div>
       <div className="flex items-center gap-2">

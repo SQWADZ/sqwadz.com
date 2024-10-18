@@ -120,7 +120,7 @@ const RoomChat: React.FC = () => {
         </div>
         <div className="flex h-full flex-col gap-4 overflow-y-auto">
           {members.map((member) => (
-            <MemberItem key={member.provider_id} user={member} />
+            <MemberItem key={member.provider_id} user={member} creatorId={page.props.room.creatorId} />
           ))}
         </div>
       </div>
