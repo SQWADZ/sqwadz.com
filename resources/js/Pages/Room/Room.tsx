@@ -3,7 +3,7 @@ import Container from '@/Components/Container';
 import RoomTitle from '@/Pages/Room/Partials/RoomTitle';
 import { PageProps, User, type Room, Message } from '@/types';
 import RoomChat from '@/Pages/Room/Partials/RoomChat';
-import { router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useSetMembers, useSetMessages } from '@/state/room';
 
 interface Props extends PageProps {
@@ -31,7 +31,6 @@ const Room: React.FC<Props> = ({ auth, room, gamePath }) => {
         // TODO: notification?
       })
       .listen('.room.message', (data: { message: Message }) => {
-        console.log(data);
         setMessages((prev) => [...prev, data.message]);
       });
 
@@ -42,6 +41,8 @@ const Room: React.FC<Props> = ({ auth, room, gamePath }) => {
 
   return (
     <Container className="flex flex-col">
+      <Head title={room.activity} />
+
       <div className="flex h-full flex-1 flex-col gap-8">
         <RoomTitle
           room={room}

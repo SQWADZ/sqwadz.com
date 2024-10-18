@@ -30,7 +30,7 @@ const UserItem: React.FC<{ user: User }> = ({ user }) => {
         >
           {user.username}
         </p>
-        {user.is_verified_creator && <VerifiedCreatorBadge />}
+        {user.is_verified_creator ? <VerifiedCreatorBadge /> : null}
       </div>
       <div className="flex items-center gap-2">
         {showControls && (
