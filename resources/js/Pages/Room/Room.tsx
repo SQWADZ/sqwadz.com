@@ -9,9 +9,10 @@ import { useSetMembers, useSetMessages } from '@/state/room';
 interface Props extends PageProps {
   room: Room;
   gamePath: string;
+  messages: string[];
 }
 
-const Room: React.FC<Props> = ({ auth, room, gamePath }) => {
+const Room: React.FC<Props> = ({ auth, room, gamePath, messages }) => {
   const setMembers = useSetMembers();
   const setMessages = useSetMessages();
 
@@ -19,6 +20,7 @@ const Room: React.FC<Props> = ({ auth, room, gamePath }) => {
     window.Echo.join(`room.${gamePath}.${room.id}`)
       .here((users: User[]) => {
         setMembers(users);
+        setMessages(messages.map((message) => JSON.parse(message)));
       })
       .joining((user: User) => {
         setMembers((prev) => [...prev, user]);

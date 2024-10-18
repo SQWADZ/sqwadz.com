@@ -31,6 +31,7 @@ class RemoveRoomJob implements ShouldQueue
         try {
             Redis::del("rooms:{$game}:{$roomId}");
             Redis::zrem("rooms:{$game}", $roomId);
+            Redis::del("room:{$game}:{$roomId}:messages");
         } catch (\Throwable $exception) {
             error_log($exception->getMessage());
         }

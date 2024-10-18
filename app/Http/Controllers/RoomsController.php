@@ -21,10 +21,12 @@ class RoomsController extends Controller
 
     public function show(string $gamePath, string $roomId): Response {
         $room = Redis::hscan("rooms:{$gamePath}:{$roomId}", 0)[1];
+        $messages = Redis::zrange("room:{$gamePath}:{$roomId}:messages", 0, -1);
 
         return Inertia::render('Room/Room', [
-            'room' => $room,
+            "room" => $room,
             "gamePath" => $gamePath,
+            "messages" => $messages
         ]);
     }
 
@@ -100,6 +102,7 @@ class RoomsController extends Controller
 
         Redis::del("rooms:{$game}:{$roomId}");
         Redis::zrem("rooms:{$game}", $roomId);
+        Redis::del("room:{$game}:{$roomId}:messages");
 
         RoomRemoved::dispatch($game, $roomId);
 
