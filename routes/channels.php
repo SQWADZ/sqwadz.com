@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 Broadcast::channel("room.{gamePath}.{roomId}", function(User $user, string $gamePath, string $roomId) {
-    $REVERB_APP_ID = env("REVERB_APP_ID");
-    $REVERB_HOST = env("REVERB_HOST");
-    $REVERB_PORT = env("REVERB_PORT");
-    $REVERB_SCHEME = env("REVERB_SCHEME");
-    $REVERB_APP_KEY = env("REVERB_APP_KEY");
-    $REVERB_APP_SECRET = env("REVERB_APP_SECRET");
+    $REVERB_APP_ID = config("broadcasting.connections.reverb.app_id");
+    $REVERB_HOST = config("broadcasting.connections.reverb.options.host");
+    $REVERB_PORT = config("broadcasting.connections.reverb.options.port");
+    $REVERB_SCHEME = config("broadcasting.connections.reverb.options.scheme");
+    $REVERB_APP_KEY = config("broadcasting.connections.reverb.key");
+    $REVERB_APP_SECRET = config("broadcasting.connections.reverb.secret");
 
     $timestamp = time();
 
